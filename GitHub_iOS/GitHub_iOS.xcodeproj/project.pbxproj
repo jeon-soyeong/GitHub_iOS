@@ -15,6 +15,12 @@
 		9B5E9F47289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5E9F46289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift */; };
 		9B6348B2C45EFB3DDA6CBBC5 /* Pods_GitHub_iOS_GitHub_iOSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3ECBAB707E8B0F90F9B0EEB /* Pods_GitHub_iOS_GitHub_iOSUITests.framework */; };
 		9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A3289EA25E00C12313 /* TabBarController.swift */; };
+		9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A5289EA38A00C12313 /* TabBar.swift */; };
+		9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */; };
+		9B6A44AB289EA4BD00C12313 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44AA289EA4BD00C12313 /* UIView+Extension.swift */; };
+		9B6A44B0289EA56400C12313 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44AF289EA56400C12313 /* SearchViewController.swift */; };
+		9B6A44B3289EA58900C12313 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44B2289EA58900C12313 /* ProfileViewController.swift */; };
+		9B6A44B5289EB81500C12313 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44B4289EB81500C12313 /* UIImage+Extension.swift */; };
 		B450AA7BD21C54D6FCD60D2A /* Pods_GitHub_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287464E839791C95CB474C02 /* Pods_GitHub_iOS.framework */; };
 		F01B65CE12EC634A85CF3430 /* Pods_GitHub_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A3F29C8D8D9D90E817AB19E /* Pods_GitHub_iOSTests.framework */; };
 /* End PBXBuildFile section */
@@ -55,6 +61,12 @@
 		9B5E9F44289CD9E600963ED1 /* GitHub_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHub_iOSUITests.swift; sourceTree = "<group>"; };
 		9B5E9F46289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHub_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		9B6A44A3289EA25E00C12313 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		9B6A44A5289EA38A00C12313 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
+		9B6A44AA289EA4BD00C12313 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		9B6A44AF289EA56400C12313 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		9B6A44B2289EA58900C12313 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		9B6A44B4289EB81500C12313 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		B3ECBAB707E8B0F90F9B0EEB /* Pods_GitHub_iOS_GitHub_iOSUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GitHub_iOS_GitHub_iOSUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF1AA66F3BA2D807985B69FF /* Pods-GitHub_iOS-GitHub_iOSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHub_iOS-GitHub_iOSUITests.release.xcconfig"; path = "Target Support Files/Pods-GitHub_iOS-GitHub_iOSUITests/Pods-GitHub_iOS-GitHub_iOSUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,7 +109,6 @@
 				74B71C0F731F96BF4C755DEF /* Pods-GitHub_iOSTests.debug.xcconfig */,
 				30BCCA1577F4ACDE8BAD064B /* Pods-GitHub_iOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -192,6 +203,7 @@
 		9B5E9F56289CDA7B00963ED1 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				9B6A44A7289EA3D400C12313 /* Extension */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -199,6 +211,7 @@
 		9B6A449E289EA22500C12313 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				9B6A44B1289EA57000C12313 /* View */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -206,8 +219,10 @@
 		9B6A449F289EA22D00C12313 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				9B6A44AE289EA56400C12313 /* View */,
 			);
-			path = Search;
+			name = Search;
+			path = Search/View;
 			sourceTree = "<group>";
 		};
 		9B6A44A0289EA23400C12313 /* TabBar */ = {
@@ -230,8 +245,35 @@
 		9B6A44A2289EA24200C12313 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9B6A44A5289EA38A00C12313 /* TabBar.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		9B6A44A7289EA3D400C12313 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */,
+				9B6A44AA289EA4BD00C12313 /* UIView+Extension.swift */,
+				9B6A44B4289EB81500C12313 /* UIImage+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		9B6A44AE289EA56400C12313 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9B6A44AF289EA56400C12313 /* SearchViewController.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		9B6A44B1289EA57000C12313 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9B6A44B2289EA58900C12313 /* ProfileViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -471,9 +513,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B6A44AB289EA4BD00C12313 /* UIView+Extension.swift in Sources */,
+				9B6A44B0289EA56400C12313 /* SearchViewController.swift in Sources */,
 				9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */,
+				9B6A44B5289EB81500C12313 /* UIImage+Extension.swift in Sources */,
 				9B5E9F24289CD9E200963ED1 /* AppDelegate.swift in Sources */,
 				9B5E9F26289CD9E200963ED1 /* SceneDelegate.swift in Sources */,
+				9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */,
+				9B6A44B3289EA58900C12313 /* ProfileViewController.swift in Sources */,
+				9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
