@@ -67,8 +67,6 @@ class TabBarController: UITabBarController {
                     self?.rootViewControllers.forEach { [weak self] _ in
                         self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "login")
                     }
-                } else {
-                    self?.showToast(message: "로그아웃 실패.")
                 }
             })
             .disposed(by: disposeBag)

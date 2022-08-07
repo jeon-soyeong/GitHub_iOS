@@ -46,8 +46,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 if isLoginSuccess {
                     print("login 성공")
                     NotificationCenter.default.post(name: .loginSuccess, object: nil)
-                } else {
-                    self?.tabBarController.showToast(message: "로그인 재시도 바랍니다.")
                 }
             })
             .disposed(by: disposeBag)
