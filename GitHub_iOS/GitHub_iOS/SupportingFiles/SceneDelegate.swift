@@ -10,7 +10,8 @@ import RxSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    let tabBarController = TabBarController()
+    private let tabBarController = TabBarController()
+    private let loginViewModel = LoginViewModel()
     private let disposeBag = DisposeBag()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -18,7 +19,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = tabBarController
         self.checkLoginState()
+        self.bindViewModel()
         window?.makeKeyAndVisible()
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let code = URLContexts.first?.url.absoluteString.components(separatedBy: "code=").last else {
+            tabBarController.showToast(message: "로그인 재시도 바랍니다.")
+            return
+        }
+        loginViewModel.action.login.onNext(code)
     }
     
     private func checkLoginState() {
@@ -30,24 +40,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        guard let code = URLContexts.first?.url.absoluteString.components(separatedBy: "code=").last else {
-            tabBarController.showToast(message: "로그인 재시도 바랍니다.")
-            return
-        }
-
-        LoginManager.shared.login(with: code)
-            .subscribe(onNext: { [weak self] result in
-                switch result {
-                case .success():
+    private func bindViewModel() {
+        loginViewModel.state.isLogined
+            .subscribe(onNext: { [weak self] isLoginSuccess in
+                if isLoginSuccess {
+                    print("login 성공")
                     NotificationCenter.default.post(name: .loginSuccess, object: nil)
-                case .failure(let error):
-                    print(error)
+                } else {
                     self?.tabBarController.showToast(message: "로그인 재시도 바랍니다.")
-                    break
                 }
             })
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

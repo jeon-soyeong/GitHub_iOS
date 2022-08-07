@@ -13,6 +13,7 @@ import RxCocoa
 class TabBarController: UITabBarController {
     private let disposeBag = DisposeBag()
     private var rootViewControllers: [UIViewController] = []
+    private let loginViewModel = LoginViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +22,7 @@ class TabBarController: UITabBarController {
         setupTabBar()
         setupViewControllers()
         bindAction()
+        bindViewModel()
         setupNotification()
     }
     
@@ -46,37 +48,37 @@ class TabBarController: UITabBarController {
     private func bindAction() {
         rootViewControllers.forEach {
             $0.navigationItem.rightBarButtonItem?.rx.tap
-                .subscribe(onNext: { [weak self] in
-                    let loginManager = LoginManager.shared
+                .subscribe(onNext: { [weak self] _ in
                     //FIXME: if loginManager.isLogined { // 로그인 되어있으면
                     if KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
-                        loginManager.logout()
-                            .subscribe(onNext: { [weak self] result in
-                                switch result {
-                                case .success():
-                                    print("logout 성공")
-                                    self?.rootViewControllers.forEach { [weak self] _ in
-                                        self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "login")
-                                    }
-                                case .failure(let error):
-                                    print(error)
-                                    self?.showToast(message: "로그아웃 실패.")
-                                }
-                            }).disposed(by: self?.disposeBag ?? DisposeBag())
+                        self?.loginViewModel.action.didTappedLogoutButton.onNext(())
                     } else { // 로그인 X
-                        loginManager.openGithubLogin()
+                        self?.loginViewModel.action.didTappedLoginButton.onNext(())
                     }
                 })
                 .disposed(by: disposeBag)
         }
     }
     
+    private func bindViewModel() {
+        loginViewModel.state.isLogout
+            .subscribe(onNext: { [weak self] isLogoutSuccess in
+                if isLogoutSuccess {
+                    self?.rootViewControllers.forEach { [weak self] _ in
+                        self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "login")
+                    }
+                } else {
+                    self?.showToast(message: "로그아웃 실패.")
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
     private func setupNotification() {
         NotificationCenter.default.rx.notification(.loginSuccess)
             .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
                 print("login noti 수신")
-                self.rootViewControllers.forEach { [weak self] _ in
+                self?.rootViewControllers.forEach { [weak self] _ in
                     self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "logout")
                 }
             }).disposed(by: disposeBag)

@@ -12,6 +12,7 @@ import RxCocoa
 
 class LoginViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    private let loginViewModel = LoginViewModel()
     
     let loginButton = UIButton().then {
         $0.setTitle("login", for: .normal)
@@ -29,9 +30,10 @@ class LoginViewController: UIViewController {
         
         loginButton.rx.tap
             .subscribe(onNext: { [weak self] in
-                let loginManager = LoginManager.shared
-                if loginManager.isLogined == false {
-                    loginManager.openGithubLogin()
+                //FIXME: 확인만
+//                if self?.loginViewModel.isLogined == false {
+                if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
+                    self?.loginViewModel.action.didTappedLoginButton.onNext(())                    
                 }
             })
             .disposed(by: disposeBag)

@@ -25,7 +25,7 @@
 		9B6A44B5289EB81500C12313 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44B4289EB81500C12313 /* UIImage+Extension.swift */; };
 		9BD5B292289EF1D90062206C /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B291289EF1D90062206C /* KeychainManager.swift */; };
 		9BD5B296289EF2510062206C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B295289EF2510062206C /* LoginViewController.swift */; };
-		9BD5B298289EF2880062206C /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B297289EF2880062206C /* LoginManager.swift */; };
+		9BD5B298289EF2880062206C /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B297289EF2880062206C /* LoginViewModel.swift */; };
 		9BD5B29A289EFABC0062206C /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B299289EFABC0062206C /* NotificationName+Extension.swift */; };
 		9BD5B29D289EFB7D0062206C /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B29C289EFB7D0062206C /* GitHubAPI.swift */; };
 		9BD5B29F289EFB8C0062206C /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B29E289EFB8C0062206C /* APIConstants.swift */; };
@@ -81,7 +81,7 @@
 		9B6A44B4289EB81500C12313 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		9BD5B291289EF1D90062206C /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		9BD5B295289EF2510062206C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		9BD5B297289EF2880062206C /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
+		9BD5B297289EF2880062206C /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		9BD5B299289EFABC0062206C /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		9BD5B29C289EFB7D0062206C /* GitHubAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
 		9BD5B29E289EFB8C0062206C /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
@@ -305,7 +305,7 @@
 			isa = PBXGroup;
 			children = (
 				9BD5B291289EF1D90062206C /* KeychainManager.swift */,
-				9BD5B297289EF2880062206C /* LoginManager.swift */,
+				9BD5B297289EF2880062206C /* LoginViewModel.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -585,7 +585,7 @@
 				9B5E9F24289CD9E200963ED1 /* AppDelegate.swift in Sources */,
 				9BD5B29D289EFB7D0062206C /* GitHubAPI.swift in Sources */,
 				9BD5B2A1289EFB990062206C /* APIService.swift in Sources */,
-				9BD5B298289EF2880062206C /* LoginManager.swift in Sources */,
+				9BD5B298289EF2880062206C /* LoginViewModel.swift in Sources */,
 				9B5E9F26289CD9E200963ED1 /* SceneDelegate.swift in Sources */,
 				9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */,
 				9B6A44B3289EA58900C12313 /* ProfileViewController.swift in Sources */,
