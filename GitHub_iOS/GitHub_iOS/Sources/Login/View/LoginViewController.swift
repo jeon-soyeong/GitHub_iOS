@@ -29,6 +29,7 @@ class LoginViewController: UIViewController {
         
         setupView()
         bindAction()
+        setupNotification()
     }
     
     private func setupView() {
@@ -36,6 +37,7 @@ class LoginViewController: UIViewController {
         
         setupSubViews()
         setupConstraints()
+        setupNavigationItem()
     }
     
     private func setupSubViews() {
@@ -53,15 +55,39 @@ class LoginViewController: UIViewController {
         }
     }
     
+    private func setupNavigationItem() {
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.title = "GitHub"
+        let resizedImage = UIImage(named: "login")?.resize(size: CGSize(width: 28, height: 28)).withRenderingMode(.alwaysOriginal)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizedImage, style: .plain, target: self, action: nil)
+    }
+    
     private func bindAction() {
         loginButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 //FIXME: 확인만
-//                if self?.loginViewModel.isLogined == false {
+                // if self?.loginViewModel.isLogined == false {
                 if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
                     self?.loginViewModel.action.didTappedLoginButton.onNext(())
                 }
             })
             .disposed(by: disposeBag)
+        
+        self.navigationItem.rightBarButtonItem?.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                //FIXME: if loginManager.isLogined { // 로그인 되어있으면
+                if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
+                    self?.loginViewModel.action.didTappedLoginButton.onNext(())
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func setupNotification() {
+        NotificationCenter.default.rx.notification(.loginSuccess)
+            .subscribe(onNext: { [weak self] _ in
+                print("login noti 수신")
+                self?.navigationController?.popViewController(animated: false)
+            }).disposed(by: disposeBag)
     }
 }
