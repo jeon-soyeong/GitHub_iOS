@@ -48,21 +48,21 @@ class TabBarController: UITabBarController {
             $0.navigationItem.rightBarButtonItem?.rx.tap
                 .subscribe(onNext: { [weak self] in
                     let loginManager = LoginManager.shared
-                    //FIXME:
-                    //if loginManager.isLogined { // 로그인 되어있으면
+                    //FIXME: if loginManager.isLogined { // 로그인 되어있으면
                     if KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
-                        loginManager.logout() { result in
-                            switch result {
-                            case .success():
-                                print("logout 성공")
-                                self?.rootViewControllers.forEach { [weak self] _ in
-                                    self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "login") // 로그아웃처리 -> login image 보이도록 처리
+                        loginManager.logout()
+                            .subscribe(onNext: { [weak self] result in
+                                switch result {
+                                case .success():
+                                    print("logout 성공")
+                                    self?.rootViewControllers.forEach { [weak self] _ in
+                                        self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "login")
+                                    }
+                                case .failure(let error):
+                                    print(error)
+                                    self?.showToast(message: "로그아웃 실패.")
                                 }
-                            case .failure(let error):
-                                print(error)
-                                self?.showToast(message: "로그아웃 실패.")
-                            }
-                        }
+                            }).disposed(by: self?.disposeBag ?? DisposeBag())
                     } else { // 로그인 X
                         loginManager.openGithubLogin()
                     }

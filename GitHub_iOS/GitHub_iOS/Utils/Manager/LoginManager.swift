@@ -73,12 +73,16 @@ extension LoginManager {
         }
     }
     
-    func logout(completion: @escaping (Result<Void, Error>) -> Void) {
-        if KeychainManager.shared.deleteAccessToken(key: "accessToken") {
-            completion(.success(()))
-            NotificationCenter.default.post(name: .logoutSuccess, object: nil)
-        } else {
-            completion(.failure(LoginError.failedLogout))
+    func logout() -> Observable<Result<Void, Error>> {
+        return Observable.create() { [weak self] result in
+            if KeychainManager.shared.deleteAccessToken(key: "accessToken") {
+                result.onNext(.success(()))
+                NotificationCenter.default.post(name: .logoutSuccess, object: nil)
+            } else {
+                result.onNext(.failure((LoginError.failedLogout)))
+            }
+            
+            return Disposables.create()
         }
     }
 }
