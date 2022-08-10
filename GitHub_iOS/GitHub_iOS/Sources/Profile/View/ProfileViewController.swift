@@ -107,7 +107,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        profileViewModel.state.userRepositoryData
+        profileViewModel.state.userStarRepositoryData
             .bind(to: myStarRepositoryTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }
