@@ -10,12 +10,22 @@ import UIKit
 import Then
 import SnapKit
 import RxSwift
+import RxCocoa
+import RxRelay
+import RxDataSources
 
 class ProfileViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    private let profileViewModel = ProfileViewModel()
     
     private lazy var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
         $0.backgroundColor = .white
+    }
+    
+    var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { dataSource, tableView, indexPath, item in
+        let repositoryTableViewCell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath) as! RepositoryTableViewCell
+        repositoryTableViewCell.setupUI(data: item)
+        return repositoryTableViewCell
     }
     
     override func viewDidLoad() {
@@ -23,11 +33,22 @@ class ProfileViewController: UIViewController {
         setupView()
         setupNotification()
         setupTableView()
+        bindAction()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
             self.navigationController?.pushViewController(LoginViewController(), animated: false)
+        } else { // login 했을 때
+            //FIXME:
+//            TabBarController().setTabBarItem()
+            // search tap에서 login 안하고 profile tap에서 로그인하면
+            // viewWillAppear에서 해당 data를 조회한적이 있는지 check, 없을 때만 star repository api 요청
+            if dataSource.sectionModels.first?.items.count == nil {
+                profileViewModel.action.fetch.onNext(())
+            }
         }
     }
     
@@ -61,44 +82,52 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupTableView() {
-        myStarRepositoryTableView.dataSource = self
-        myStarRepositoryTableView.delegate = self
-        
         myStarRepositoryTableView.showsVerticalScrollIndicator = false
+        myStarRepositoryTableView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
         myStarRepositoryTableView.registerCell(cellType: RepositoryTableViewCell.self)
         myStarRepositoryTableView.register(MyStarRepositoryTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
     }
-}
-
-// MARK: UITableViewDataSource
-extension ProfileViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //FIXME: viewModel data 로 변경
-        return 20
+    
+    private func bindAction() {
+        myStarRepositoryTableView.rx.prefetchRows
+            .compactMap(\.last?.row)
+            .withUnretained(self)
+            .bind { [weak self] vc, row in
+                if self?.profileViewModel.isRequestCompleted == false {
+                    if let dataCount = self?.dataSource.sectionModels.first?.items.count {
+                        if row == dataCount - 1 {
+                            self?.profileViewModel.action.fetch.onNext(())
+                        }
+                        print("dataCount: \(dataCount)")
+                    }
+                }
+            }
+            .disposed(by: self.disposeBag)
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let repositoryTableViewCell = tableView.dequeueReusableCell(cellType: RepositoryTableViewCell.self, indexPath: indexPath) else {
-            return UITableViewCell()
-        }
-        repositoryTableViewCell.setupUI(index: indexPath.row)
-        return repositoryTableViewCell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+    private func bindViewModel() {
+        profileViewModel.state.userRepositoryData
+            .bind(to: myStarRepositoryTableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
     }
 }
 
 // MARK: UITableViewDelegate
 extension ProfileViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 155
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let myStarRepositoryTableViewHeaderView = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID) as? MyStarRepositoryTableViewHeaderView else {
-            //TODO: myStarRepositoryTableViewHeaderView UI udate
-            //            myStarRepositoryTableViewHeaderView.userIDLabel
-            
             return UIView()
         }
+        
+        profileViewModel.state.userData
+            .subscribe(onNext: { data in
+                myStarRepositoryTableViewHeaderView.setupUI(data: data)
+            }).disposed(by: disposeBag)
         
         return myStarRepositoryTableViewHeaderView
     }
