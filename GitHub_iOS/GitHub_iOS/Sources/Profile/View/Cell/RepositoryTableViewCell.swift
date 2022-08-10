@@ -7,26 +7,48 @@
 
 import UIKit
 
+import RxSwift
+import Kingfisher
+import RxDataSources
+import RxRelay
+import Kingfisher
+
+typealias RepositoryTopicSection = SectionModel<Void, String>
+
 class RepositoryTableViewCell: UITableViewCell {
-    //FIXME: viewmodel data 로 변경
-    let data: [String] = ["reactorkit", "swift", "ios", "reactive", "observer", "functional"]
+    private let disposeBag = DisposeBag()
     private var dataCount = 0
     private let contentsLimitWidth = UIScreen.main.bounds.width - 100
+    var repositoryTopicData = BehaviorRelay(value: [RepositoryTopicSection]())
+    var userRepositoryData: UserRepository?
     
-    private let repositoryImageView = UIImageView().then {
-        $0.image = UIImage(named: "repository")
-        $0.contentMode = .scaleAspectFill
-        $0.clipsToBounds = true
+    var dataSource = RxCollectionViewSectionedReloadDataSource<RepositoryTopicSection> { dataSource, collectionView, indexPath, item in
+        let repositoryTopicCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "RepositoryTopicCollectionViewCell", for: indexPath) as! RepositoryTopicCollectionViewCell
+        repositoryTopicCollectionViewCell.setupUI(topic: item)
+        
+        return repositoryTopicCollectionViewCell
+    }
+    
+    private let repositoryOwnerImageView = UIImageView().then {
+        $0.contentMode = .scaleToFill
+        $0.layer.cornerRadius = 9
+        $0.layer.masksToBounds = true
+        $0.addBorder(color: .lightGray, width: 0.5)
+        $0.addShadow()
     }
     
     private let ownerNameLabel = UILabel().then {
-        $0.textColor = .mainBlue
+        $0.textColor = .darkGray
         $0.font = UIFont.setFont(type: .regular, size: 18)
+        $0.numberOfLines = 1
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     private let repositoryNameLabel = UILabel().then {
         $0.textColor = .mainBlue
         $0.font = UIFont.setFont(type: .bold, size: 18)
+        $0.numberOfLines = 1
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     private let repositoryDescriptionLabel = UILabel().then {
@@ -37,7 +59,7 @@ class RepositoryTableViewCell: UITableViewCell {
     }
     
     private let starImageView = UIImageView().then {
-        $0.image = UIImage(named: "unStar")
+        $0.image = UIImage(named: "star")
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
     }
@@ -66,7 +88,6 @@ class RepositoryTableViewCell: UITableViewCell {
     
     private let LanguageView = UIView().then {
         $0.layer.cornerRadius = 7
-        $0.backgroundColor = .mainBlue
     }
     
     private let LanguageLabel = UILabel().then {
@@ -78,6 +99,7 @@ class RepositoryTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         setupCollectionView()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -90,47 +112,49 @@ class RepositoryTableViewCell: UITableViewCell {
     }
     
     private func setupSubViews() {
-        self.addSubviews([repositoryImageView, ownerNameLabel, repositoryNameLabel, starImageView, repositoryDescriptionLabel, repositoryTopicCollectionView, starCountImageView, starCountLabel, LanguageView, LanguageLabel])
+        self.addSubviews([repositoryOwnerImageView, ownerNameLabel, repositoryNameLabel, starImageView, repositoryDescriptionLabel, repositoryTopicCollectionView, starCountImageView, starCountLabel, LanguageView, LanguageLabel])
     }
     
     private func setupConstraints() {
-        repositoryImageView.snp.makeConstraints {
+        repositoryOwnerImageView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(14)
             $0.leading.equalToSuperview().inset(14)
             $0.width.height.equalTo(18)
         }
         
         ownerNameLabel.snp.makeConstraints {
-            $0.top.equalTo(repositoryImageView.snp.top)
-            $0.leading.equalTo(repositoryImageView.snp.trailing).offset(6)
+            $0.top.equalTo(repositoryOwnerImageView.snp.top).offset(-1)
+            $0.leading.equalTo(repositoryOwnerImageView.snp.trailing).offset(6)
+            $0.width.equalTo(contentsLimitWidth)
         }
         
         repositoryNameLabel.snp.makeConstraints {
-            $0.top.equalTo(repositoryImageView.snp.top)
-            $0.leading.equalTo(ownerNameLabel.snp.trailing)
-        }
-        
-        starImageView.snp.makeConstraints {
-            $0.top.equalTo(repositoryImageView.snp.top)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.width.height.equalTo(24)
-        }
-        
-        repositoryDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(ownerNameLabel.snp.bottom).offset(4)
             $0.leading.equalTo(ownerNameLabel.snp.leading)
             $0.width.equalTo(contentsLimitWidth)
         }
         
+        starImageView.snp.makeConstraints {
+            $0.top.equalTo(repositoryOwnerImageView.snp.top)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.width.height.equalTo(24)
+        }
+        
+        repositoryDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(repositoryNameLabel.snp.bottom).offset(4)
+            $0.leading.equalTo(repositoryNameLabel.snp.leading)
+            $0.width.equalTo(contentsLimitWidth)
+        }
+        
         repositoryTopicCollectionView.snp.makeConstraints {
             $0.top.equalTo(repositoryDescriptionLabel.snp.bottom).offset(2)
-            $0.leading.equalTo(ownerNameLabel.snp.leading)
+            $0.leading.equalTo(repositoryNameLabel.snp.leading)
             $0.width.equalTo(contentsLimitWidth)
             $0.height.equalTo(24)
         }
         
         starCountImageView.snp.makeConstraints {
-            $0.leading.equalTo(ownerNameLabel.snp.leading)
+            $0.leading.equalTo(repositoryNameLabel.snp.leading)
             $0.bottom.equalToSuperview().inset(12)
             $0.width.height.equalTo(14)
         }
@@ -153,15 +177,20 @@ class RepositoryTableViewCell: UITableViewCell {
     }
     
     private func setupCollectionView() {
-        repositoryTopicCollectionView.dataSource = self
-        repositoryTopicCollectionView.delegate = self
+        repositoryTopicCollectionView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
         repositoryTopicCollectionView.registerCell(cellType: RepositoryTopicCollectionViewCell.self)
+    }
+    
+    private func bind() {
+        repositoryTopicData
+            .bind(to: repositoryTopicCollectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
     }
     
     private func calculateCellWidth(index: Int, fontSize: CGFloat) -> CGFloat {
         let label = UILabel()
-        //FIXME: viewModel data로 변경
-        label.text = data[index]
+        label.text = userRepositoryData?.topics[index]
         label.font = UIFont.setFont(type: .medium, size: fontSize)
         label.sizeToFit()
         return label.frame.width
@@ -181,29 +210,74 @@ class RepositoryTableViewCell: UITableViewCell {
         return resultIndex
     }
     
-    //FIXME: viewModel data로 변경
-    func setupUI(index: Int) {
-        ownerNameLabel.text = "tableViewcell test\(index)"
-        repositoryNameLabel.text = "WeatherLook_iOS"
-        repositoryDescriptionLabel.text = "WeatherLook_iOSWeatherLook_WeatherLook_iOSWeatherLook_WeatherLook_iOSWeatherLook_WeatherLook_iOS"
-        starCountLabel.text = "881"
-        LanguageLabel.text = "Swift"
-    }
-}
-
-// MARK: UICollectionViewDataSource
-extension RepositoryTableViewCell: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return calculateFirstLineLastCellIndex(dataCount: data.count) + 1
+    private func convertAbbreviation(to number: Int) -> String {
+        let number = Double(number)
+        let thousand = number / 1000
+        let million = number / 1000000
+        if million >= 1.0 {
+            return "\(round(million * 10) / 10)M"
+        } else if thousand >= 1.0 {
+            return "\(round(thousand * 10) / 10)K"
+        } else {
+            return "\(Int(number))"
+        }
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let repositoryTopicCollectionViewCell = collectionView.dequeueReusableCell(cellType: RepositoryTopicCollectionViewCell.self, indexPath: indexPath) else {
-            return UICollectionViewCell()
+    private func getLanguageViewColor(language: String) -> UIColor {
+        switch language {
+        case LanguageType.objectivec.text:
+            return LanguageType.objectivec.color
+        case LanguageType.java.text:
+            return LanguageType.java.color
+        case LanguageType.javaScript.text:
+            return LanguageType.javaScript.color
+        case LanguageType.python.text:
+            return LanguageType.python.color
+        case LanguageType.starlark.text:
+            return LanguageType.starlark.color
+        case LanguageType.go.text:
+            return LanguageType.go.color
+        case LanguageType.shell.text:
+            return LanguageType.shell.color
+        case LanguageType.ruby.text:
+            return LanguageType.ruby.color
+        case LanguageType.kotlin.text:
+            return LanguageType.kotlin.color
+        case LanguageType.php.text:
+            return LanguageType.php.color
+        case LanguageType.applescript.text:
+            return LanguageType.applescript.color
+        case LanguageType.vue.text:
+            return LanguageType.vue.color
+        case LanguageType.css.text:
+            return LanguageType.css.color
+        default:
+            return LanguageType.swift.color
         }
-        repositoryTopicCollectionViewCell.setupUI(topic: data[indexPath.item])
+    }
+    
+    func setupUI(data: UserRepository) {
+        repositoryOwnerImageView.kf.setImage(with: URL(string: data.owner.avatarURL))
+        ownerNameLabel.text = data.owner.login
+        repositoryNameLabel.text = data.name
+        repositoryDescriptionLabel.text = data.userRepositoryDescription
+        starCountLabel.text = convertAbbreviation(to: data.stargazersCount)
+        if let language = data.language {
+            LanguageView.backgroundColor = getLanguageViewColor(language: language)
+            LanguageLabel.text = data.language
+        }
         
-        return repositoryTopicCollectionViewCell
+        if data.topics.count != 0 {
+            userRepositoryData = data
+            let dataCount = calculateFirstLineLastCellIndex(dataCount: data.topics.count) + 1
+            var topicArray: [String] = []
+            for i in 0..<dataCount {
+                topicArray.append(data.topics[i])
+            }
+            
+            let sections = [RepositoryTopicSection(model: Void(), items: topicArray)]
+            repositoryTopicData.accept(sections)
+        }
     }
 }
 
