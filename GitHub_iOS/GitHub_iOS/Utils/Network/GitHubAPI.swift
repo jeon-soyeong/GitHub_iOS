@@ -13,6 +13,8 @@ enum GitHubAPI {
     case requestAccessToken(code: String)
     case getUserData
     case getUserStarRepositoryData(page: Int, perPage: Int)
+    case requestStar(fullName: String)
+    case requestUnstar(fullName: String)
 }
 
 extension GitHubAPI: TargetType {
@@ -33,6 +35,8 @@ extension GitHubAPI: TargetType {
             return "/user"
         case .getUserStarRepositoryData:
             return "/user/starred"
+        case .requestStar(let fullName), .requestUnstar(let fullName):
+            return "/user/starred/\(fullName)"
         }
     }
     
@@ -40,6 +44,10 @@ extension GitHubAPI: TargetType {
         switch self {
         case .requestAccessToken, .getUserStarRepositoryData, .getUserData:
             return .get
+        case .requestStar:
+            return .put
+        case .requestUnstar:
+            return .delete
         }
     }
     

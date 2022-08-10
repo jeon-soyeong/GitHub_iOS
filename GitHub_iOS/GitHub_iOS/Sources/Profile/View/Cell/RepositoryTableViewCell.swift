@@ -11,12 +11,14 @@ import RxSwift
 import Kingfisher
 import RxDataSources
 import RxRelay
+import RxCocoa
 import Kingfisher
 
 typealias RepositoryTopicSection = SectionModel<Void, String>
 
 class RepositoryTableViewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
+    private let viewModel = RepositoryTableViewCellViewModel()
     private var dataCount = 0
     private let contentsLimitWidth = UIScreen.main.bounds.width - 100
     var repositoryTopicData = BehaviorRelay(value: [RepositoryTopicSection]())
@@ -58,8 +60,9 @@ class RepositoryTableViewCell: UITableViewCell {
         $0.lineBreakMode = .byTruncatingTail
     }
     
-    private let starImageView = UIImageView().then {
-        $0.image = UIImage(named: "star")
+    private let starButton = UIButton().then {
+        $0.setImage(UIImage(named: "star"), for: .selected)
+        $0.setImage(UIImage(named: "unStar"), for: .normal)
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
     }
@@ -86,11 +89,11 @@ class RepositoryTableViewCell: UITableViewCell {
         $0.font = UIFont.setFont(type: .regular, size: 12)
     }
     
-    private let LanguageView = UIView().then {
+    private let languageView = UIView().then {
         $0.layer.cornerRadius = 7
     }
     
-    private let LanguageLabel = UILabel().then {
+    private let languageLabel = UILabel().then {
         $0.textColor = .gray
         $0.font = UIFont.setFont(type: .regular, size: 12)
     }
@@ -99,7 +102,8 @@ class RepositoryTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         setupCollectionView()
-        bind()
+        bindAction()
+        bindViewModel()
     }
     
     required init?(coder: NSCoder) {
@@ -112,7 +116,7 @@ class RepositoryTableViewCell: UITableViewCell {
     }
     
     private func setupSubViews() {
-        self.addSubviews([repositoryOwnerImageView, ownerNameLabel, repositoryNameLabel, starImageView, repositoryDescriptionLabel, repositoryTopicCollectionView, starCountImageView, starCountLabel, LanguageView, LanguageLabel])
+        contentView.addSubviews([repositoryOwnerImageView, ownerNameLabel, repositoryNameLabel, starButton, repositoryDescriptionLabel, repositoryTopicCollectionView, starCountImageView, starCountLabel, languageView, languageLabel])
     }
     
     private func setupConstraints() {
@@ -134,7 +138,7 @@ class RepositoryTableViewCell: UITableViewCell {
             $0.width.equalTo(contentsLimitWidth)
         }
         
-        starImageView.snp.makeConstraints {
+        starButton.snp.makeConstraints {
             $0.top.equalTo(repositoryOwnerImageView.snp.top)
             $0.trailing.equalToSuperview().inset(20)
             $0.width.height.equalTo(24)
@@ -164,14 +168,14 @@ class RepositoryTableViewCell: UITableViewCell {
             $0.bottom.equalToSuperview().inset(10)
         }
         
-        LanguageView.snp.makeConstraints {
+        languageView.snp.makeConstraints {
             $0.leading.equalTo(starCountLabel.snp.trailing).offset(12)
             $0.bottom.equalToSuperview().inset(12)
             $0.width.height.equalTo(14)
         }
         
-        LanguageLabel.snp.makeConstraints {
-            $0.leading.equalTo(LanguageView.snp.trailing).offset(4)
+        languageLabel.snp.makeConstraints {
+            $0.leading.equalTo(languageView.snp.trailing).offset(4)
             $0.bottom.equalToSuperview().inset(10)
         }
     }
@@ -182,12 +186,30 @@ class RepositoryTableViewCell: UITableViewCell {
         repositoryTopicCollectionView.registerCell(cellType: RepositoryTopicCollectionViewCell.self)
     }
     
-    private func bind() {
+    private func bindAction() {
+        starButton.rx.tap
+            .bind { [weak self] in
+                guard let self = self,
+                      let fullName = self.userRepositoryData?.fullName else { return }
+                self.viewModel.action.didTappedStarButton.onNext((!self.starButton.isSelected, fullName))
+            }
+            .disposed(by: disposeBag)
+    }
+
+    private func bindViewModel() {
         repositoryTopicData
             .bind(to: repositoryTopicCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+
+        viewModel.state.starToggleResult
+            .subscribe(onNext: { [weak self] isSuccess in
+                guard let self = self,
+                      isSuccess else { return }
+                self.starButton.isSelected = !self.starButton.isSelected
+            })
+            .disposed(by: disposeBag)
     }
-    
+
     private func calculateCellWidth(index: Int, fontSize: CGFloat) -> CGFloat {
         let label = UILabel()
         label.text = userRepositoryData?.topics[index]
@@ -256,19 +278,20 @@ class RepositoryTableViewCell: UITableViewCell {
         }
     }
     
-    func setupUI(data: UserRepository) {
+    func setupUI(data: UserRepository, isStarred: Bool) {
+        starButton.isSelected = isStarred
         repositoryOwnerImageView.kf.setImage(with: URL(string: data.owner.avatarURL))
         ownerNameLabel.text = data.owner.login
         repositoryNameLabel.text = data.name
         repositoryDescriptionLabel.text = data.userRepositoryDescription
         starCountLabel.text = convertAbbreviation(to: data.stargazersCount)
         if let language = data.language {
-            LanguageView.backgroundColor = getLanguageViewColor(language: language)
-            LanguageLabel.text = data.language
+            languageView.backgroundColor = getLanguageViewColor(language: language)
+            languageLabel.text = data.language
         }
         
+        userRepositoryData = data
         if data.topics.count != 0 {
-            userRepositoryData = data
             let dataCount = calculateFirstLineLastCellIndex(dataCount: data.topics.count) + 1
             var topicArray: [String] = []
             for i in 0..<dataCount {

@@ -17,17 +17,18 @@ import RxDataSources
 class ProfileViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let profileViewModel = ProfileViewModel()
-    
+    let userData = BehaviorRelay(value: [String: String]())
     private lazy var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
         $0.backgroundColor = .white
         $0.clipsToBounds = true
         $0.scrollsToTop = true
+        $0.isUserInteractionEnabled = true
     }
     
     var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { dataSource, tableView, indexPath, item in
         let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
         let repositoryTableViewCell = cell as? RepositoryTableViewCell
-        repositoryTableViewCell?.setupUI(data: item)
+        repositoryTableViewCell?.setupUI(data: item, isStarred: true)
         return cell
     }
     
@@ -71,8 +72,7 @@ class ProfileViewController: UIViewController {
             return
         }
         myStarRepositoryTableView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalToSuperview().inset(91)
+            $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().inset(tabBarSize)
         }
     }
@@ -103,7 +103,7 @@ class ProfileViewController: UIViewController {
                         if row == dataCount - 1 {
                             self?.profileViewModel.action.fetch.onNext(())
                         }
-                        print("dataCount: \(dataCount)")
+//                        print("dataCount: \(dataCount)")
                     }
                 }
             }
@@ -114,6 +114,11 @@ class ProfileViewController: UIViewController {
         profileViewModel.state.userStarRepositoryData
             .bind(to: myStarRepositoryTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+
+        profileViewModel.state.userData
+            .subscribe(onNext: { (result: [String: String]) in
+                self.userData.accept(result)
+            }).disposed(by: disposeBag)
     }
 }
 

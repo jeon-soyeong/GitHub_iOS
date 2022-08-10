@@ -16,7 +16,7 @@ class APIService {
     func request<T: Codable, API: TargetType>(_ target: API) -> Single<T> {
         return Single<T>.create { single in
             let provider = MoyaProvider<API>(session: DefaultSession.sharedSession)
-            let request = provider.request(target) { [weak self] result in
+            let request = provider.request(target) { result in
                 switch result {
                 case .success(let response):
                     do {
@@ -27,6 +27,24 @@ class APIService {
                     }
                 case .failure(let error):
                     single(.failure(error))
+                }
+            }
+            
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+
+    func request<API: TargetType>(_ target: API) -> Observable<Data> {
+        return Observable.create { observer in
+            let provider = MoyaProvider<API>(session: DefaultSession.sharedSession)
+            let request = provider.request(target) { result in
+                switch result {
+                case .success(let response):
+                    observer.onNext(response.data)
+                case .failure(let error):
+                    observer.onError(error)
                 }
             }
             
