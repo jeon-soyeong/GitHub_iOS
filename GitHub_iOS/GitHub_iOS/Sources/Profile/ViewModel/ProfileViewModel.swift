@@ -39,8 +39,8 @@ class ProfileViewModel: ViewModelType {
     // refresh 할 때만
     func initialize() {
         currentPage = 1
-        perPage = 20
         isRequestCompleted = false
+        section = []
     }
     
     private func configure() {
