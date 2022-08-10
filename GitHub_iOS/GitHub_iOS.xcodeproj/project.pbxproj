@@ -10,7 +10,6 @@
 		9B27032E289F7BB100D65283 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B27032D289F7BB100D65283 /* UIViewController+Extension.swift */; };
 		9B270330289FD43500D65283 /* LoginError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B27032F289FD43400D65283 /* LoginError.swift */; };
 		9B27033328A029D900D65283 /* RepositoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B27033228A029D900D65283 /* RepositoryTableViewCell.swift */; };
-		9B27033528A02E1900D65283 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B27033428A02E1900D65283 /* UITableView+Extension.swift */; };
 		9B5E9F24289CD9E200963ED1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5E9F23289CD9E200963ED1 /* AppDelegate.swift */; };
 		9B5E9F26289CD9E200963ED1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5E9F25289CD9E200963ED1 /* SceneDelegate.swift */; };
 		9B5E9F2D289CD9E600963ED1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B5E9F2C289CD9E600963ED1 /* Assets.xcassets */; };
@@ -29,6 +28,13 @@
 		9B781D5F28A0ECCC0075D72F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D5E28A0ECCC0075D72F /* UIColor+Extension.swift */; };
 		9B781D6128A0F1F00075D72F /* RepositoryTopicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6028A0F1F00075D72F /* RepositoryTopicCollectionViewCell.swift */; };
 		9B781D6328A0F6060075D72F /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6228A0F6060075D72F /* UICollectionView+Extension.swift */; };
+		9B781D6B28A18A7C0075D72F /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6A28A18A7C0075D72F /* ProfileViewModel.swift */; };
+		9B781D6E28A18B710075D72F /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6D28A18B710075D72F /* ViewModelType.swift */; };
+		9B781D7028A1FE450075D72F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6F28A1FE450075D72F /* UserRepository.swift */; };
+		9BC2E17428A2A41400B5A8B6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17328A2A41300B5A8B6 /* User.swift */; };
+		9BC2E17628A2ACCA00B5A8B6 /* LanguageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */; };
+		9BC2E17B28A312CE00B5A8B6 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17928A312CE00B5A8B6 /* UICollectionView+Extension.swift */; };
+		9BC2E17C28A312CE00B5A8B6 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17A28A312CE00B5A8B6 /* UITableView+Extension.swift */; };
 		9BD5B292289EF1D90062206C /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B291289EF1D90062206C /* KeychainManager.swift */; };
 		9BD5B296289EF2510062206C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B295289EF2510062206C /* LoginViewController.swift */; };
 		9BD5B298289EF2880062206C /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5B297289EF2880062206C /* LoginViewModel.swift */; };
@@ -69,7 +75,6 @@
 		9B27032D289F7BB100D65283 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		9B27032F289FD43400D65283 /* LoginError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
 		9B27033228A029D900D65283 /* RepositoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTableViewCell.swift; sourceTree = "<group>"; };
-		9B27033428A02E1900D65283 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		9B5E9F20289CD9E200963ED1 /* GitHub_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHub_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B5E9F23289CD9E200963ED1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B5E9F25289CD9E200963ED1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +96,13 @@
 		9B781D5E28A0ECCC0075D72F /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		9B781D6028A0F1F00075D72F /* RepositoryTopicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTopicCollectionViewCell.swift; sourceTree = "<group>"; };
 		9B781D6228A0F6060075D72F /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
+		9B781D6A28A18A7C0075D72F /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		9B781D6D28A18B710075D72F /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
+		9B781D6F28A1FE450075D72F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		9BC2E17328A2A41300B5A8B6 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageType.swift; sourceTree = "<group>"; };
+		9BC2E17928A312CE00B5A8B6 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
+		9BC2E17A28A312CE00B5A8B6 /* UITableView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		9BD5B291289EF1D90062206C /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		9BD5B295289EF2510062206C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9BD5B297289EF2880062206C /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -245,8 +257,9 @@
 		9B5E9F56289CDA7B00963ED1 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				9BD5B29B289EFB5C0062206C /* Network */,
+				9B781D6C28A18B4E0075D72F /* Protocol */,
 				9B6A44A7289EA3D400C12313 /* Extension */,
+				9BD5B29B289EFB5C0062206C /* Network */,
 				9BD5B290289EF1C80062206C /* Manager */,
 			);
 			path = Utils;
@@ -255,7 +268,9 @@
 		9B6A449E289EA22500C12313 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				9B781D6428A186000075D72F /* Model */,
 				9B6A44B1289EA57000C12313 /* View */,
+				9B781D6928A18A560075D72F /* ViewModel */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -302,9 +317,9 @@
 				9B6A44B4289EB81500C12313 /* UIImage+Extension.swift */,
 				9BD5B299289EFABC0062206C /* NotificationName+Extension.swift */,
 				9B27032D289F7BB100D65283 /* UIViewController+Extension.swift */,
-				9B27033428A02E1900D65283 /* UITableView+Extension.swift */,
 				9B781D5E28A0ECCC0075D72F /* UIColor+Extension.swift */,
-				9B781D6228A0F6060075D72F /* UICollectionView+Extension.swift */,
+				9BC2E17928A312CE00B5A8B6 /* UICollectionView+Extension.swift */,
+				9BC2E17A28A312CE00B5A8B6 /* UITableView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -327,11 +342,52 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		9B781D6428A186000075D72F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9BC2E17328A2A41300B5A8B6 /* User.swift */,
+				9B781D6F28A1FE450075D72F /* UserRepository.swift */,
+				9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9B781D6728A18A280075D72F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				9BD5B297289EF2880062206C /* LoginViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		9B781D6828A18A330075D72F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9B27032F289FD43400D65283 /* LoginError.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9B781D6928A18A560075D72F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				9B781D6A28A18A7C0075D72F /* ProfileViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		9B781D6C28A18B4E0075D72F /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				9B781D6D28A18B710075D72F /* ViewModelType.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		9BD5B290289EF1C80062206C /* Manager */ = {
 			isa = PBXGroup;
 			children = (
 				9BD5B291289EF1D90062206C /* KeychainManager.swift */,
-				9BD5B297289EF2880062206C /* LoginViewModel.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -339,8 +395,9 @@
 		9BD5B293289EF22F0062206C /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				9B781D6828A18A330075D72F /* Model */,
+				9B781D6728A18A280075D72F /* ViewModel */,
 				9BD5B294289EF23A0062206C /* View */,
-				9B27032F289FD43400D65283 /* LoginError.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -604,6 +661,9 @@
 				9B27032E289F7BB100D65283 /* UIViewController+Extension.swift in Sources */,
 				9B6A44AB289EA4BD00C12313 /* UIView+Extension.swift in Sources */,
 				9B27033528A02E1900D65283 /* UITableView+Extension.swift in Sources */,
+				9BC2E17428A2A41400B5A8B6 /* User.swift in Sources */,
+				9B781D6B28A18A7C0075D72F /* ProfileViewModel.swift in Sources */,
+				9B781D7028A1FE450075D72F /* UserRepository.swift in Sources */,
 				9B6A44B0289EA56400C12313 /* SearchViewController.swift in Sources */,
 				9B27033328A029D900D65283 /* RepositoryTableViewCell.swift in Sources */,
 				9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */,
@@ -611,15 +671,18 @@
 				9B6A44B5289EB81500C12313 /* UIImage+Extension.swift in Sources */,
 				9B781D6128A0F1F00075D72F /* RepositoryTopicCollectionViewCell.swift in Sources */,
 				9BD5B2A3289EFBA30062206C /* DefaultSession.swift in Sources */,
+				9BC2E17628A2ACCA00B5A8B6 /* LanguageType.swift in Sources */,
 				9B5E9F24289CD9E200963ED1 /* AppDelegate.swift in Sources */,
 				9BD5B29D289EFB7D0062206C /* GitHubAPI.swift in Sources */,
 				9BD5B2A1289EFB990062206C /* APIService.swift in Sources */,
 				9BD5B298289EF2880062206C /* LoginViewModel.swift in Sources */,
+				9BC2E17C28A312CE00B5A8B6 /* UITableView+Extension.swift in Sources */,
 				9B781D5D28A091FB0075D72F /* MyStarRepositoryTableViewHeaderView.swift in Sources */,
 				9B5E9F26289CD9E200963ED1 /* SceneDelegate.swift in Sources */,
-				9B781D6328A0F6060075D72F /* UICollectionView+Extension.swift in Sources */,
+				9BC2E17B28A312CE00B5A8B6 /* UICollectionView+Extension.swift in Sources */,
 				9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */,
 				9B6A44B3289EA58900C12313 /* ProfileViewController.swift in Sources */,
+				9B781D6E28A18B710075D72F /* ViewModelType.swift in Sources */,
 				9B781D5F28A0ECCC0075D72F /* UIColor+Extension.swift in Sources */,
 				9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */,
 				9BD5B29F289EFB8C0062206C /* APIConstants.swift in Sources */,
