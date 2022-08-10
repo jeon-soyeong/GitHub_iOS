@@ -8,8 +8,8 @@
 import Foundation
 import RxSwift
 
-class LoginViewModel {
-    private let disposeBag = DisposeBag()
+class LoginViewModel: ViewModelType {
+    var disposeBag = DisposeBag()
     
     var isLogined: Bool {
         if KeychainManager.shared.readAccessToken(key: "access_token") != nil {
@@ -79,7 +79,7 @@ class LoginViewModel {
     
     private func openGithubLogin() {
         let scope = "repo,user"
-        let urlString = "\(APIConstants.baseUrl)/login/oauth/authorize?client_id=\(APIConstants.clientID)&scope=\(scope)"
+        let urlString = "\(APIConstants.githubLoginBaseURL)/login/oauth/authorize?client_id=\(APIConstants.clientID)&scope=\(scope)"
         if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
         }
