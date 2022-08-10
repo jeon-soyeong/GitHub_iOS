@@ -20,12 +20,15 @@ class ProfileViewController: UIViewController {
     
     private lazy var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
         $0.backgroundColor = .white
+        $0.clipsToBounds = true
+        $0.scrollsToTop = true
     }
     
     var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { dataSource, tableView, indexPath, item in
-        let repositoryTableViewCell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath) as! RepositoryTableViewCell
-        repositoryTableViewCell.setupUI(data: item)
-        return repositoryTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
+        let repositoryTableViewCell = cell as? RepositoryTableViewCell
+        repositoryTableViewCell?.setupUI(data: item)
+        return cell
     }
     
     override func viewDidLoad() {
@@ -44,11 +47,11 @@ class ProfileViewController: UIViewController {
         } else { // login 했을 때
             //FIXME:
 //            TabBarController().setTabBarItem()
-            // search tap에서 login 안하고 profile tap에서 로그인하면
-            // viewWillAppear에서 해당 data를 조회한적이 있는지 check, 없을 때만 star repository api 요청
-            if dataSource.sectionModels.first?.items.count == nil {
-                profileViewModel.action.fetch.onNext(())
-            }
+            let safeAreaTopHeight = view.safeAreaInsets.top
+
+            myStarRepositoryTableView.contentOffset = CGPoint(x: 0, y: -Int(safeAreaTopHeight))
+            profileViewModel.initialize()
+            profileViewModel.action.fetch.onNext(())
         }
     }
     
@@ -68,7 +71,8 @@ class ProfileViewController: UIViewController {
             return
         }
         myStarRepositoryTableView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview().inset(91)
             $0.bottom.equalToSuperview().inset(tabBarSize)
         }
     }
