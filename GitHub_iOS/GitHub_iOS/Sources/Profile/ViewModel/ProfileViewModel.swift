@@ -65,7 +65,7 @@ class ProfileViewModel: ViewModelType {
     private func requestUserStarRepositoryData() {
         APIService.shared.request(GitHubAPI.getUserStarRepositoryData(page: currentPage, perPage: perPage))
             .subscribe(onSuccess: { [weak self] (userRepositories: [UserRepository]) in
-//                print("UserRepositories: \(userRepositories.map { $0 })")
+//                print("[jeon] UserRepositories: \(userRepositories.map { $0.fullName })")
                 if self?.currentPage != 1 {
                     self?.isRequestCompleted = userRepositories.isEmpty
                 }

@@ -12,7 +12,6 @@ import Kingfisher
 import RxDataSources
 import RxRelay
 import RxCocoa
-import Kingfisher
 
 typealias RepositoryTopicSection = SectionModel<Void, String>
 
@@ -279,6 +278,7 @@ class RepositoryTableViewCell: UITableViewCell {
     }
     
     func setupUI(data: UserRepository, isStarred: Bool) {
+        starButton.isHidden = KeychainManager.shared.readAccessToken(key: "accessToken") == nil
         starButton.isSelected = isStarred
         repositoryOwnerImageView.kf.setImage(with: URL(string: data.owner.avatarURL))
         ownerNameLabel.text = data.owner.login
