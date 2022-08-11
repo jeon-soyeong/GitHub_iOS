@@ -178,7 +178,6 @@
 				9B6EFDD028A3C96700C7464E /* ViewModel */,
 				9B27033228A029D900D65283 /* RepositoryTableViewCell.swift */,
 				9B781D6028A0F1F00075D72F /* RepositoryTopicCollectionViewCell.swift */,
-				9B6EFDCE28A3AFFA00C7464E /* RepositoryTableViewCellViewModel.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -355,6 +354,7 @@
 		9B6EFDD028A3C96700C7464E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				9B6EFDCE28A3AFFA00C7464E /* RepositoryTableViewCellViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
