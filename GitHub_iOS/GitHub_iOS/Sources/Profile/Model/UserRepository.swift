@@ -44,7 +44,7 @@ struct UserRepository: Codable {
     let nodeID: String
     let contributorsURL: String
     let openIssuesCount: Int
-    let permissions: Permissions
+    let permissions: Permissions?
     let forksCount: Int
     let treesURL: String
     let svnURL: String
@@ -154,7 +154,7 @@ struct UserRepository: Codable {
 // MARK: - License
 struct License: Codable {
     let nodeID, key, spdxID, name: String
-    let url: String
+    let url: String?
 
     enum CodingKeys: String, CodingKey {
         case nodeID = "node_id"

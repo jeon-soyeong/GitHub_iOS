@@ -15,6 +15,7 @@ enum GitHubAPI {
     case getUserStarRepositoryData(page: Int, perPage: Int)
     case requestStar(fullName: String)
     case requestUnstar(fullName: String)
+    case getSearchRepositoryData(page: Int, perPage: Int, query: String)
 }
 
 extension GitHubAPI: TargetType {
@@ -31,8 +32,10 @@ extension GitHubAPI: TargetType {
         switch self {
         case .requestAccessToken:
             return "/login/oauth/access_token"
-        case.getUserData:
+        case .getUserData:
             return "/user"
+        case .getSearchRepositoryData:
+            return "/search/repositories"
         case .getUserStarRepositoryData:
             return "/user/starred"
         case .requestStar(let fullName), .requestUnstar(let fullName):
@@ -42,7 +45,7 @@ extension GitHubAPI: TargetType {
     
     var method: Moya.Method {
         switch self {
-        case .requestAccessToken, .getUserStarRepositoryData, .getUserData:
+        case .requestAccessToken, .getUserStarRepositoryData, .getUserData, .getSearchRepositoryData:
             return .get
         case .requestStar:
             return .put
@@ -58,8 +61,13 @@ extension GitHubAPI: TargetType {
                               "client_secret": APIConstants.clientSecret,
                               "code": code] as [String: Any]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
-        case.getUserStarRepositoryData(let page, let perPage):
+        case .getUserStarRepositoryData(let page, let perPage):
             let parameters = ["page": page,
+                              "per_page": perPage] as [String: Any]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+        case .getSearchRepositoryData(let page, let perPage, let query):
+            let parameters = ["q": query,
+                              "page": page,
                               "per_page": perPage] as [String: Any]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         default:

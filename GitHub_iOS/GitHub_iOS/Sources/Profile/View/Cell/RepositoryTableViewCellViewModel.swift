@@ -35,7 +35,6 @@ class RepositoryTableViewCellViewModel: ViewModelType {
                 } else {
                     self?.requestUnstar(fullName: result.fullName)
                 }
-                
             })
             .disposed(by: disposeBag)
     }

@@ -20,6 +20,11 @@ class APIService {
                 switch result {
                 case .success(let response):
                     do {
+//                        let object = try JSONSerialization.jsonObject(with: response.data, options: [])
+//                        let data2 = try JSONSerialization.data(withJSONObject: object, options: .prettyPrinted)
+//
+//                        print("resp: \(NSString.init(data: data2, encoding: String.Encoding.utf8.rawValue))")
+
                         let parsedResponse = try JSONDecoder().decode(T.self, from: response.data)
                         single(.success(parsedResponse))
                     } catch let error {
@@ -27,6 +32,29 @@ class APIService {
                     }
                 case .failure(let error):
                     single(.failure(error))
+                }
+            }
+            
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+
+    func request<T: Codable, API: TargetType>(_ target: API) -> Observable<T> {
+        return Observable.create { observer in
+            let provider = MoyaProvider<API>(session: DefaultSession.sharedSession)
+            let request = provider.request(target) { result in
+                switch result {
+                case .success(let response):
+                    do {
+                        let parsedResponse = try JSONDecoder().decode(T.self, from: response.data)
+                        observer.onNext(parsedResponse)
+                    } catch let error {
+                        observer.onError(error)
+                    }
+                case .failure(let error):
+                    observer.onError(error)
                 }
             }
             
@@ -47,7 +75,7 @@ class APIService {
                     observer.onError(error)
                 }
             }
-            
+
             return Disposables.create {
                 request.cancel()
             }
