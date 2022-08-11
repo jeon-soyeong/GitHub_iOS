@@ -18,7 +18,6 @@ enum TabBar: CaseIterable {
             return "search"
         case .profile:
             return "profile"
-            
         }
     }
     
