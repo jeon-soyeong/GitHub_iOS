@@ -15,11 +15,11 @@ typealias UserRepositorySection = SectionModel<Void, UserRepository>
 
 class ProfileViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    var currentPage = 1
-    var perPage = 20
-    var isRequestCompleted = false
-    var section: [UserRepository] = []
-    var isRequesting = false
+    private(set) var currentPage = 1
+    private(set) var perPage = 20
+    private(set) var isRequestCompleted = false
+    private(set) var section: [UserRepository] = []
+    private(set) var isRequesting = false
     
     struct Action {
         let fetch = PublishSubject<Void>()
@@ -76,7 +76,7 @@ class ProfileViewModel: ViewModelType {
             .disposed(by: disposeBag)
     }
     
-    private func process(userRepositories: [UserRepository]) {
+    func process(userRepositories: [UserRepository]) {
         if currentPage != 1 {
             isRequestCompleted = userRepositories.isEmpty
         }

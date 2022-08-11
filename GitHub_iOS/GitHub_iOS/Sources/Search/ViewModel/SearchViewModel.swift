@@ -13,13 +13,13 @@ import RxDataSources
 
 class SearchViewModel : ViewModelType {
     var disposeBag = DisposeBag()
-    var currentPage = 1
-    var perPage = 20
-    var isRequestCompleted = false
-    var section: [UserRepository] = []
-    var starredList: [UserRepository] = []
-    var isViewWillDisappear = false
-    var isRequesting = false
+    private(set) var currentPage = 1
+    private(set) var perPage = 20
+    private(set) var isRequestCompleted = false
+    private(set) var section: [UserRepository] = []
+    private(set) var starredList: [UserRepository] = []
+    private(set) var isViewWillDisappear = false
+    private(set) var isRequesting = false
 
     struct Action {
         let viewWillAppear = PublishSubject<Void>()
