@@ -7,76 +7,50 @@
 
 import Foundation
 import RxSwift
+import RxRelay
 
 class LoginViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    
-    var isLogined: Bool {
-        if KeychainManager.shared.readAccessToken(key: "access_token") != nil {
-            return true
-        } else {
-            return false
-        }
-    }
-    
+
     struct Action {
-        let didTappedLoginButton = PublishSubject<Void>()
         let login = PublishSubject<String>()
+        let didTappedLoginButton = PublishSubject<Void>()
         let didTappedLogoutButton = PublishSubject<Void>()
     }
-    
+
     struct State {
-        let isLogined = BehaviorSubject<Bool>(value: false)
-        let isLogout = BehaviorSubject<Bool>(value: false)
+        let isLogined = BehaviorRelay<Bool>(value: false)
+        let isLogout = BehaviorRelay<Bool>(value: false)
     }
-    
+
     var action = Action()
     var state = State()
-    
+
     init() {
         configure()
     }
-    
+
     private func configure() {
         action.didTappedLoginButton
-            .subscribe(onNext: {
-                self.openGithubLogin()
+            .subscribe(onNext: { [weak self] in
+                self?.openGithubLogin()
             })
             .disposed(by: disposeBag)
-        
+
         action.login
             .subscribe(onNext: { [weak self] code in
-                self?.login(with: code)
-                    .subscribe(onNext: { [weak self] result in
-                        switch result {
-                        case .success():
-                            self?.state.isLogined.onNext(true)
-                        case .failure(let error):
-                            print(error)
-                            self?.state.isLogined.onNext(false)
-                        }
-                    })
-                    .disposed(by: self?.disposeBag ?? DisposeBag())
+                guard let self = self else { return }
+                self.requestAccessToken(with: code)
             })
             .disposed(by: disposeBag)
-        
+
         action.didTappedLogoutButton
             .subscribe(onNext: {
                 self.logout()
-                    .subscribe(onNext: { [weak self] result in
-                        switch result {
-                        case .success():
-                            print("logout 성공")
-                            self?.state.isLogout.onNext(true)
-                        case .failure(let error):
-                            print(error)
-                            self?.state.isLogout.onNext(false)
-                        }
-                    }).disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
     }
-    
+
     private func openGithubLogin() {
         let scope = "repo,user"
         let urlString = "\(APIConstants.githubLoginBaseURL)/login/oauth/authorize?client_id=\(APIConstants.clientID)&scope=\(scope)"
@@ -84,57 +58,29 @@ class LoginViewModel: ViewModelType {
             UIApplication.shared.open(url)
         }
     }
-    
-    private func requestAccessToken(with code: String) -> Observable<Result<String, Error>> {
-        return Observable.create() { [weak self] result in
-            APIService.shared.request(GitHubAPI.requestAccessToken(code: code))
-                .subscribe(onSuccess: { (response: [String: String]) in
-                    if let accessToken = response["access_token"] {
-                        print("accessToken: \(accessToken)")
-                        result.onNext(.success(accessToken))
-                    } else {
-                        result.onNext(.failure(LoginError.notExistsAccessToken))
-                    }
-                }, onFailure: {
-                    result.onNext(.failure($0))
-                })
-                .disposed(by: self?.disposeBag ?? DisposeBag())
-            
-            return Disposables.create()
-        }
+
+    private func requestAccessToken(with code: String) {
+        APIService.shared.request(GitHubAPI.getAccessToken(code: code))
+            .subscribe(onSuccess: { [weak self] (response: [String: String]) in
+                if let accessToken = response["access_token"],
+                   KeychainManager.shared.addAccessToken(key: "accessToken", value: accessToken) {
+                    print("accessToken: \(accessToken)")
+                    self?.state.isLogined.accept(true)
+                } else {
+                    self?.state.isLogined.accept(false)
+                }
+            }, onFailure: { _ in 
+                self.state.isLogined.accept(false)
+            })
+            .disposed(by: self.disposeBag)
     }
-    
-    private func login(with code: String) -> Observable<Result<Void, Error>> {
-        return Observable.create() { [weak self] result in
-            self?.requestAccessToken(with: code)
-                .subscribe(onNext: { response in
-                    switch response {
-                    case .success(let accessToken):
-                        if KeychainManager.shared.addAccessToken(key: "accessToken", value: accessToken) {
-                            result.onNext(.success(()))
-                        } else {
-                            result.onNext(.failure((LoginError.failedToSaveKeychain)))
-                        }
-                    case .failure(let error):
-                        print(error)
-                        result.onNext(.failure((LoginError.failedToGetAccessToken)))
-                    }
-                }).disposed(by: self?.disposeBag ?? DisposeBag())
-            
-            return Disposables.create()
-        }
-    }
-    
-    private func logout() -> Observable<Result<Void, Error>> {
-        return Observable.create() { result in
-            if KeychainManager.shared.deleteAccessToken(key: "accessToken") {
-                result.onNext(.success(()))
-                NotificationCenter.default.post(name: .logoutSuccess, object: nil)
-            } else {
-                result.onNext(.failure((LoginError.failedLogout)))
-            }
-            
-            return Disposables.create()
+
+    private func logout() {
+        if KeychainManager.shared.deleteAccessToken(key: "accessToken") {
+            state.isLogout.accept(true)
+            NotificationCenter.default.post(name: .logoutSuccess, object: nil)
+        } else {
+            state.isLogout.accept(false)
         }
     }
 }

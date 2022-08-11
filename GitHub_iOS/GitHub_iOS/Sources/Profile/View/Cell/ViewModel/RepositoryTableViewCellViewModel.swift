@@ -8,25 +8,26 @@
 import Foundation
 
 import RxSwift
+import RxRelay
 
 class RepositoryTableViewCellViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    
+
     struct Action {
         let didTappedStarButton = PublishSubject<(isRequestStar: Bool, fullName: String)>()
     }
-    
+
     struct State {
-        let starToggleResult = BehaviorSubject<Bool>(value: false)
+        let starToggleResult = BehaviorRelay<Bool>(value: false)
     }
-    
+
     var action = Action()
     var state = State()
-    
+
     init() {
         self.configure()
     }
-    
+
     private func configure() {
         action.didTappedStarButton
             .subscribe(onNext: { [weak self] result in
@@ -38,13 +39,13 @@ class RepositoryTableViewCellViewModel: ViewModelType {
             })
             .disposed(by: disposeBag)
     }
-
+    
     private func requestStar(fullName: String) {
         APIService.shared.request(GitHubAPI.requestStar(fullName: fullName))
             .subscribe(onNext: { [weak self] in
-                self?.state.starToggleResult.onNext($0.count == 0)
+                self?.state.starToggleResult.accept($0.count == 0)
             }, onError: { [weak self] _ in
-                self?.state.starToggleResult.onNext(false)
+                self?.state.starToggleResult.accept(false)
             })
             .disposed(by: disposeBag)
     }
@@ -52,9 +53,9 @@ class RepositoryTableViewCellViewModel: ViewModelType {
     private func requestUnstar(fullName: String) {
         APIService.shared.request(GitHubAPI.requestUnstar(fullName: fullName))
             .subscribe(onNext: { [weak self] in
-                self?.state.starToggleResult.onNext($0.count == 0)
+                self?.state.starToggleResult.accept($0.count == 0)
             }, onError: { [weak self] _ in
-                self?.state.starToggleResult.onNext(false)
+                self?.state.starToggleResult.accept(false)
             })
             .disposed(by: disposeBag)
     }

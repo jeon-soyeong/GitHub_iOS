@@ -8,12 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		9B27032E289F7BB100D65283 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B27032D289F7BB100D65283 /* UIViewController+Extension.swift */; };
-		9B270330289FD43500D65283 /* LoginError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B27032F289FD43400D65283 /* LoginError.swift */; };
 		9B27033328A029D900D65283 /* RepositoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B27033228A029D900D65283 /* RepositoryTableViewCell.swift */; };
 		9B41FA4E28A5399700EDE4C5 /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA4D28A5399700EDE4C5 /* SearchRepository.swift */; };
 		9B41FA4F28A5399700EDE4C5 /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA4D28A5399700EDE4C5 /* SearchRepository.swift */; };
 		9B41FA5128A539A500EDE4C5 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA5028A539A500EDE4C5 /* SearchViewModel.swift */; };
 		9B41FA5228A539A500EDE4C5 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA5028A539A500EDE4C5 /* SearchViewModel.swift */; };
+		9B41FA5428A53D8E00EDE4C5 /* Key.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B41FA5328A53D8E00EDE4C5 /* Key.plist */; };
+		9B41FA5528A53D8E00EDE4C5 /* Key.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B41FA5328A53D8E00EDE4C5 /* Key.plist */; };
 		9B5E9F24289CD9E200963ED1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5E9F23289CD9E200963ED1 /* AppDelegate.swift */; };
 		9B5E9F26289CD9E200963ED1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5E9F25289CD9E200963ED1 /* SceneDelegate.swift */; };
 		9B5E9F2D289CD9E600963ED1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B5E9F2C289CD9E600963ED1 /* Assets.xcassets */; };
@@ -77,10 +78,10 @@
 		51A9853F7A877F1458B46CFF /* Pods-GitHub_iOS-GitHub_iOSUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHub_iOS-GitHub_iOSUITests.debug.xcconfig"; path = "Target Support Files/Pods-GitHub_iOS-GitHub_iOSUITests/Pods-GitHub_iOS-GitHub_iOSUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		74B71C0F731F96BF4C755DEF /* Pods-GitHub_iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHub_iOSTests.debug.xcconfig"; path = "Target Support Files/Pods-GitHub_iOSTests/Pods-GitHub_iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9B27032D289F7BB100D65283 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
-		9B27032F289FD43400D65283 /* LoginError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginError.swift; sourceTree = "<group>"; };
 		9B27033228A029D900D65283 /* RepositoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTableViewCell.swift; sourceTree = "<group>"; };
 		9B41FA4D28A5399700EDE4C5 /* SearchRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRepository.swift; sourceTree = "<group>"; };
 		9B41FA5028A539A500EDE4C5 /* SearchViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		9B41FA5328A53D8E00EDE4C5 /* Key.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Key.plist; sourceTree = "<group>"; };
 		9B5E9F20289CD9E200963ED1 /* GitHub_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHub_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B5E9F23289CD9E200963ED1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B5E9F25289CD9E200963ED1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -256,6 +257,7 @@
 				9B5E9F23289CD9E200963ED1 /* AppDelegate.swift */,
 				9B5E9F25289CD9E200963ED1 /* SceneDelegate.swift */,
 				9B5E9F31289CD9E600963ED1 /* Info.plist */,
+				9B41FA5328A53D8E00EDE4C5 /* Key.plist */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -395,14 +397,6 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		9B781D6828A18A330075D72F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9B27032F289FD43400D65283 /* LoginError.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		9B781D6928A18A560075D72F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -430,7 +424,6 @@
 		9BD5B293289EF22F0062206C /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				9B781D6828A18A330075D72F /* Model */,
 				9B781D6728A18A280075D72F /* ViewModel */,
 				9BD5B294289EF23A0062206C /* View */,
 			);
@@ -565,6 +558,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B41FA5428A53D8E00EDE4C5 /* Key.plist in Resources */,
 				9B5E9F2D289CD9E600963ED1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -573,6 +567,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B41FA5528A53D8E00EDE4C5 /* Key.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -703,7 +698,6 @@
 				9B27033328A029D900D65283 /* RepositoryTableViewCell.swift in Sources */,
 				9B41FA4E28A5399700EDE4C5 /* SearchRepository.swift in Sources */,
 				9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */,
-				9B270330289FD43500D65283 /* LoginError.swift in Sources */,
 				9B6A44B5289EB81500C12313 /* UIImage+Extension.swift in Sources */,
 				9B781D6128A0F1F00075D72F /* RepositoryTopicCollectionViewCell.swift in Sources */,
 				9BD5B2A3289EFBA30062206C /* DefaultSession.swift in Sources */,

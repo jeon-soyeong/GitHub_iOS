@@ -32,7 +32,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func checkLoginState() {
-        // FIXME: isLogin 상태로
         if KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
             tabBarController.setupNavigationBarRightButtonItem(size: (28, 28), imageName: "logout")
         } else {
@@ -42,9 +41,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func bindViewModel() {
         loginViewModel.state.isLogined
-            .subscribe(onNext: { [weak self] isLoginSuccess in
+            .subscribe(onNext: { isLoginSuccess in
                 if isLoginSuccess {
-                    print("login 성공")
                     NotificationCenter.default.post(name: .loginSuccess, object: nil)
                 }
             })

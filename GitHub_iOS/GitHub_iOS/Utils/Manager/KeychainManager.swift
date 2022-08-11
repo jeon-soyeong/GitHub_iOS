@@ -10,7 +10,7 @@ import Foundation
 class KeychainManager {
     static let shared = KeychainManager()
     private let bundleIdentifier = Bundle.main.bundleIdentifier as Any
-    
+
     func addAccessToken(key: Any, value: Any) -> Bool {
         let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                                 kSecAttrAccount: key,
@@ -24,46 +24,45 @@ class KeychainManager {
         print("addAccessToken Error: \(SecItemAdd(query as CFDictionary, nil).description))")
         return false
     }
-    
+
     func updateAccessToken(key: Any, value: Any) -> Bool {
         let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                                 kSecAttrAccount: key,
                                 kSecAttrService: bundleIdentifier]
         let updateQuery: [CFString: Any] = [kSecValueData: (value as AnyObject).data(using: String.Encoding.utf8.rawValue) as Any]
-        if SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary) == errSecSuccess {
-            return true
+        guard SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary) == errSecSuccess else {
+            print("updateAccessToken Error: \(SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary).description)")
+            return false
         }
-        print("updateAccessToken Error: \(SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary).description)")
-        return false
+        return true
     }
-    
+
     func readAccessToken(key: Any) -> Any? {
         let getQuery: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                                    kSecAttrAccount: key,
                                    kSecAttrService: bundleIdentifier,
                               kSecReturnAttributes: true,
                                     kSecReturnData: true]
-        
         var item: CFTypeRef?
-        if SecItemCopyMatching(getQuery as CFDictionary, &item) == errSecSuccess {
-            if let existingItem = item as? [String: Any],
-               let data = existingItem[kSecValueData as String] as? Data,
-               let password = String(data: data, encoding: .utf8) {
-                return password
-            }
-        }
-        print("readAccessToken Error: \(SecItemCopyMatching(getQuery as CFDictionary, &item).description)")
-        return nil
+
+        guard SecItemCopyMatching(getQuery as CFDictionary, &item) == errSecSuccess,
+              let existingItem = item as? [String: Any],
+              let data = existingItem[kSecValueData as String] as? Data,
+              let password = String(data: data, encoding: .utf8) else {
+                  print("readAccessToken Error: \(SecItemCopyMatching(getQuery as CFDictionary, &item).description)")
+                  return nil
+              }
+        return password
     }
-    
+
     func deleteAccessToken(key: String) -> Bool {
         let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                                 kSecAttrService: bundleIdentifier,
                                 kSecAttrAccount: key]
-        if SecItemDelete(query as CFDictionary) == errSecSuccess {
-            return true
+        guard SecItemDelete(query as CFDictionary) == errSecSuccess else {
+            print("deleteAccessToken Error: \(SecItemDelete(query as CFDictionary).description)")
+            return false
         }
-        print("deleteAccessToken Error: \(SecItemDelete(query as CFDictionary).description)")
-        return false
+        return true
     }
 }

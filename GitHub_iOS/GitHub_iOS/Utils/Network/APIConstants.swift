@@ -12,23 +12,23 @@ struct APIConstants {
     static let baseURL = "https://api.github.com"
 
     static var clientID: String {
-        guard let filePath = Bundle.main.path(forResource: "Info", ofType: "plist") else {
-            fatalError("Couldn't find file 'Info.plist'.")
+        guard let filePath = Bundle.main.path(forResource: "Key", ofType: "plist") else {
+            return ""
         }
         let plist = NSDictionary(contentsOfFile: filePath)
         guard let value = plist?.object(forKey: "clientID") as? String else {
-            fatalError("Couldn't find key 'clientID' in 'Info.plist'.")
+            return ""
         }
         return value
     }
-    
+
     static var clientSecret: String {
-        guard let filePath = Bundle.main.path(forResource: "Info", ofType: "plist") else {
-            fatalError("Couldn't find file 'Info.plist'.")
+        guard let filePath = Bundle.main.path(forResource: "Key", ofType: "plist") else {
+            return ""
         }
         let plist = NSDictionary(contentsOfFile: filePath)
         guard let value = plist?.object(forKey: "clientSecret") as? String else {
-            fatalError("Couldn't find key 'clientSecret' in 'Info.plist'.")
+            return ""
         }
         return value
     }

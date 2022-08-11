@@ -12,7 +12,7 @@ import Moya
 
 class APIService {
     static let shared = APIService()
-    
+
     func request<T: Codable, API: TargetType>(_ target: API) -> Single<T> {
         return Single<T>.create { single in
             let provider = MoyaProvider<API>(session: DefaultSession.sharedSession)
@@ -20,11 +20,6 @@ class APIService {
                 switch result {
                 case .success(let response):
                     do {
-//                        let object = try JSONSerialization.jsonObject(with: response.data, options: [])
-//                        let data2 = try JSONSerialization.data(withJSONObject: object, options: .prettyPrinted)
-//
-//                        print("resp: \(NSString.init(data: data2, encoding: String.Encoding.utf8.rawValue))")
-
                         let parsedResponse = try JSONDecoder().decode(T.self, from: response.data)
                         single(.success(parsedResponse))
                     } catch let error {
@@ -34,7 +29,7 @@ class APIService {
                     single(.failure(error))
                 }
             }
-            
+
             return Disposables.create {
                 request.cancel()
             }

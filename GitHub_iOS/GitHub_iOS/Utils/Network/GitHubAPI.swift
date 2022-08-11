@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 enum GitHubAPI {
-    case requestAccessToken(code: String)
+    case getAccessToken(code: String)
     case getUserData
     case getUserStarRepositoryData(page: Int, perPage: Int)
     case requestStar(fullName: String)
@@ -21,16 +21,16 @@ enum GitHubAPI {
 extension GitHubAPI: TargetType {
     var baseURL: URL {
         switch self {
-        case .requestAccessToken:
+        case .getAccessToken:
             return URL(string: APIConstants.githubLoginBaseURL)!
         default:
             return URL(string: APIConstants.baseURL)!
         }
     }
-    
+
     var path: String {
         switch self {
-        case .requestAccessToken:
+        case .getAccessToken:
             return "/login/oauth/access_token"
         case .getUserData:
             return "/user"
@@ -42,10 +42,10 @@ extension GitHubAPI: TargetType {
             return "/user/starred/\(fullName)"
         }
     }
-    
+
     var method: Moya.Method {
         switch self {
-        case .requestAccessToken, .getUserStarRepositoryData, .getUserData, .getSearchRepositoryData:
+        case .getAccessToken, .getUserStarRepositoryData, .getUserData, .getSearchRepositoryData:
             return .get
         case .requestStar:
             return .put
@@ -53,10 +53,10 @@ extension GitHubAPI: TargetType {
             return .delete
         }
     }
-    
+
     var task: Task {
         switch self {
-        case .requestAccessToken(let code):
+        case .getAccessToken(let code):
             let parameters = ["client_id": APIConstants.clientID,
                               "client_secret": APIConstants.clientSecret,
                               "code": code] as [String: Any]
@@ -74,10 +74,10 @@ extension GitHubAPI: TargetType {
             return .requestPlain
         }
     }
-    
+
     var headers: [String: String]? {
         switch self {
-        case .requestAccessToken:
+        case .getAccessToken:
             return ["Accept": "application/json"]
         default:
             guard let accssToken = KeychainManager.shared.readAccessToken(key: "accessToken") else {

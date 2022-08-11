@@ -11,7 +11,7 @@ import UIKit
 enum TabBar: CaseIterable {
     case search
     case profile
-    
+
     var title: String {
         switch self {
         case .search:
@@ -20,7 +20,7 @@ enum TabBar: CaseIterable {
             return "profile"
         }
     }
-    
+
     var image: UIImage? {
         switch self {
         case .search:
@@ -29,7 +29,7 @@ enum TabBar: CaseIterable {
             return UIImage(named: "profile")
         }
     }
-    
+
     var rootViewController: UIViewController {
         switch self {
         case .search:

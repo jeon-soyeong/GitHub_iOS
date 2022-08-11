@@ -19,6 +19,7 @@ class ProfileViewModel: ViewModelType {
     var perPage = 20
     var isRequestCompleted = false
     var section: [UserRepository] = []
+    var isRequesting = false
     
     struct Action {
         let fetch = PublishSubject<Void>()
@@ -36,7 +37,6 @@ class ProfileViewModel: ViewModelType {
         self.configure()
     }
     
-    // refresh 할 때만
     func initialize() {
         currentPage = 1
         isRequestCompleted = false
@@ -53,9 +53,11 @@ class ProfileViewModel: ViewModelType {
     }
     
     private func requestUserData() {
+        self.isRequesting = true
         APIService.shared.request(GitHubAPI.getUserData)
             .subscribe(onSuccess: { [weak self] (user: User) in
                 self?.state.userData.accept([user.userID: user.userImageURL])
+                self?.isRequesting = false
             }, onFailure: {
                 print($0)
             })
@@ -63,24 +65,27 @@ class ProfileViewModel: ViewModelType {
     }
     
     private func requestUserStarRepositoryData() {
+        self.isRequesting = true
         APIService.shared.request(GitHubAPI.getUserStarRepositoryData(page: currentPage, perPage: perPage))
             .subscribe(onSuccess: { [weak self] (userRepositories: [UserRepository]) in
-//                print("[jeon] UserRepositories: \(userRepositories.map { $0.fullName })")
-                if self?.currentPage != 1 {
-                    self?.isRequestCompleted = userRepositories.isEmpty
-                }
-                self?.currentPage += 1
-                for item in userRepositories {
-                    self?.section.append(item)
-                }
-                if self?.isRequestCompleted == false {
-                    if let section = self?.section {
-                        self?.state.userStarRepositoryData.accept([UserRepositorySection(model: Void(), items: section)])
-                    }
-                }
+                self?.process(userRepositories: userRepositories)
+                self?.isRequesting = false
             }, onFailure: {
                 print($0)
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func process(userRepositories: [UserRepository]) {
+        if currentPage != 1 {
+            isRequestCompleted = userRepositories.isEmpty
+        }
+        currentPage += 1
+        for item in userRepositories {
+            section.append(item)
+        }
+        if isRequestCompleted == false {
+            state.userStarRepositoryData.accept([UserRepositorySection(model: Void(), items: section)])
+        }
     }
 }

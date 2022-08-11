@@ -20,7 +20,7 @@ class SearchViewModel : ViewModelType {
     var starredList: [UserRepository] = []
     var isViewWillDisappear = false
     var isRequesting = false
-    
+
     struct Action {
         let viewWillAppear = PublishSubject<Void>()
         let viewDisappear = PublishSubject<Void>()
@@ -33,19 +33,18 @@ class SearchViewModel : ViewModelType {
     
     var action = Action()
     var state = State()
-    
+
     init() {
         self.configure()
     }
-    
-    // refresh 할 때만
+
     func initialize() {
         currentPage = 1
         isRequestCompleted = false
         section = []
         state.searchRepositoryData.accept([UserRepositorySection(model: Void(), items: section)])
     }
-    
+
     private func configure() {
         action.didSearch
             .subscribe(onNext: { [weak self] in
@@ -56,10 +55,9 @@ class SearchViewModel : ViewModelType {
                    KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
                     self.isRequesting = true
                     Single.zip(APIService.shared.request(GitHubAPI.getUserStarRepositoryData(page: 1, perPage: 100)),
-                               APIService.shared.request(GitHubAPI.getSearchRepositoryData(page: self.currentPage, perPage: self.perPage, query: $0))) { [weak self] (starredRepos: [UserRepository], searchRepoData: SearchRepository) in
-                        self?.starredList = starredRepos
-//                        print("[jeon] SearchStarList: \(starredRepos.map { $0.fullName })")
-                        self?.process(searchRepoData: searchRepoData)
+                               APIService.shared.request(GitHubAPI.getSearchRepositoryData(page: self.currentPage, perPage: self.perPage, query: $0))) { [weak self] (starredRepository: [UserRepository], searchRepository: SearchRepository) in
+                        self?.starredList = starredRepository
+                        self?.process(searchRepository: searchRepository)
                     }
                     .subscribe(onSuccess: { [weak self] _ in
                         self?.isRequesting = false
@@ -76,8 +74,6 @@ class SearchViewModel : ViewModelType {
         action.viewDisappear
             .subscribe(onNext: { [weak self] _ in
                 self?.isViewWillDisappear = true
-                // 네트워크 요청 진행중 task cancel
-                print("network")
             })
             .disposed(by: disposeBag)
         
@@ -91,8 +87,8 @@ class SearchViewModel : ViewModelType {
     private func requestSearchRepositoryData(query: String) {
         isRequesting = true
         APIService.shared.request(GitHubAPI.getSearchRepositoryData(page: currentPage, perPage: perPage, query: query))
-            .subscribe(onSuccess: { [weak self] (searchRepoData: SearchRepository) in
-                self?.process(searchRepoData: searchRepoData)
+            .subscribe(onSuccess: { [weak self] (searchRepository: SearchRepository) in
+                self?.process(searchRepository: searchRepository)
                 self?.isRequesting = false
             }, onFailure: {
                 print($0)
@@ -100,11 +96,11 @@ class SearchViewModel : ViewModelType {
             .disposed(by: disposeBag)
     }
 
-    private func process(searchRepoData: SearchRepository) {
-        for item in searchRepoData.items {
+    private func process(searchRepository: SearchRepository) {
+        for item in searchRepository.items {
             section.append(item)
         }
-        isRequestCompleted = searchRepoData.totalCount <= section.count
+        isRequestCompleted = searchRepository.totalCount <= section.count
         currentPage += 1
         
         if isViewWillDisappear == false {
