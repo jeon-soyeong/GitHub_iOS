@@ -18,7 +18,6 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
         setupTabBar()
         setupViewControllers()
         bindAction()
@@ -27,9 +26,13 @@ class TabBarController: UITabBarController {
     }
     
     private func setupTabBar() {
-        UITabBar.appearance().backgroundColor = .black
         tabBar.tintColor = .white
         tabBar.barTintColor = .white
+        
+        let appearance = UITabBarAppearance()
+        appearance.backgroundColor = .black
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
     }
     
     private func setupViewControllers() {
@@ -93,9 +96,9 @@ class TabBarController: UITabBarController {
     private func setupTabBarItem(navigationController: UINavigationController, title: String, image: UIImage?) {
         navigationController.tabBarItem.title = title
         navigationController.tabBarItem.image = image
-        navigationController.tabBarItem.imageInsets = .init(top: 15, left: 0, bottom: 0, right: 0)
-        navigationController.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 10)
-        navigationController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.setFont(type: .bold, size: 14)], for: .normal)
+        navigationController.tabBarItem.imageInsets = .init(top: 7, left: 0, bottom: 7, right: 0)
+        navigationController.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 0)
+        navigationController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.setFont(type: .bold, size: 24)], for: .normal)
     }
     
     private func setupNavigationBar(navigationController: UINavigationController, rootViewController: UIViewController) {

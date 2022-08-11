@@ -8,8 +8,9 @@
 import Foundation
 
 struct APIConstants {
-    static let baseUrl = "https://github.com"
-    
+    static let githubLoginBaseURL = "https://github.com"
+    static let baseURL = "https://api.github.com"
+
     static var clientID: String {
         guard let filePath = Bundle.main.path(forResource: "Info", ofType: "plist") else {
             fatalError("Couldn't find file 'Info.plist'.")

@@ -9,71 +9,61 @@ import Foundation
 
 class KeychainManager {
     static let shared = KeychainManager()
+    private let bundleIdentifier = Bundle.main.bundleIdentifier as Any
     
     func addAccessToken(key: Any, value: Any) -> Bool {
         let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                                 kSecAttrAccount: key,
+                                kSecAttrService: bundleIdentifier,
                                   kSecValueData: (value as AnyObject).data(using: String.Encoding.utf8.rawValue) as Any]
-        
-        let result: Bool = {
-            let status = SecItemAdd(query as CFDictionary, nil)
-            if status == errSecSuccess {
-                return true
-            } else if status == errSecDuplicateItem {
-                return updateAccessToken(key: key, value: value)
-            }
-            print("addAccessToken Error: \(status.description))")
-            return false
-        }()
-        
-        return result
+        if SecItemAdd(query as CFDictionary, nil) == errSecSuccess {
+            return true
+        } else if SecItemAdd(query as CFDictionary, nil) == errSecDuplicateItem {
+            return updateAccessToken(key: key, value: value)
+        }
+        print("addAccessToken Error: \(SecItemAdd(query as CFDictionary, nil).description))")
+        return false
     }
     
     func updateAccessToken(key: Any, value: Any) -> Bool {
         let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
-                                kSecAttrAccount: key]
+                                kSecAttrAccount: key,
+                                kSecAttrService: bundleIdentifier]
         let updateQuery: [CFString: Any] = [kSecValueData: (value as AnyObject).data(using: String.Encoding.utf8.rawValue) as Any]
-        
-        let result: Bool = {
-            let status = SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary)
-            if status == errSecSuccess {
-                return true
-            }
-            print("updateAccessToken Error: \(status.description)")
-            return false
-        }()
-        
-        return result
+        if SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary) == errSecSuccess {
+            return true
+        }
+        print("updateAccessToken Error: \(SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary).description)")
+        return false
     }
     
     func readAccessToken(key: Any) -> Any? {
         let getQuery: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                                    kSecAttrAccount: key,
+                                   kSecAttrService: bundleIdentifier,
                               kSecReturnAttributes: true,
                                     kSecReturnData: true]
-        var item: CFTypeRef?
-        let result = SecItemCopyMatching(getQuery as CFDictionary, &item)
         
-        if result == errSecSuccess {
+        var item: CFTypeRef?
+        if SecItemCopyMatching(getQuery as CFDictionary, &item) == errSecSuccess {
             if let existingItem = item as? [String: Any],
                let data = existingItem[kSecValueData as String] as? Data,
                let password = String(data: data, encoding: .utf8) {
                 return password
             }
         }
-        
-        print("readAccessToken Error: \(result.description)")
+        print("readAccessToken Error: \(SecItemCopyMatching(getQuery as CFDictionary, &item).description)")
         return nil
     }
     
     func deleteAccessToken(key: String) -> Bool {
         let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
+                                kSecAttrService: bundleIdentifier,
                                 kSecAttrAccount: key]
-        let status = SecItemDelete(query as CFDictionary)
-        if status == errSecSuccess {
+        if SecItemDelete(query as CFDictionary) == errSecSuccess {
             return true
         }
-        print("deleteAccessToken Error: \(status.description)")
+        print("deleteAccessToken Error: \(SecItemDelete(query as CFDictionary).description)")
         return false
     }
 }

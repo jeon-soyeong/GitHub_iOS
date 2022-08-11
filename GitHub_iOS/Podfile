@@ -9,9 +9,11 @@ target 'GitHub_iOS' do
     pod 'ReactorKit'
     pod 'RxSwift', '6.5.0'
     pod 'RxCocoa'
+    pod 'RxDataSources'
     pod 'Moya/RxSwift'
     pod 'SnapKit', '~> 5.6.0'
     pod 'Then'
+    pod 'Kingfisher', '~> 7.2.0'
 
   target 'GitHub_iOSTests' do
     inherit! :search_paths
