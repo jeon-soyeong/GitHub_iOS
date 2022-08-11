@@ -98,7 +98,6 @@ class TabBarController: UITabBarController {
         navigationController.tabBarItem.image = image
         navigationController.tabBarItem.imageInsets = .init(top: 7, left: 0, bottom: 7, right: 0)
         navigationController.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 0)
-        navigationController.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.setFont(type: .bold, size: 24)], for: .normal)
     }
     
     private func setupNavigationBar(navigationController: UINavigationController, rootViewController: UIViewController) {
