@@ -35,6 +35,7 @@ class SearchViewController: UIViewController {
         let repositoryTableViewCell = cell as? RepositoryTableViewCell
         let isStarred = self?.viewModel.starredList.contains { $0.fullName == item.fullName } ?? false
         repositoryTableViewCell?.setupUI(data: item, isStarred: isStarred)
+        repositoryTableViewCell?.selectionStyle = .none
 
         return cell
     }

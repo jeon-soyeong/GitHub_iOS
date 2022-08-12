@@ -6,7 +6,6 @@ target 'GitHub_iOS' do
   use_frameworks!
 
   # Pods for GitHub_iOS
-    pod 'ReactorKit'
     pod 'RxSwift', '6.5.0'
     pod 'RxCocoa'
     pod 'RxDataSources'

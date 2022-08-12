@@ -30,6 +30,8 @@ class ProfileViewController: UIViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
         let repositoryTableViewCell = cell as? RepositoryTableViewCell
         repositoryTableViewCell?.setupUI(data: item, isStarred: true)
+        repositoryTableViewCell?.selectionStyle = .none
+        
         return cell
     }
 
