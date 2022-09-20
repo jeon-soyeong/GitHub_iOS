@@ -97,8 +97,7 @@ class ProfileViewController: UIViewController {
     private func bindAction() {
         myStarRepositoryTableView.rx.prefetchRows
             .compactMap(\.last?.row)
-            .withUnretained(self)
-            .bind { [weak self] vc, row in
+            .bind { [weak self] row in
                 if self?.viewModel.isRequestCompleted == false,
                    let dataCount = self?.dataSource.sectionModels.first?.items.count,
                    row >= dataCount - 3,

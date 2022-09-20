@@ -55,6 +55,7 @@ class KeychainManager {
         return password
     }
 
+    @discardableResult
     func deleteAccessToken(key: String) -> Bool {
         let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                                 kSecAttrService: bundleIdentifier,
