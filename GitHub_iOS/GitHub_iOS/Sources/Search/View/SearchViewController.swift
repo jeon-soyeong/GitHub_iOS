@@ -40,8 +40,7 @@ class SearchViewController: UIViewController {
     lazy var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { [weak self] dataSource, tableView, indexPath, item in
         let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
         let repositoryTableViewCell = cell as? RepositoryTableViewCell
-        let isStarred = self?.viewModel.starredList.contains { $0.fullName == item.fullName } ?? false
-        repositoryTableViewCell?.setupUI(data: item, isStarred: isStarred)
+        repositoryTableViewCell?.setupUI(data: item, isStarred: false)
         repositoryTableViewCell?.selectionStyle = .none
 
         return cell
@@ -51,24 +50,10 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
 
         setupView()
-        setupNotification()
         setupTableView()
         setupGestureRecognizer(to: searchRepositoryTableView)
         bindAction()
         bindViewModel()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        viewModel.action.viewWillAppear.onNext(())
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        initializeUI()
-        viewModel.action.viewDisappear.onNext(())
     }
 
     private func setupView() {
@@ -94,20 +79,6 @@ class SearchViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().inset(tabBarController?.tabBar.frame.size.height ?? 100)
         }
-    }
-
-    private func setupNotification() {
-        NotificationCenter.default.rx.notification(.loginSuccess)
-            .subscribe(onNext: { [weak self] _ in
-                self?.initializeUI()
-                self?.viewModel.action.didSearch.onNext((""))
-            }).disposed(by: disposeBag)
-
-        NotificationCenter.default.rx.notification(.logoutSuccess)
-            .subscribe(onNext: { [weak self] _ in
-                self?.initializeUI()
-                self?.viewModel.action.didSearch.onNext((""))
-            }).disposed(by: disposeBag)
     }
 
     private func setupTableView() {
@@ -153,13 +124,10 @@ class SearchViewController: UIViewController {
         searchRepositoryTableView.rx.prefetchRows
             .compactMap(\.last?.row)
             .bind { [weak self] row in
-                if self?.viewModel.isRequestCompleted == false {
-                    if let searchText = self?.searchBar.searchTextField.text,
-                       let dataCount = self?.dataSource.sectionModels.first?.items.count,
-                       row >= dataCount - 3,
-                       self?.viewModel.isRequesting == false {
-                        self?.viewModel.action.didSearch.onNext((searchText))
-                    }
+                if let searchText = self?.searchBar.searchTextField.text,
+                   let dataCount = self?.dataSource.sectionModels.first?.items.count,
+                   row >= dataCount - 3 {
+                    self?.viewModel.action.didSearch.onNext((searchText))
                 }
             }
             .disposed(by: self.disposeBag)

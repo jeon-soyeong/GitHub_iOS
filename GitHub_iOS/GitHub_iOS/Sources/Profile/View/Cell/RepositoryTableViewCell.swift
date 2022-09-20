@@ -279,7 +279,7 @@ class RepositoryTableViewCell: UITableViewCell {
     }
 
     func setupUI(data: UserRepository, isStarred: Bool) {
-        starButton.isHidden = KeychainManager.shared.readAccessToken(key: "accessToken") == nil
+        starButton.isHidden = !isStarred
         starButton.isSelected = isStarred
         repositoryOwnerImageView.kf.setImage(with: URL(string: data.owner.avatarURL))
         ownerNameLabel.text = data.owner.login
