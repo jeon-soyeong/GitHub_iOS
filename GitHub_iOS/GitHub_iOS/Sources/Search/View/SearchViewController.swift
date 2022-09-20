@@ -136,6 +136,14 @@ class SearchViewController: UIViewController {
             }
             .disposed(by: self.disposeBag)
 
+        searchBar.searchTextField.rx.text
+            .orEmpty
+            .filter { $0.isEmpty }
+            .bind { [weak self] _ in
+                self?.initializeUI()
+            }
+            .disposed(by: self.disposeBag)
+
         searchRepositoryTableView.rx.prefetchRows
             .compactMap(\.last?.row)
             .bind { [weak self] row in
