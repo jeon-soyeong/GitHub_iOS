@@ -29,6 +29,7 @@ class SearchViewModel : ViewModelType {
 
     struct State {
         let searchRepositoryData = BehaviorRelay(value: [UserRepositorySection]())
+        let isRequesting = BehaviorRelay<Bool>(value: false)
     }
     
     var action = Action()

@@ -30,6 +30,12 @@ class SearchViewController: UIViewController {
         $0.isUserInteractionEnabled = true
         $0.keyboardDismissMode = .onDrag
     }
+    
+    private lazy var loadingIndicatorView = LoadingIndicatorView().then {
+        $0.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        $0.center = view.center
+        $0.isHidden = true
+    }
 
     lazy var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { [weak self] dataSource, tableView, indexPath, item in
         let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
@@ -73,7 +79,7 @@ class SearchViewController: UIViewController {
     }
 
     private func setupSubViews() {
-        view.addSubviews([searchBar, searchRepositoryTableView])
+        view.addSubviews([searchBar, searchRepositoryTableView, loadingIndicatorView])
     }
 
     private func setupConstraints() {
@@ -163,12 +169,36 @@ class SearchViewController: UIViewController {
         viewModel.state.searchRepositoryData
             .bind(to: searchRepositoryTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
+        viewModel.state.isRequesting
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] isRequesting in
+                if isRequesting {
+                    self?.showActivityIndicator()
+                } else {
+                    self?.hideActivityIndicator()
+                }
+            })
+            .disposed(by: disposeBag)
     }
 
     private func initializeUI() {
         searchBar.searchTextField.text = ""
         viewModel.initialize()
         searchRepositoryTableView.contentOffset = .zero
+    }
+    
+    private func showActivityIndicator() {
+        DispatchQueue.main.async {
+            self.loadingIndicatorView.isHidden = false
+            self.loadingIndicatorView.startAnimation()
+        }
+    }
+
+    private func hideActivityIndicator() {
+        DispatchQueue.main.async {
+            self.loadingIndicatorView.isHidden = true
+        }
     }
 }
 
