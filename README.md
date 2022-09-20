@@ -1,8 +1,10 @@
 # GitHub_iOS
 
-<img width="120" alt="icon" src="https://user-images.githubusercontent.com/61855905/184266181-04d7d7a6-ae56-41bc-8379-96537505d832.png">
-  
-</br>  
+<img width="120" alt="icon" src="https://user-images.githubusercontent.com/61855905/184266181-04d7d7a6-ae56-41bc-8379-96537505d832.png">  
+
+### GitHub API를 이용한 GitHub 앱😺 입니다.
+사용자는 repository를 검색할 수 있으며, 로그인한 사용자는 star한 repository를 조회할 수 있습니다. 
+</br></br>
 
 ## [Preview]
 
