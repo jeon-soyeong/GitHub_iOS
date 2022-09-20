@@ -28,6 +28,7 @@ class SearchViewController: UIViewController {
         $0.clipsToBounds = true
         $0.scrollsToTop = true
         $0.isUserInteractionEnabled = true
+        $0.keyboardDismissMode = .onDrag
     }
 
     lazy var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { [weak self] dataSource, tableView, indexPath, item in
@@ -46,6 +47,7 @@ class SearchViewController: UIViewController {
         setupView()
         setupNotification()
         setupTableView()
+        setupGestureRecognizer(to: searchRepositoryTableView)
         bindAction()
         bindViewModel()
     }
@@ -109,13 +111,26 @@ class SearchViewController: UIViewController {
         searchRepositoryTableView.registerCell(cellType: RepositoryTableViewCell.self)
         searchRepositoryTableView.register(MyStarRepositoryTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
     }
+    
+    private func setupGestureRecognizer(to view: UIView) {
+        let tapGestureRecognizer = UITapGestureRecognizer().then {
+            $0.cancelsTouchesInView = false
+            view.addGestureRecognizer($0)
+        }
+        
+        tapGestureRecognizer.rx.event
+            .subscribe(onNext: { [weak self] _ in
+                self?.searchBar.resignFirstResponder()
+            })
+        .disposed(by: disposeBag)
+    }
 
     private func bindAction() {
         searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
             .bind { [weak self] _ in
                 self?.viewModel.initialize()
                 if let searchText = self?.searchBar.searchTextField.text {
-                    print("searchText: \(searchText)")
+                    self?.searchBar.resignFirstResponder()
                     self?.viewModel.action.didSearch.onNext((searchText))
                 }
             }
@@ -123,8 +138,7 @@ class SearchViewController: UIViewController {
 
         searchRepositoryTableView.rx.prefetchRows
             .compactMap(\.last?.row)
-            .withUnretained(self)
-            .bind { [weak self] vc, row in
+            .bind { [weak self] row in
                 if self?.viewModel.isRequestCompleted == false {
                     if let searchText = self?.searchBar.searchTextField.text,
                        let dataCount = self?.dataSource.sectionModels.first?.items.count,
