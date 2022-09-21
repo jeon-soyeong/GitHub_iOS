@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import Moya
 
-class APIService {
+final class APIService {
     static let shared = APIService()
 
     func request<T: Codable, API: TargetType>(_ target: API) -> Single<T> {

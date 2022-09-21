@@ -11,7 +11,7 @@ import RxSwift
 import RxRelay
 import RxDataSources
 
-class SearchViewModel : ViewModelType {
+final class SearchViewModel : ViewModelType {
     var disposeBag = DisposeBag()
     private(set) var currentPage = 1
     private(set) var perPage = 20

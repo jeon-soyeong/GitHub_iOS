@@ -13,7 +13,7 @@ import RxDataSources
 
 typealias UserRepositorySection = SectionModel<Void, UserRepository>
 
-class ProfileViewModel: ViewModelType {
+final class ProfileViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     private(set) var currentPage = 1
     private(set) var perPage = 20

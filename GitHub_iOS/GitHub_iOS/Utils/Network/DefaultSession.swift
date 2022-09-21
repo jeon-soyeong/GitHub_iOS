@@ -9,7 +9,7 @@ import Foundation
 
 import Moya
 
-class DefaultSession: Session {
+final class DefaultSession: Session {
     static let sharedSession: DefaultSession = {
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = Session.default.session.configuration.httpAdditionalHeaders

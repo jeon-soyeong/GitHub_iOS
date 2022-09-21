@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class TabBarController: UITabBarController {
+final class TabBarController: UITabBarController {
     private let disposeBag = DisposeBag()
     private var rootViewControllers: [UIViewController] = []
     private let loginViewModel = LoginViewModel()

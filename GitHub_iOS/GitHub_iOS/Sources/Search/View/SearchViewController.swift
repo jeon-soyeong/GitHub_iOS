@@ -14,7 +14,7 @@ import RxDataSources
 import Then
 import SnapKit
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel = SearchViewModel()
 

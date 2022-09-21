@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxRelay
 
-class RepositoryTableViewCellViewModel: ViewModelType {
+final class RepositoryTableViewCellViewModel: ViewModelType {
     var disposeBag = DisposeBag()
 
     struct Action {

@@ -15,7 +15,7 @@ import RxCocoa
 
 typealias RepositoryTopicSection = SectionModel<Void, String>
 
-class RepositoryTableViewCell: UITableViewCell {
+final class RepositoryTableViewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
     private let viewModel = RepositoryTableViewCellViewModel()
     private var dataCount = 0

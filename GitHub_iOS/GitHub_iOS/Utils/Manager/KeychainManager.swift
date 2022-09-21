@@ -7,7 +7,7 @@
 
 import Foundation
 
-class KeychainManager {
+final class KeychainManager {
     static let shared = KeychainManager()
     private let bundleIdentifier = Bundle.main.bundleIdentifier as Any
 

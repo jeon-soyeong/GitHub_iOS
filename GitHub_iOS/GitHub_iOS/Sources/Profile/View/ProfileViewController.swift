@@ -14,7 +14,7 @@ import RxCocoa
 import RxRelay
 import RxDataSources
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel = ProfileViewModel()
 

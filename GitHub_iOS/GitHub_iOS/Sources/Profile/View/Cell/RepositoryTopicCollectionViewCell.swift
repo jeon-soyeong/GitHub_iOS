@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RepositoryTopicCollectionViewCell: UICollectionViewCell {
+final class RepositoryTopicCollectionViewCell: UICollectionViewCell {
     private let repositoryTopicLabelView = UIView().then {
         $0.backgroundColor = .mainSkyBlue
         $0.layer.masksToBounds = true
