@@ -19,7 +19,6 @@ class ProfileViewModel: ViewModelType {
     private(set) var perPage = 20
     private(set) var isRequestCompleted = false
     private(set) var section: [UserRepository] = []
-    private(set) var isRequesting = false
     
     struct Action {
         let fetch = PublishSubject<Void>()
@@ -28,6 +27,7 @@ class ProfileViewModel: ViewModelType {
     struct State {
         let userData = BehaviorRelay(value: [String: String]())
         let userStarRepositoryData = BehaviorRelay(value: [UserRepositorySection]())
+        let isRequesting = BehaviorRelay<Bool>(value: false)
     }
     
     var action = Action()
@@ -46,30 +46,38 @@ class ProfileViewModel: ViewModelType {
     private func configure() {
         action.fetch
             .subscribe(onNext: { [weak self] in
-                self?.requestUserData()
-                self?.requestUserStarRepositoryData()
+                guard let self = self else { return }
+                let isRequesting = self.state.isRequesting.value
+                if isRequesting == false {
+                    if self.section.count == 0 {
+                        self.state.isRequesting.accept(true)
+                        Single.zip(APIService.shared.request(GitHubAPI.getUserData),
+                                   APIService.shared.request(GitHubAPI.getUserStarRepositoryData(page: self.currentPage, perPage: self.perPage))) { [weak self] (user: User, userRepositories: [UserRepository]) in
+                            self?.state.userData.accept([user.userID: user.userImageURL])
+                            self?.process(userRepositories: userRepositories)
+                        }
+                       .subscribe(onSuccess: { [weak self] _ in
+                           self?.state.isRequesting.accept(false)
+                       }, onFailure: {
+                           print($0)
+                       })
+                       .disposed(by: self.disposeBag)
+                    } else {
+                        if self.isRequestCompleted == false {
+                            self.requestUserStarRepositoryData()
+                        }
+                    }
+                }
             })
             .disposed(by: disposeBag)
     }
-    
-    private func requestUserData() {
-        self.isRequesting = true
-        APIService.shared.request(GitHubAPI.getUserData)
-            .subscribe(onSuccess: { [weak self] (user: User) in
-                self?.state.userData.accept([user.userID: user.userImageURL])
-                self?.isRequesting = false
-            }, onFailure: {
-                print($0)
-            })
-            .disposed(by: disposeBag)
-    }
-    
+
     private func requestUserStarRepositoryData() {
-        self.isRequesting = true
+        self.state.isRequesting.accept(true)
         APIService.shared.request(GitHubAPI.getUserStarRepositoryData(page: currentPage, perPage: perPage))
             .subscribe(onSuccess: { [weak self] (userRepositories: [UserRepository]) in
                 self?.process(userRepositories: userRepositories)
-                self?.isRequesting = false
+                self?.state.isRequesting.accept(false)
             }, onFailure: {
                 print($0)
             })
@@ -80,11 +88,12 @@ class ProfileViewModel: ViewModelType {
         if currentPage != 1 {
             isRequestCompleted = userRepositories.isEmpty
         }
-        currentPage += 1
-        for item in userRepositories {
-            section.append(item)
-        }
+        
         if isRequestCompleted == false {
+            for item in userRepositories {
+                section.append(item)
+            }
+            currentPage += 1
             state.userStarRepositoryData.accept([UserRepositorySection(model: Void(), items: section)])
         }
     }

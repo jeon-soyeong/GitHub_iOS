@@ -281,7 +281,7 @@ class RepositoryTableViewCell: UITableViewCell {
     func setupUI(data: UserRepository, isStarred: Bool) {
         starButton.isHidden = !isStarred
         starButton.isSelected = isStarred
-        repositoryOwnerImageView.kf.setImage(with: URL(string: data.owner.avatarURL), placeholder: UIImage(named: "defaultUser"))
+        repositoryOwnerImageView.kf.setImage(with: URL(string: data.owner.avatarURL))
         ownerNameLabel.text = data.owner.login
         repositoryNameLabel.text = data.name
         repositoryDescriptionLabel.text = data.userRepositoryDescription

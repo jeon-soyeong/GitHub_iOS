@@ -17,13 +17,18 @@ import RxDataSources
 class ProfileViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel = ProfileViewModel()
-    let userData = BehaviorRelay(value: [String: String]())
 
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
         $0.backgroundColor = .white
         $0.clipsToBounds = true
         $0.scrollsToTop = true
         $0.isUserInteractionEnabled = true
+    }
+    
+    private lazy var loadingIndicatorView = LoadingIndicatorView().then {
+        $0.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        $0.center = view.center
+        $0.isHidden = true
     }
 
     var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { dataSource, tableView, indexPath, item in
@@ -66,7 +71,7 @@ class ProfileViewController: UIViewController {
     }
 
     private func setupSubViews() {
-        view.addSubview(myStarRepositoryTableView)
+        view.addSubviews([myStarRepositoryTableView, loadingIndicatorView])
     }
 
     private func setupConstraints() {
@@ -98,10 +103,8 @@ class ProfileViewController: UIViewController {
         myStarRepositoryTableView.rx.prefetchRows
             .compactMap(\.last?.row)
             .bind { [weak self] row in
-                if self?.viewModel.isRequestCompleted == false,
-                   let dataCount = self?.dataSource.sectionModels.first?.items.count,
-                   row >= dataCount - 3,
-                   self?.viewModel.isRequesting == false {
+                if let dataCount = self?.dataSource.sectionModels.first?.items.count,
+                   row >= dataCount - 3 {
                     self?.viewModel.action.fetch.onNext(())
                 }
             }
@@ -112,11 +115,37 @@ class ProfileViewController: UIViewController {
         viewModel.state.userStarRepositoryData
             .bind(to: myStarRepositoryTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-
+        
+        viewModel.state.isRequesting
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] isRequesting in
+                if isRequesting {
+                    self?.showActivityIndicator()
+                } else {
+                    self?.hideActivityIndicator()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindViewModel(to headerView: MyStarRepositoryTableViewHeaderView?) {
         viewModel.state.userData
-            .subscribe(onNext: { (result: [String: String]) in
-                self.userData.accept(result)
+            .subscribe(onNext: { (userData: [String: String]) in
+                headerView?.setupUI(data: userData)
             }).disposed(by: disposeBag)
+    }
+    
+    private func showActivityIndicator() {
+        DispatchQueue.main.async {
+            self.loadingIndicatorView.isHidden = false
+            self.loadingIndicatorView.startAnimation()
+        }
+    }
+
+    private func hideActivityIndicator() {
+        DispatchQueue.main.async {
+            self.loadingIndicatorView.isHidden = true
+        }
     }
 }
 
@@ -129,12 +158,8 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
         let myStarRepositoryTableViewHeaderView = headerView as? MyStarRepositoryTableViewHeaderView
-
-        viewModel.state.userData
-            .subscribe(onNext: { data in
-                myStarRepositoryTableViewHeaderView?.setupUI(data: data)
-            }).disposed(by: disposeBag)
-
+        bindViewModel(to: myStarRepositoryTableViewHeaderView)
+        
         return headerView
     }
 

@@ -58,7 +58,7 @@ final class MyStarRepositoryTableViewHeaderView: UITableViewHeaderFooterView {
     func setupUI(data: [String: String]) {
         userIDLabel.text = data.keys.first
         if let userImageURL = data.values.first {
-            userImageView.kf.setImage(with: URL(string: userImageURL), placeholder: UIImage(named: "defaultUser"))
+            userImageView.kf.setImage(with: URL(string: userImageURL))
         }
     }
 }

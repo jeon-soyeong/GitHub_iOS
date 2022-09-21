@@ -64,6 +64,7 @@
 		9B781D6E28A18B710075D72F /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6D28A18B710075D72F /* ViewModelType.swift */; };
 		9B781D7028A1FE450075D72F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6F28A1FE450075D72F /* UserRepository.swift */; };
 		9B85BD8128DA13D100E47747 /* LoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */; };
+		9B85BD8228DB004F00E47747 /* LoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */; };
 		9BBF4A7628A5B2620039A6AB /* ProfileViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBF4A7528A5B2620039A6AB /* ProfileViewModelTests.swift */; };
 		9BC2E17428A2A41400B5A8B6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17328A2A41300B5A8B6 /* User.swift */; };
 		9BC2E17628A2ACCA00B5A8B6 /* LanguageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */; };
@@ -780,6 +781,7 @@
 				9B41FA5D28A57FC700EDE4C5 /* APIConstants.swift in Sources */,
 				9B41FA6328A59D7300EDE4C5 /* SearchViewController.swift in Sources */,
 				9B41FA6428A59D7A00EDE4C5 /* RepositoryTableViewCellViewModel.swift in Sources */,
+				9B85BD8228DB004F00E47747 /* LoadingIndicatorView.swift in Sources */,
 				9B5E9F3B289CD9E600963ED1 /* KeychainManagerTests.swift in Sources */,
 				9B41FA5828A57F7600EDE4C5 /* ViewModelType.swift in Sources */,
 				9B41FA5628A57F2500EDE4C5 /* ProfileViewModel.swift in Sources */,

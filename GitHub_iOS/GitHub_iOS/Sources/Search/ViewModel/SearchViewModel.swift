@@ -17,7 +17,6 @@ class SearchViewModel : ViewModelType {
     private(set) var perPage = 20
     private(set) var isRequestCompleted = false
     private(set) var section: [UserRepository] = []
-    private(set) var isRequesting = false
 
     struct Action {
         let didSearch = PublishSubject<String>()
