@@ -52,7 +52,7 @@ final class ProfileViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
             self.navigationController?.pushViewController(LoginViewController(), animated: false)
         } else {

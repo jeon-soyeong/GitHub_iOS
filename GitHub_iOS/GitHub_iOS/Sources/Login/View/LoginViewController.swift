@@ -65,17 +65,13 @@ final class LoginViewController: UIViewController {
     private func bindAction() {
         loginButton.rx.tap
             .subscribe(onNext: { [weak self] in
-                if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
-                    self?.viewModel.action.didTappedLoginButton.onNext(())
-                }
+                self?.viewModel.action.didTappedLoginButton.onNext(())
             })
             .disposed(by: disposeBag)
 
         self.navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { [weak self] _ in
-                if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
-                    self?.viewModel.action.didTappedLoginButton.onNext(())
-                }
+                self?.viewModel.action.didTappedLoginButton.onNext(())
             })
             .disposed(by: disposeBag)
     }

@@ -14,16 +14,16 @@ final class TabBarController: UITabBarController {
     private let disposeBag = DisposeBag()
     private var rootViewControllers: [UIViewController] = []
     private let loginViewModel: LoginViewModel
-    
+
     init(loginViewModel: LoginViewModel) {
         self.loginViewModel = loginViewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -113,9 +113,9 @@ final class TabBarController: UITabBarController {
         ]
         navigationController.navigationBar.standardAppearance = navigationBarAppearance
         navigationController.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-        
+
         rootViewController.navigationItem.title = "GitHub"
-        
+
         var resizedImage: UIImage?
         if KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
             resizedImage = UIImage(named: "logout")?.resize(size: CGSize(width: 28, height: 28)).withRenderingMode(.alwaysOriginal)
