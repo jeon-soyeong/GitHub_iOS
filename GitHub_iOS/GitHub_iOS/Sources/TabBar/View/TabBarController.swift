@@ -13,7 +13,16 @@ import RxCocoa
 final class TabBarController: UITabBarController {
     private let disposeBag = DisposeBag()
     private var rootViewControllers: [UIViewController] = []
-    private let loginViewModel = LoginViewModel()
+    private let loginViewModel: LoginViewModel
+    
+    init(loginViewModel: LoginViewModel) {
+        self.loginViewModel = loginViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +31,6 @@ final class TabBarController: UITabBarController {
         setupViewControllers()
         bindAction()
         bindViewModel()
-        setupNotification()
     }
 
     private func setupTabBar() {
@@ -40,8 +48,8 @@ final class TabBarController: UITabBarController {
         TabBar.allCases.forEach {
             let rootViewController = $0.rootViewController
             navigationControllers.append(createNavigationController(rootViewController: rootViewController,
-                                                              title: $0.title,
-                                                              image: $0.image))
+                                                                    title: $0.title,
+                                                                    image: $0.image))
             rootViewControllers.append(rootViewController)
         }
         setViewControllers(navigationControllers, animated: false)
@@ -63,25 +71,21 @@ final class TabBarController: UITabBarController {
     }
 
     private func bindViewModel() {
-        loginViewModel.state.isLogout
-            .subscribe(onNext: { [weak self] isLogoutSuccess in
-                if isLogoutSuccess {
-                    self?.rootViewControllers.forEach { [weak self] _ in
-                        self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "login")
-                    }
+        loginViewModel.state.isLogined
+            .subscribe(onNext: { [weak self] isLoginSuccess in
+                if isLoginSuccess {
+                    self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "logout")
                 }
             })
             .disposed(by: disposeBag)
-    }
-
-    private func setupNotification() {
-        NotificationCenter.default.rx.notification(.loginSuccess)
-            .subscribe(onNext: { [weak self] _ in
-                print("login noti 수신")
-                self?.rootViewControllers.forEach { [weak self] _ in
-                    self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "logout")
+        
+        loginViewModel.state.isLogout
+            .subscribe(onNext: { [weak self] isLogoutSuccess in
+                if isLogoutSuccess {
+                    self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "login")
                 }
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
 
     private func createNavigationController(rootViewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
@@ -111,7 +115,13 @@ final class TabBarController: UITabBarController {
         navigationController.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
         rootViewController.navigationItem.title = "GitHub"
-        let resizedImage = UIImage(named: "login")?.resize(size: CGSize(width: 28, height: 28)).withRenderingMode(.alwaysOriginal)
+        
+        var resizedImage: UIImage?
+        if KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
+            resizedImage = UIImage(named: "logout")?.resize(size: CGSize(width: 28, height: 28)).withRenderingMode(.alwaysOriginal)
+        } else {
+            resizedImage = UIImage(named: "login")?.resize(size: CGSize(width: 28, height: 28)).withRenderingMode(.alwaysOriginal)
+        }
         rootViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizedImage, style: .plain, target: self, action: nil)
     }
 

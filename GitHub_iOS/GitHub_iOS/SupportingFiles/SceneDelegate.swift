@@ -10,45 +10,26 @@ import RxSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    private let tabBarController = TabBarController()
     private let loginViewModel = LoginViewModel()
+    private var tabBarController: TabBarController?
     private let disposeBag = DisposeBag()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
+        tabBarController = TabBarController(loginViewModel: loginViewModel)
         window?.rootViewController = tabBarController
-        self.checkLoginState()
-        self.bindViewModel()
         window?.makeKeyAndVisible()
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let code = URLContexts.first?.url.absoluteString.components(separatedBy: "code=").last else {
-            tabBarController.showToast(message: "로그인 재시도 바랍니다.")
+            tabBarController?.showToast(message: "로그인 재시도 바랍니다.")
             return
         }
         loginViewModel.action.login.onNext(code)
     }
-    
-    private func checkLoginState() {
-        if KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
-            tabBarController.setupNavigationBarRightButtonItem(size: (28, 28), imageName: "logout")
-        } else {
-            tabBarController.setupNavigationBarRightButtonItem(size: (28, 28), imageName: "login")
-        }
-    }
-    
-    private func bindViewModel() {
-        loginViewModel.state.isLogined
-            .subscribe(onNext: { isLoginSuccess in
-                if isLoginSuccess {
-                    NotificationCenter.default.post(name: .loginSuccess, object: nil)
-                }
-            })
-            .disposed(by: disposeBag)
-    }
-    
+
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

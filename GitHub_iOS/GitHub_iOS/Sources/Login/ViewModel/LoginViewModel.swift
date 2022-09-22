@@ -65,6 +65,7 @@ final class LoginViewModel: ViewModelType {
                 if let accessToken = response["access_token"],
                    KeychainManager.shared.addAccessToken(key: "accessToken", value: accessToken) {
                     print("accessToken: \(accessToken)")
+                    NotificationCenter.default.post(name: .loginSuccess, object: nil)
                     self?.state.isLogined.accept(true)
                 } else {
                     self?.state.isLogined.accept(false)
