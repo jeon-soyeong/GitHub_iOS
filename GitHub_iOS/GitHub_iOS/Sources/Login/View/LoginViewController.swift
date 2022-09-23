@@ -12,7 +12,7 @@ import RxCocoa
 
 final class LoginViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    private let viewModel = LoginViewModel()
+    private let viewModel: LoginViewModel
 
     private let loginLabel = UILabel().then {
         $0.text = "로그인이 필요합니다"
@@ -22,6 +22,15 @@ final class LoginViewController: UIViewController {
     private let loginButton = UIButton().then {
         let resizedImage = UIImage(named: "loginButton")?.resize(size: CGSize(width: 100, height: 100))
         $0.setImage(resizedImage, for: .normal)
+    }
+    
+    init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {

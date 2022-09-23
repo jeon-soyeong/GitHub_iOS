@@ -16,7 +16,7 @@ import SnapKit
 
 final class SearchViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    private let viewModel = SearchViewModel()
+    private let viewModel: SearchViewModel
 
     private let searchBar = UISearchBar().then {
         $0.searchBarStyle = .minimal
@@ -44,6 +44,15 @@ final class SearchViewController: UIViewController {
         repositoryTableViewCell?.selectionStyle = .none
 
         return cell
+    }
+
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {

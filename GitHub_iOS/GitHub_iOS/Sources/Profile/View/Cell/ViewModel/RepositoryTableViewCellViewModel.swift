@@ -13,6 +13,8 @@ import RxRelay
 final class RepositoryTableViewCellViewModel: ViewModelType {
     var disposeBag = DisposeBag()
 
+    private let apiService: APIService
+    
     struct Action {
         let didTappedStarButton = PublishSubject<(isRequestStar: Bool, fullName: String)>()
     }
@@ -24,7 +26,8 @@ final class RepositoryTableViewCellViewModel: ViewModelType {
     var action = Action()
     var state = State()
 
-    init() {
+    init(apiService: APIService) {
+        self.apiService = apiService
         self.configure()
     }
 
@@ -41,7 +44,7 @@ final class RepositoryTableViewCellViewModel: ViewModelType {
     }
     
     private func requestStar(fullName: String) {
-        APIService.shared.request(GitHubAPI.requestStar(fullName: fullName))
+        apiService.request(GitHubAPI.requestStar(fullName: fullName))
             .subscribe(onNext: { [weak self] in
                 self?.state.starToggleResult.accept($0.count == 0)
             }, onError: { [weak self] _ in
@@ -51,7 +54,7 @@ final class RepositoryTableViewCellViewModel: ViewModelType {
     }
 
     private func requestUnstar(fullName: String) {
-        APIService.shared.request(GitHubAPI.requestUnstar(fullName: fullName))
+        apiService.request(GitHubAPI.requestUnstar(fullName: fullName))
             .subscribe(onNext: { [weak self] in
                 self?.state.starToggleResult.accept($0.count == 0)
             }, onError: { [weak self] _ in

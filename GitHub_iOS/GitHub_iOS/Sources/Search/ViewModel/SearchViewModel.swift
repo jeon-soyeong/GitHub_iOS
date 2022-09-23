@@ -17,6 +17,7 @@ final class SearchViewModel : ViewModelType {
     private(set) var perPage = 20
     private(set) var isRequestCompleted = false
     private(set) var section: [UserRepository] = []
+    private let apiService: APIService
 
     struct Action {
         let didSearch = PublishSubject<String>()
@@ -30,7 +31,8 @@ final class SearchViewModel : ViewModelType {
     var action = Action()
     var state = State()
 
-    init() {
+    init(apiService: APIService) {
+        self.apiService = apiService
         self.configure()
     }
 
@@ -55,7 +57,7 @@ final class SearchViewModel : ViewModelType {
 
     private func requestSearchRepositoryData(query: String) {
         self.state.isRequesting.accept(true)
-        APIService.shared.request(GitHubAPI.getSearchRepositoryData(page: currentPage, perPage: perPage, query: query))
+        apiService.request(GitHubAPI.getSearchRepositoryData(page: currentPage, perPage: perPage, query: query))
             .subscribe(onSuccess: { [weak self] (searchRepository: SearchRepository) in
                 self?.process(searchRepository: searchRepository)
                 self?.state.isRequesting.accept(false)

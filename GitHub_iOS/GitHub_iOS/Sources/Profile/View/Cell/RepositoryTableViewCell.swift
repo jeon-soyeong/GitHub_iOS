@@ -17,7 +17,7 @@ typealias RepositoryTopicSection = SectionModel<Void, String>
 
 final class RepositoryTableViewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
-    private let viewModel = RepositoryTableViewCellViewModel()
+    private var viewModel: RepositoryTableViewCellViewModel?
     private var dataCount = 0
     private let contentsLimitWidth = UIScreen.main.bounds.width - 100
     var repositoryTopicData = BehaviorRelay(value: [RepositoryTopicSection]())
@@ -103,11 +103,16 @@ final class RepositoryTableViewCell: UITableViewCell {
         setupView()
         setupCollectionView()
         bindAction()
-        bindViewModel()
+        bindDataSource()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(viewModel: RepositoryTableViewCellViewModel) {
+        self.viewModel = viewModel
+        bindViewModel()
     }
 
     private func setupView() {
@@ -191,17 +196,19 @@ final class RepositoryTableViewCell: UITableViewCell {
             .bind { [weak self] in
                 guard let self = self,
                       let fullName = self.userRepositoryData?.fullName else { return }
-                self.viewModel.action.didTappedStarButton.onNext((!self.starButton.isSelected, fullName))
+                self.viewModel?.action.didTappedStarButton.onNext((!self.starButton.isSelected, fullName))
             }
             .disposed(by: disposeBag)
     }
     
-    private func bindViewModel() {
+    private func bindDataSource() {
         repositoryTopicData
             .bind(to: repositoryTopicCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-
-        viewModel.state.starToggleResult
+    }
+    
+    private func bindViewModel() {
+        viewModel?.state.starToggleResult
             .subscribe(onNext: { [weak self] isSuccess in
                 guard let self = self,
                       isSuccess else { return }

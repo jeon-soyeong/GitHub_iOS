@@ -16,7 +16,7 @@ import RxDataSources
 
 final class ProfileViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    private let viewModel = ProfileViewModel()
+    private let viewModel: ProfileViewModel
 
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
         $0.backgroundColor = .white
@@ -34,10 +34,20 @@ final class ProfileViewController: UIViewController {
     var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { dataSource, tableView, indexPath, item in
         let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
         let repositoryTableViewCell = cell as? RepositoryTableViewCell
+        repositoryTableViewCell?.configure(viewModel: RepositoryTableViewCellViewModel(apiService: APIService()))
         repositoryTableViewCell?.setupUI(data: item, isStarred: true)
         repositoryTableViewCell?.selectionStyle = .none
         
         return cell
+    }
+
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -54,7 +64,7 @@ final class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
 
         if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
-            self.navigationController?.pushViewController(LoginViewController(), animated: false)
+            self.navigationController?.pushViewController(LoginViewController(viewModel: LoginViewModel(apiService: APIService())), animated: false)
         } else {
             let safeAreaTopHeight = view.safeAreaInsets.top
             myStarRepositoryTableView.contentOffset = CGPoint(x: 0, y: -Int(safeAreaTopHeight))
@@ -87,7 +97,7 @@ final class ProfileViewController: UIViewController {
     private func setupNotification() {
         NotificationCenter.default.rx.notification(.logoutSuccess)
             .subscribe(onNext: { [weak self] _ in
-                self?.navigationController?.pushViewController(LoginViewController(), animated: false)
+                self?.navigationController?.pushViewController(LoginViewController(viewModel: LoginViewModel(apiService: APIService())), animated: false)
             }).disposed(by: disposeBag)
     }
 

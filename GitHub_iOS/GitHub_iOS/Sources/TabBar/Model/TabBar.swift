@@ -33,9 +33,9 @@ enum TabBar: CaseIterable {
     var rootViewController: UIViewController {
         switch self {
         case .search:
-            return SearchViewController()
+            return SearchViewController(viewModel: SearchViewModel(apiService: APIService()))
         case .profile:
-            return ProfileViewController()
+            return ProfileViewController(viewModel: ProfileViewModel(apiService: APIService()))
         }
     }
 }

@@ -19,6 +19,7 @@ final class ProfileViewModel: ViewModelType {
     private(set) var perPage = 20
     private(set) var isRequestCompleted = false
     private(set) var section: [UserRepository] = []
+    private let apiService: APIService
     
     struct Action {
         let fetch = PublishSubject<Void>()
@@ -33,7 +34,8 @@ final class ProfileViewModel: ViewModelType {
     var action = Action()
     var state = State()
     
-    init() {
+    init(apiService: APIService) {
+        self.apiService = apiService
         self.configure()
     }
     
@@ -51,8 +53,8 @@ final class ProfileViewModel: ViewModelType {
                 if isRequesting == false {
                     if self.section.count == 0 {
                         self.state.isRequesting.accept(true)
-                        Single.zip(APIService.shared.request(GitHubAPI.getUserData),
-                                   APIService.shared.request(GitHubAPI.getUserStarRepositoryData(page: self.currentPage, perPage: self.perPage))) { [weak self] (user: User, userRepositories: [UserRepository]) in
+                        Single.zip(self.apiService.request(GitHubAPI.getUserData),
+                                   self.apiService.request(GitHubAPI.getUserStarRepositoryData(page: self.currentPage, perPage: self.perPage))) { [weak self] (user: User, userRepositories: [UserRepository]) in
                             self?.state.userData.accept([user.userID: user.userImageURL])
                             self?.process(userRepositories: userRepositories)
                         }
@@ -74,7 +76,7 @@ final class ProfileViewModel: ViewModelType {
 
     private func requestUserStarRepositoryData() {
         self.state.isRequesting.accept(true)
-        APIService.shared.request(GitHubAPI.getUserStarRepositoryData(page: currentPage, perPage: perPage))
+        apiService.request(GitHubAPI.getUserStarRepositoryData(page: currentPage, perPage: perPage))
             .subscribe(onSuccess: { [weak self] (userRepositories: [UserRepository]) in
                 self?.process(userRepositories: userRepositories)
                 self?.state.isRequesting.accept(false)

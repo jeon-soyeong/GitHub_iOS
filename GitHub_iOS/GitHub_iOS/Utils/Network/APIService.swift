@@ -11,12 +11,15 @@ import RxSwift
 import Moya
 
 final class APIService {
-    static let shared = APIService()
+    private let provider: MoyaProvider<MultiTarget>
+
+    init(provider: MoyaProvider<MultiTarget> = MoyaProvider<MultiTarget>()) {
+        self.provider = provider
+    }
 
     func request<T: Codable, API: TargetType>(_ target: API) -> Single<T> {
         return Single<T>.create { single in
-            let provider = MoyaProvider<API>(session: DefaultSession.sharedSession)
-            let request = provider.request(target) { result in
+            let request = self.provider.request(MultiTarget(target)) { result in
                 switch result {
                 case .success(let response):
                     do {
@@ -38,8 +41,7 @@ final class APIService {
 
     func request<T: Codable, API: TargetType>(_ target: API) -> Observable<T> {
         return Observable.create { observer in
-            let provider = MoyaProvider<API>(session: DefaultSession.sharedSession)
-            let request = provider.request(target) { result in
+            let request = self.provider.request(MultiTarget(target)) { result in
                 switch result {
                 case .success(let response):
                     do {
@@ -61,8 +63,7 @@ final class APIService {
 
     func request<API: TargetType>(_ target: API) -> Observable<Data> {
         return Observable.create { observer in
-            let provider = MoyaProvider<API>(session: DefaultSession.sharedSession)
-            let request = provider.request(target) { result in
+            let request = self.provider.request(MultiTarget(target)) { result in
                 switch result {
                 case .success(let response):
                     observer.onNext(response.data)
