@@ -9,22 +9,21 @@ import Foundation
 
 import RxSwift
 import RxRelay
-import RxDataSources
 
 final class SearchViewModel : ViewModelType {
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    private let apiService: APIService
     private(set) var currentPage = 1
     private(set) var perPage = 20
     private(set) var isRequestCompleted = false
-    private(set) var section: [UserRepository] = []
-    private let apiService: APIService
+    private(set) var userRepository: [UserRepository] = []
 
     struct Action {
         let didSearch = PublishSubject<String>()
     }
 
     struct State {
-        let searchRepositoryData = BehaviorRelay(value: [UserRepositorySection]())
+        let searchRepositoryData = BehaviorRelay(value: [UserRepository]())
         let isRequesting = BehaviorRelay<Bool>(value: false)
     }
     
@@ -39,8 +38,8 @@ final class SearchViewModel : ViewModelType {
     func initialize() {
         currentPage = 1
         isRequestCompleted = false
-        section = []
-        state.searchRepositoryData.accept([UserRepositorySection(model: Void(), items: section)])
+        userRepository = []
+        state.searchRepositoryData.accept([])
     }
 
     private func configure() {
@@ -69,11 +68,11 @@ final class SearchViewModel : ViewModelType {
 
     private func process(searchRepository: SearchRepository) {
         for item in searchRepository.items {
-            section.append(item)
+            userRepository.append(item)
         }
-        isRequestCompleted = searchRepository.totalCount <= section.count
+        isRequestCompleted = searchRepository.totalCount <= userRepository.count
         currentPage += 1
         
-        state.searchRepositoryData.accept([UserRepositorySection(model: Void(), items: section)])
+        state.searchRepositoryData.accept(userRepository)
     }
 }

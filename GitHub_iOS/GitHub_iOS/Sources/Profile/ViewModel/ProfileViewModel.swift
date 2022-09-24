@@ -9,25 +9,22 @@ import Foundation
 
 import RxSwift
 import RxRelay
-import RxDataSources
-
-typealias UserRepositorySection = SectionModel<Void, UserRepository>
 
 final class ProfileViewModel: ViewModelType {
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    private let apiService: APIService
     private(set) var currentPage = 1
     private(set) var perPage = 20
     private(set) var isRequestCompleted = false
-    private(set) var section: [UserRepository] = []
-    private let apiService: APIService
+    private(set) var userRepository: [UserRepository] = []
     
     struct Action {
         let fetch = PublishSubject<Void>()
     }
     
     struct State {
-        let userData = BehaviorRelay(value: [String: String]())
-        let userStarRepositoryData = BehaviorRelay(value: [UserRepositorySection]())
+        let userData = BehaviorRelay<User?>(value: nil)
+        let userStarRepositoryData = BehaviorRelay(value: [UserRepository]())
         let isRequesting = BehaviorRelay<Bool>(value: false)
     }
     
@@ -42,7 +39,7 @@ final class ProfileViewModel: ViewModelType {
     func initialize() {
         currentPage = 1
         isRequestCompleted = false
-        section = []
+        userRepository = []
     }
     
     private func configure() {
@@ -51,11 +48,11 @@ final class ProfileViewModel: ViewModelType {
                 guard let self = self else { return }
                 let isRequesting = self.state.isRequesting.value
                 if isRequesting == false {
-                    if self.section.count == 0 {
+                    if self.userRepository.count == 0 {
                         self.state.isRequesting.accept(true)
                         Single.zip(self.apiService.request(GitHubAPI.getUserData),
                                    self.apiService.request(GitHubAPI.getUserStarRepositoryData(page: self.currentPage, perPage: self.perPage))) { [weak self] (user: User, userRepositories: [UserRepository]) in
-                            self?.state.userData.accept([user.userID: user.userImageURL])
+                            self?.state.userData.accept(user)
                             self?.process(userRepositories: userRepositories)
                         }
                        .subscribe(onSuccess: { [weak self] _ in
@@ -93,10 +90,10 @@ final class ProfileViewModel: ViewModelType {
         
         if isRequestCompleted == false {
             for item in userRepositories {
-                section.append(item)
+                userRepository.append(item)
             }
             currentPage += 1
-            state.userStarRepositoryData.accept([UserRepositorySection(model: Void(), items: section)])
+            state.userStarRepositoryData.accept(userRepository)
         }
     }
 }

@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxRelay
-import RxDataSources
 import Then
 import SnapKit
 
@@ -35,15 +34,6 @@ final class SearchViewController: UIViewController {
         $0.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         $0.center = view.center
         $0.isHidden = true
-    }
-
-    lazy var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { [weak self] dataSource, tableView, indexPath, item in
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
-        let repositoryTableViewCell = cell as? RepositoryTableViewCell
-        repositoryTableViewCell?.setupUI(data: item, isStarred: false)
-        repositoryTableViewCell?.selectionStyle = .none
-
-        return cell
     }
 
     init(viewModel: SearchViewModel) {
@@ -92,8 +82,8 @@ final class SearchViewController: UIViewController {
 
     private func setupTableView() {
         searchRepositoryTableView.showsVerticalScrollIndicator = false
-        searchRepositoryTableView.rx.setDelegate(self)
-            .disposed(by: disposeBag)
+        searchRepositoryTableView.dataSource = self
+        searchRepositoryTableView.delegate = self
         searchRepositoryTableView.registerCell(cellType: RepositoryTableViewCell.self)
         searchRepositoryTableView.register(MyStarRepositoryTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
     }
@@ -134,7 +124,7 @@ final class SearchViewController: UIViewController {
             .compactMap(\.last?.row)
             .bind { [weak self] row in
                 if let searchText = self?.searchBar.searchTextField.text,
-                   let dataCount = self?.dataSource.sectionModels.first?.items.count,
+                   let dataCount = self?.viewModel.userRepository.count,
                    row >= dataCount - 3 {
                     self?.viewModel.action.didSearch.onNext((searchText))
                 }
@@ -144,7 +134,9 @@ final class SearchViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.searchRepositoryData
-            .bind(to: searchRepositoryTableView.rx.items(dataSource: dataSource))
+            .subscribe(onNext: { [weak self] _ in
+                self?.searchRepositoryTableView.reloadData()
+            })
             .disposed(by: disposeBag)
         
         viewModel.state.isRequesting
@@ -176,6 +168,23 @@ final class SearchViewController: UIViewController {
         DispatchQueue.main.async {
             self.loadingIndicatorView.isHidden = true
         }
+    }
+}
+
+// MARK: UITableViewDataSource
+extension SearchViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        viewModel.userRepository.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
+        let repositoryTableViewCell = cell as? RepositoryTableViewCell
+        repositoryTableViewCell?.configure(viewModel: RepositoryTableViewCellViewModel(data: viewModel.userRepository[indexPath.row], apiService: APIService()))
+        repositoryTableViewCell?.setupUI(data: viewModel.userRepository[indexPath.row], isStarred: false)
+        repositoryTableViewCell?.selectionStyle = .none
+        
+        return cell
     }
 }
 

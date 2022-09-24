@@ -12,7 +12,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxRelay
-import RxDataSources
 
 final class ProfileViewController: UIViewController {
     private let disposeBag = DisposeBag()
@@ -29,16 +28,6 @@ final class ProfileViewController: UIViewController {
         $0.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         $0.center = view.center
         $0.isHidden = true
-    }
-
-    var dataSource = RxTableViewSectionedReloadDataSource<UserRepositorySection> { dataSource, tableView, indexPath, item in
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
-        let repositoryTableViewCell = cell as? RepositoryTableViewCell
-        repositoryTableViewCell?.configure(viewModel: RepositoryTableViewCellViewModel(apiService: APIService()))
-        repositoryTableViewCell?.setupUI(data: item, isStarred: true)
-        repositoryTableViewCell?.selectionStyle = .none
-        
-        return cell
     }
 
     init(viewModel: ProfileViewModel) {
@@ -103,8 +92,8 @@ final class ProfileViewController: UIViewController {
 
     private func setupTableView() {
         myStarRepositoryTableView.showsVerticalScrollIndicator = false
-        myStarRepositoryTableView.rx.setDelegate(self)
-            .disposed(by: disposeBag)
+        myStarRepositoryTableView.dataSource = self
+        myStarRepositoryTableView.delegate = self
         myStarRepositoryTableView.registerCell(cellType: RepositoryTableViewCell.self)
         myStarRepositoryTableView.register(MyStarRepositoryTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
     }
@@ -113,7 +102,7 @@ final class ProfileViewController: UIViewController {
         myStarRepositoryTableView.rx.prefetchRows
             .compactMap(\.last?.row)
             .bind { [weak self] row in
-                if let dataCount = self?.dataSource.sectionModels.first?.items.count,
+                if let dataCount = self?.viewModel.userRepository.count,
                    row >= dataCount - 3 {
                     self?.viewModel.action.fetch.onNext(())
                 }
@@ -123,7 +112,9 @@ final class ProfileViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.userStarRepositoryData
-            .bind(to: myStarRepositoryTableView.rx.items(dataSource: dataSource))
+            .subscribe(onNext: { [weak self] _ in
+                self?.myStarRepositoryTableView.reloadData()
+            })
             .disposed(by: disposeBag)
         
         viewModel.state.isRequesting
@@ -140,8 +131,8 @@ final class ProfileViewController: UIViewController {
     
     private func bindViewModel(to headerView: MyStarRepositoryTableViewHeaderView?) {
         viewModel.state.userData
-            .subscribe(onNext: { (userData: [String: String]) in
-                headerView?.setupUI(data: userData)
+            .subscribe(onNext: { (user: User?) in
+                headerView?.setupUI(data: user)
             }).disposed(by: disposeBag)
     }
     
@@ -156,6 +147,23 @@ final class ProfileViewController: UIViewController {
         DispatchQueue.main.async {
             self.loadingIndicatorView.isHidden = true
         }
+    }
+}
+
+// MARK: UITableViewDataSource
+extension ProfileViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        viewModel.userRepository.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
+        let repositoryTableViewCell = cell as? RepositoryTableViewCell
+        repositoryTableViewCell?.configure(viewModel: RepositoryTableViewCellViewModel(data: viewModel.userRepository[indexPath.row], apiService: APIService()))
+        repositoryTableViewCell?.setupUI(data: viewModel.userRepository[indexPath.row], isStarred: true)
+        repositoryTableViewCell?.selectionStyle = .none
+        
+        return cell
     }
 }
 
