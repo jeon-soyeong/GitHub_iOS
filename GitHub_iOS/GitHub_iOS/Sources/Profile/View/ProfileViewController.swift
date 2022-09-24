@@ -157,11 +157,14 @@ extension ProfileViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepositoryTableViewCell", for: indexPath)
-        let repositoryTableViewCell = cell as? RepositoryTableViewCell
-        repositoryTableViewCell?.configure(viewModel: RepositoryTableViewCellViewModel(data: viewModel.userRepository[indexPath.row], apiService: APIService()))
-        repositoryTableViewCell?.setupUI(data: viewModel.userRepository[indexPath.row], isStarred: true)
-        repositoryTableViewCell?.selectionStyle = .none
+        guard let cell = tableView.dequeueReusableCell(cellType: RepositoryTableViewCell.self, indexPath: indexPath),
+              indexPath.item < viewModel.userRepository.count else {
+            return UITableViewCell()
+        }
+        
+        cell.configure(viewModel: RepositoryTableViewCellViewModel(data: viewModel.userRepository[indexPath.row], apiService: APIService()))
+        cell.setupUI(data: viewModel.userRepository[indexPath.row], isStarred: true)
+        cell.selectionStyle = .none
         
         return cell
     }

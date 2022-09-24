@@ -11,7 +11,7 @@ final class RepositoryTopicCollectionViewCell: UICollectionViewCell {
     private let repositoryTopicLabelView = UIView().then {
         $0.backgroundColor = .mainSkyBlue
         $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 4
+        $0.layer.cornerRadius = 6
     }
 
     private let repositoryTopicLabel = UILabel().then {
