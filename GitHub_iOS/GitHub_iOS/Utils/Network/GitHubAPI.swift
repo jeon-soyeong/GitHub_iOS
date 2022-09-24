@@ -88,4 +88,18 @@ extension GitHubAPI: TargetType {
             ]
         }
     }
+    
+    var sampleData: Data {
+        switch self {
+        case .getUserData:
+            let user = User(userID: "Jeon", userImageURL: "Jeon's Profile Image URL")
+            if let data = try? JSONEncoder().encode(user) {
+                return data
+            } else {
+                return Data()
+            }
+        default:
+            return Data()
+        }
+    }
 }

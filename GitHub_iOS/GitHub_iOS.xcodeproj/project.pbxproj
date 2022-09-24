@@ -49,6 +49,7 @@
 		9B5E9F45289CD9E600963ED1 /* GitHub_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5E9F44289CD9E600963ED1 /* GitHub_iOSUITests.swift */; };
 		9B5E9F47289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5E9F46289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift */; };
 		9B6348B2C45EFB3DDA6CBBC5 /* Pods_GitHub_iOS_GitHub_iOSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3ECBAB707E8B0F90F9B0EEB /* Pods_GitHub_iOS_GitHub_iOSUITests.framework */; };
+		9B63934928DEFE3000784E2A /* GitHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63934828DEFE3000784E2A /* GitHubTests.swift */; };
 		9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A3289EA25E00C12313 /* TabBarController.swift */; };
 		9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A5289EA38A00C12313 /* TabBar.swift */; };
 		9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */; };
@@ -122,6 +123,7 @@
 		9B5E9F40289CD9E600963ED1 /* GitHub_iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GitHub_iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B5E9F44289CD9E600963ED1 /* GitHub_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHub_iOSUITests.swift; sourceTree = "<group>"; };
 		9B5E9F46289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHub_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		9B63934828DEFE3000784E2A /* GitHubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubTests.swift; sourceTree = "<group>"; };
 		9B6A44A3289EA25E00C12313 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9B6A44A5289EA38A00C12313 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 		9B5E9F39289CD9E600963ED1 /* GitHub_iOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				9B63934828DEFE3000784E2A /* GitHubTests.swift */,
 				9B5E9F3A289CD9E600963ED1 /* KeychainManagerTests.swift */,
 				9BBF4A7528A5B2620039A6AB /* ProfileViewModelTests.swift */,
 			);
@@ -794,6 +797,7 @@
 				9BBF4A7628A5B2620039A6AB /* ProfileViewModelTests.swift in Sources */,
 				9B41FA6F28A59FBD00EDE4C5 /* UIColor+Extension.swift in Sources */,
 				9B41FA5928A57F7D00EDE4C5 /* GitHubAPI.swift in Sources */,
+				9B63934928DEFE3000784E2A /* GitHubTests.swift in Sources */,
 				9B41FA5E28A57FCF00EDE4C5 /* User.swift in Sources */,
 				9B41FA5A28A57F8A00EDE4C5 /* APIService.swift in Sources */,
 				9B41FA6228A59D3100EDE4C5 /* LoginViewController.swift in Sources */,
