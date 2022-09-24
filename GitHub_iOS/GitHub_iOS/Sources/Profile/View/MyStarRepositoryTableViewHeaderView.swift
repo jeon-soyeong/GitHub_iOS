@@ -44,7 +44,7 @@ final class MyStarRepositoryTableViewHeaderView: UITableViewHeaderFooterView {
     
     private func setupConstraints() {
         userImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(16)
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(24)
             $0.width.height.equalTo(90)
         }
