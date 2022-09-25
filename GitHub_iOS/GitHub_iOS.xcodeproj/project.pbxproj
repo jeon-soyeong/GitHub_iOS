@@ -62,6 +62,12 @@
 		9B63936228E05E2D00784E2A /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936028E05E2D00784E2A /* SearchRepository.swift */; };
 		9B63936428E0634600784E2A /* DefaultSearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936328E0634600784E2A /* DefaultSearchRepository.swift */; };
 		9B63936528E0634600784E2A /* DefaultSearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936328E0634600784E2A /* DefaultSearchRepository.swift */; };
+		9B63936728E065DC00784E2A /* ProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936628E065DC00784E2A /* ProfileUseCase.swift */; };
+		9B63936828E065DC00784E2A /* ProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936628E065DC00784E2A /* ProfileUseCase.swift */; };
+		9B63936A28E0666E00784E2A /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936928E0666E00784E2A /* ProfileRepository.swift */; };
+		9B63936B28E0666E00784E2A /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936928E0666E00784E2A /* ProfileRepository.swift */; };
+		9B63936D28E066AD00784E2A /* DefaultProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936C28E066AD00784E2A /* DefaultProfileRepository.swift */; };
+		9B63936E28E066AD00784E2A /* DefaultProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936C28E066AD00784E2A /* DefaultProfileRepository.swift */; };
 		9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A3289EA25E00C12313 /* TabBarController.swift */; };
 		9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A5289EA38A00C12313 /* TabBar.swift */; };
 		9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */; };
@@ -142,6 +148,9 @@
 		9B63935D28E05D6600784E2A /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
 		9B63936028E05E2D00784E2A /* SearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepository.swift; sourceTree = "<group>"; };
 		9B63936328E0634600784E2A /* DefaultSearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSearchRepository.swift; sourceTree = "<group>"; };
+		9B63936628E065DC00784E2A /* ProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUseCase.swift; sourceTree = "<group>"; };
+		9B63936928E0666E00784E2A /* ProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepository.swift; sourceTree = "<group>"; };
+		9B63936C28E066AD00784E2A /* DefaultProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProfileRepository.swift; sourceTree = "<group>"; };
 		9B6A44A3289EA25E00C12313 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9B6A44A5289EA38A00C12313 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
@@ -370,6 +379,7 @@
 			children = (
 				9B63935628E0460800784E2A /* DefaultLoginRepository.swift */,
 				9B63936328E0634600784E2A /* DefaultSearchRepository.swift */,
+				9B63936C28E066AD00784E2A /* DefaultProfileRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -391,6 +401,7 @@
 			children = (
 				9B63935428E041E700784E2A /* LoginUseCase.swift */,
 				9B63935D28E05D6600784E2A /* SearchUseCase.swift */,
+				9B63936628E065DC00784E2A /* ProfileUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -408,6 +419,7 @@
 			children = (
 				9B63935A28E0463500784E2A /* LoginRepository.swift */,
 				9B63936028E05E2D00784E2A /* SearchRepository.swift */,
+				9B63936928E0666E00784E2A /* ProfileRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -805,7 +817,9 @@
 				9B6A44B0289EA56400C12313 /* SearchViewController.swift in Sources */,
 				9B27033328A029D900D65283 /* RepositoryTableViewCell.swift in Sources */,
 				9B41FA4E28A5399700EDE4C5 /* RepositoryInfo.swift in Sources */,
+				9B63936728E065DC00784E2A /* ProfileUseCase.swift in Sources */,
 				9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */,
+				9B63936D28E066AD00784E2A /* DefaultProfileRepository.swift in Sources */,
 				9B6A44B5289EB81500C12313 /* UIImage+Extension.swift in Sources */,
 				9B781D6128A0F1F00075D72F /* RepositoryTopicCollectionViewCell.swift in Sources */,
 				9BD5B2A3289EFBA30062206C /* DefaultSession.swift in Sources */,
@@ -832,6 +846,7 @@
 				9BD5B29F289EFB8C0062206C /* APIConstants.swift in Sources */,
 				9B6EFDCF28A3AFFA00C7464E /* RepositoryTableViewCellViewModel.swift in Sources */,
 				9BD5B292289EF1D90062206C /* KeychainManager.swift in Sources */,
+				9B63936A28E0666E00784E2A /* ProfileRepository.swift in Sources */,
 				9BD5B29A289EFABC0062206C /* NotificationName+Extension.swift in Sources */,
 				9BD5B296289EF2510062206C /* LoginViewController.swift in Sources */,
 				9B63936128E05E2D00784E2A /* SearchRepository.swift in Sources */,
@@ -851,7 +866,9 @@
 				9B41FA6928A59DF900EDE4C5 /* UIFont+Extension.swift in Sources */,
 				9B41FA7028A5A00E00EDE4C5 /* UICollectionView+Extension.swift in Sources */,
 				9B41FA6D28A59FAD00EDE4C5 /* ProfileViewController.swift in Sources */,
+				9B63936828E065DC00784E2A /* ProfileUseCase.swift in Sources */,
 				9B41FA5D28A57FC700EDE4C5 /* APIConstants.swift in Sources */,
+				9B63936E28E066AD00784E2A /* DefaultProfileRepository.swift in Sources */,
 				9B41FA6328A59D7300EDE4C5 /* SearchViewController.swift in Sources */,
 				9B41FA6428A59D7A00EDE4C5 /* RepositoryTableViewCellViewModel.swift in Sources */,
 				9B63935828E0461200784E2A /* DefaultLoginRepository.swift in Sources */,
@@ -878,6 +895,7 @@
 				9B41FA6E28A59FB500EDE4C5 /* UITableView+Extension.swift in Sources */,
 				9B41FA4F28A5399700EDE4C5 /* RepositoryInfo.swift in Sources */,
 				9B41FA5C28A57FC000EDE4C5 /* KeychainManager.swift in Sources */,
+				9B63936B28E0666E00784E2A /* ProfileRepository.swift in Sources */,
 				9B41FA6B28A59E3C00EDE4C5 /* UIView+Extension.swift in Sources */,
 				9B41FA6028A59D2900EDE4C5 /* TabBar.swift in Sources */,
 				9B63936228E05E2D00784E2A /* SearchRepository.swift in Sources */,

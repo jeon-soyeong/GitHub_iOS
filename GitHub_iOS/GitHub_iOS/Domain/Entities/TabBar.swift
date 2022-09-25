@@ -36,7 +36,8 @@ enum TabBar: CaseIterable {
             return SearchViewController(viewModel: SearchViewModel(useCase: DefaultSearchUseCase(searchRepository: DefaultSearchRepository()),
                                                                    apiService: APIService()))
         case .profile:
-            return ProfileViewController(viewModel: ProfileViewModel(apiService: APIService()))
+            return ProfileViewController(viewModel: ProfileViewModel(useCase: DefaultProfileUseCase(profileRepository: DefaultProfileRepository()),
+                                                                     apiService: APIService()))
         }
     }
 }

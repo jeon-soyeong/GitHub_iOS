@@ -12,6 +12,7 @@ import RxRelay
 
 final class ProfileViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
+    private let useCase: ProfileUseCase
     private let apiService: APIService
     private(set) var currentPage = 1
     private(set) var perPage = 20
@@ -31,7 +32,8 @@ final class ProfileViewModel: ViewModelType {
     var action = Action()
     var state = State()
     
-    init(apiService: APIService) {
+    init(useCase: ProfileUseCase, apiService: APIService) {
+        self.useCase = useCase
         self.apiService = apiService
         self.configure()
     }
