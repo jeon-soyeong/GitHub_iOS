@@ -226,15 +226,6 @@
 			path = ../ViewModel;
 			sourceTree = "<group>";
 		};
-		9B41FA4C28A5390600EDE4C5 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9B41FA4D28A5399700EDE4C5 /* SearchRepository.swift */,
-			);
-			name = Model;
-			path = ../Model;
-			sourceTree = "<group>";
-		};
 		9B5E9F17289CD9E200963ED1 = {
 			isa = PBXGroup;
 			children = (
@@ -260,10 +251,12 @@
 		9B5E9F22289CD9E200963ED1 /* GitHub_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				9B63934D28E0279700784E2A /* Application */,
 				9B5E9F56289CDA7B00963ED1 /* Utils */,
-				9B5E9F55289CDA7500963ED1 /* Sources */,
+				9B63934A28E0267800784E2A /* Presentation */,
+				9B63934C28E026AE00784E2A /* Domain */,
+				9B63934B28E026A700784E2A /* Data */,
 				9B5E9F54289CDA6B00963ED1 /* Resources */,
-				9B5E9F53289CDA4D00963ED1 /* SupportingFiles */,
 			);
 			path = GitHub_iOS;
 			sourceTree = "<group>";
@@ -287,26 +280,17 @@
 			path = GitHub_iOSUITests;
 			sourceTree = "<group>";
 		};
-		9B5E9F53289CDA4D00963ED1 /* SupportingFiles */ = {
-			isa = PBXGroup;
-			children = (
-				9B5E9F23289CD9E200963ED1 /* AppDelegate.swift */,
-				9B5E9F25289CD9E200963ED1 /* SceneDelegate.swift */,
-				9B5E9F31289CD9E600963ED1 /* Info.plist */,
-				9B41FA5328A53D8E00EDE4C5 /* Key.plist */,
-			);
-			path = SupportingFiles;
-			sourceTree = "<group>";
-		};
 		9B5E9F54289CDA6B00963ED1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				9B5E9F2C289CD9E600963ED1 /* Assets.xcassets */,
+				9B5E9F31289CD9E600963ED1 /* Info.plist */,
+				9B41FA5328A53D8E00EDE4C5 /* Key.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		9B5E9F55289CDA7500963ED1 /* Sources */ = {
+		9B5E9F55289CDA7500963ED1 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
 				9B6A44A0289EA23400C12313 /* TabBar */,
@@ -314,7 +298,7 @@
 				9B6A449F289EA22D00C12313 /* Search */,
 				9B6A449E289EA22500C12313 /* Profile */,
 			);
-			path = Sources;
+			path = Scenes;
 			sourceTree = "<group>";
 		};
 		9B5E9F56289CDA7B00963ED1 /* Utils */ = {
@@ -322,16 +306,91 @@
 			children = (
 				9B781D6C28A18B4E0075D72F /* Protocol */,
 				9B6A44A7289EA3D400C12313 /* Extension */,
-				9BD5B29B289EFB5C0062206C /* Network */,
 				9BD5B290289EF1C80062206C /* Manager */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		9B63934A28E0267800784E2A /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				9B5E9F55289CDA7500963ED1 /* Scenes */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		9B63934B28E026A700784E2A /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				9B63934E28E0286E00784E2A /* Repositories */,
+				9BD5B29B289EFB5C0062206C /* Network */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		9B63934C28E026AE00784E2A /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				9B63934F28E0287A00784E2A /* Entities */,
+				9B63935028E0288A00784E2A /* UseCases */,
+				9B63935128E0289000784E2A /* Interfaces */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		9B63934D28E0279700784E2A /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				9B5E9F23289CD9E200963ED1 /* AppDelegate.swift */,
+				9B5E9F25289CD9E200963ED1 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		9B63934E28E0286E00784E2A /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		9B63934F28E0287A00784E2A /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				9B6A44A5289EA38A00C12313 /* TabBar.swift */,
+				9B41FA4D28A5399700EDE4C5 /* SearchRepository.swift */,
+				9BC2E17328A2A41300B5A8B6 /* User.swift */,
+				9B781D6F28A1FE450075D72F /* UserRepository.swift */,
+				9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		9B63935028E0288A00784E2A /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		9B63935128E0289000784E2A /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				9B63935228E028A300784E2A /* Repositories */,
+			);
+			path = Interfaces;
+			sourceTree = "<group>";
+		};
+		9B63935228E028A300784E2A /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
 		9B6A449E289EA22500C12313 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				9B781D6428A186000075D72F /* Model */,
 				9B6A44B1289EA57000C12313 /* View */,
 				9B781D6928A18A560075D72F /* ViewModel */,
 			);
@@ -341,7 +400,6 @@
 		9B6A449F289EA22D00C12313 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				9B41FA4C28A5390600EDE4C5 /* Model */,
 				9B41FA4B28A538F900EDE4C5 /* ViewModel */,
 				9B6A44AE289EA56400C12313 /* View */,
 			);
@@ -352,7 +410,6 @@
 		9B6A44A0289EA23400C12313 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
-				9B6A44A2289EA24200C12313 /* Model */,
 				9B6A44A1289EA23A00C12313 /* View */,
 			);
 			path = TabBar;
@@ -364,14 +421,6 @@
 				9B6A44A3289EA25E00C12313 /* TabBarController.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		9B6A44A2289EA24200C12313 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9B6A44A5289EA38A00C12313 /* TabBar.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		9B6A44A7289EA3D400C12313 /* Extension */ = {
@@ -414,16 +463,6 @@
 				9B6EFDCE28A3AFFA00C7464E /* RepositoryTableViewCellViewModel.swift */,
 			);
 			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		9B781D6428A186000075D72F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9BC2E17328A2A41300B5A8B6 /* User.swift */,
-				9B781D6F28A1FE450075D72F /* UserRepository.swift */,
-				9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		9B781D6728A18A280075D72F /* ViewModel */ = {
@@ -961,7 +1000,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 577SG3C42S;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = GitHub_iOS/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = GitHub_iOS/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = GitHub;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -991,7 +1030,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 577SG3C42S;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = GitHub_iOS/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = GitHub_iOS/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = GitHub;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
