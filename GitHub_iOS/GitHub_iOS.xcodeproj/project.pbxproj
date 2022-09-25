@@ -56,6 +56,12 @@
 		9B63935928E0461600784E2A /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935428E041E700784E2A /* LoginUseCase.swift */; };
 		9B63935B28E0463500784E2A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935A28E0463500784E2A /* LoginRepository.swift */; };
 		9B63935C28E0463500784E2A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935A28E0463500784E2A /* LoginRepository.swift */; };
+		9B63935E28E05D6600784E2A /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935D28E05D6600784E2A /* SearchUseCase.swift */; };
+		9B63935F28E05D6600784E2A /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935D28E05D6600784E2A /* SearchUseCase.swift */; };
+		9B63936128E05E2D00784E2A /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936028E05E2D00784E2A /* SearchRepository.swift */; };
+		9B63936228E05E2D00784E2A /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936028E05E2D00784E2A /* SearchRepository.swift */; };
+		9B63936428E0634600784E2A /* DefaultSearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936328E0634600784E2A /* DefaultSearchRepository.swift */; };
+		9B63936528E0634600784E2A /* DefaultSearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936328E0634600784E2A /* DefaultSearchRepository.swift */; };
 		9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A3289EA25E00C12313 /* TabBarController.swift */; };
 		9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A5289EA38A00C12313 /* TabBar.swift */; };
 		9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */; };
@@ -133,6 +139,9 @@
 		9B63935428E041E700784E2A /* LoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUseCase.swift; sourceTree = "<group>"; };
 		9B63935628E0460800784E2A /* DefaultLoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginRepository.swift; sourceTree = "<group>"; };
 		9B63935A28E0463500784E2A /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
+		9B63935D28E05D6600784E2A /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
+		9B63936028E05E2D00784E2A /* SearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepository.swift; sourceTree = "<group>"; };
+		9B63936328E0634600784E2A /* DefaultSearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSearchRepository.swift; sourceTree = "<group>"; };
 		9B6A44A3289EA25E00C12313 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9B6A44A5289EA38A00C12313 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
@@ -360,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				9B63935628E0460800784E2A /* DefaultLoginRepository.swift */,
+				9B63936328E0634600784E2A /* DefaultSearchRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -380,6 +390,7 @@
 			isa = PBXGroup;
 			children = (
 				9B63935428E041E700784E2A /* LoginUseCase.swift */,
+				9B63935D28E05D6600784E2A /* SearchUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -396,6 +407,7 @@
 			isa = PBXGroup;
 			children = (
 				9B63935A28E0463500784E2A /* LoginRepository.swift */,
+				9B63936028E05E2D00784E2A /* SearchRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -801,8 +813,10 @@
 				9B5E9F24289CD9E200963ED1 /* AppDelegate.swift in Sources */,
 				9BD5B29D289EFB7D0062206C /* GitHubAPI.swift in Sources */,
 				9B63935728E0460900784E2A /* DefaultLoginRepository.swift in Sources */,
+				9B63935E28E05D6600784E2A /* SearchUseCase.swift in Sources */,
 				9B63935B28E0463500784E2A /* LoginRepository.swift in Sources */,
 				9BD5B2A1289EFB990062206C /* APIService.swift in Sources */,
+				9B63936428E0634600784E2A /* DefaultSearchRepository.swift in Sources */,
 				9BD5B298289EF2880062206C /* LoginViewModel.swift in Sources */,
 				9BC2E17C28A312CE00B5A8B6 /* UITableView+Extension.swift in Sources */,
 				9B63935528E041E700784E2A /* LoginUseCase.swift in Sources */,
@@ -820,6 +834,7 @@
 				9BD5B292289EF1D90062206C /* KeychainManager.swift in Sources */,
 				9BD5B29A289EFABC0062206C /* NotificationName+Extension.swift in Sources */,
 				9BD5B296289EF2510062206C /* LoginViewController.swift in Sources */,
+				9B63936128E05E2D00784E2A /* SearchRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,8 +859,10 @@
 				9B5E9F3B289CD9E600963ED1 /* KeychainManagerTests.swift in Sources */,
 				9B41FA5828A57F7600EDE4C5 /* ViewModelType.swift in Sources */,
 				9B41FA5628A57F2500EDE4C5 /* ProfileViewModel.swift in Sources */,
+				9B63935F28E05D6600784E2A /* SearchUseCase.swift in Sources */,
 				9B63935C28E0463500784E2A /* LoginRepository.swift in Sources */,
 				9B41FA5728A57F4C00EDE4C5 /* UserRepository.swift in Sources */,
+				9B63936528E0634600784E2A /* DefaultSearchRepository.swift in Sources */,
 				9B41FA6C28A59F9800EDE4C5 /* UIImage+Extension.swift in Sources */,
 				9B41FA5B28A57F9F00EDE4C5 /* DefaultSession.swift in Sources */,
 				9B41FA6A28A59E0700EDE4C5 /* NotificationName+Extension.swift in Sources */,
@@ -863,6 +880,7 @@
 				9B41FA5C28A57FC000EDE4C5 /* KeychainManager.swift in Sources */,
 				9B41FA6B28A59E3C00EDE4C5 /* UIView+Extension.swift in Sources */,
 				9B41FA6028A59D2900EDE4C5 /* TabBar.swift in Sources */,
+				9B63936228E05E2D00784E2A /* SearchRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
