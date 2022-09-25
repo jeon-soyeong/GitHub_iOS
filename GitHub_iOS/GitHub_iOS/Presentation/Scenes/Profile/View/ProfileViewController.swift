@@ -16,6 +16,7 @@ import RxRelay
 final class ProfileViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: ProfileViewModel
+    private let loginViewController = LoginViewController(viewModel: LoginViewModel(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()), apiService: APIService()))
 
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
         $0.backgroundColor = .white
@@ -53,7 +54,7 @@ final class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
 
         if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
-            self.navigationController?.pushViewController(LoginViewController(viewModel: LoginViewModel(apiService: APIService())), animated: false)
+            self.navigationController?.pushViewController(loginViewController, animated: false)
         } else {
             let safeAreaTopHeight = view.safeAreaInsets.top
             myStarRepositoryTableView.contentOffset = CGPoint(x: 0, y: -Int(safeAreaTopHeight))
@@ -86,7 +87,8 @@ final class ProfileViewController: UIViewController {
     private func setupNotification() {
         NotificationCenter.default.rx.notification(.logoutSuccess)
             .subscribe(onNext: { [weak self] _ in
-                self?.navigationController?.pushViewController(LoginViewController(viewModel: LoginViewModel(apiService: APIService())), animated: false)
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(self.loginViewController, animated: false)
             }).disposed(by: disposeBag)
     }
 

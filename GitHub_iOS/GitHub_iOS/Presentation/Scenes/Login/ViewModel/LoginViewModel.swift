@@ -11,6 +11,7 @@ import RxRelay
 
 final class LoginViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
+    private let useCase: LoginUseCase
     private let apiService: APIService
 
     struct Action {
@@ -27,8 +28,9 @@ final class LoginViewModel: ViewModelType {
     var action = Action()
     var state = State()
 
-    init(apiService: APIService) {
+    init(useCase: LoginUseCase, apiService: APIService) {
         self.apiService = apiService
+        self.useCase = useCase
         configure()
     }
 
@@ -62,7 +64,7 @@ final class LoginViewModel: ViewModelType {
     }
 
     private func requestAccessToken(with code: String) {
-        apiService.request(GitHubAPI.getAccessToken(code: code))
+        useCase.getAccessToken(code: code)
             .subscribe(onSuccess: { [weak self] (response: [String: String]) in
                 if let accessToken = response["access_token"],
                    KeychainManager.shared.addAccessToken(key: "accessToken", value: accessToken) {

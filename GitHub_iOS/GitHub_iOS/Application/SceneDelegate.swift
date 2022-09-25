@@ -10,7 +10,7 @@ import RxSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    private let loginViewModel = LoginViewModel(apiService: APIService())
+    private let loginViewModel = LoginViewModel(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()), apiService: APIService())
     private var tabBarController: TabBarController?
     private let disposeBag = DisposeBag()
     

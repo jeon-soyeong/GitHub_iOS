@@ -50,6 +50,12 @@
 		9B5E9F47289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5E9F46289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift */; };
 		9B6348B2C45EFB3DDA6CBBC5 /* Pods_GitHub_iOS_GitHub_iOSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3ECBAB707E8B0F90F9B0EEB /* Pods_GitHub_iOS_GitHub_iOSUITests.framework */; };
 		9B63934928DEFE3000784E2A /* GitHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63934828DEFE3000784E2A /* GitHubTests.swift */; };
+		9B63935528E041E700784E2A /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935428E041E700784E2A /* LoginUseCase.swift */; };
+		9B63935728E0460900784E2A /* DefaultLoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935628E0460800784E2A /* DefaultLoginRepository.swift */; };
+		9B63935828E0461200784E2A /* DefaultLoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935628E0460800784E2A /* DefaultLoginRepository.swift */; };
+		9B63935928E0461600784E2A /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935428E041E700784E2A /* LoginUseCase.swift */; };
+		9B63935B28E0463500784E2A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935A28E0463500784E2A /* LoginRepository.swift */; };
+		9B63935C28E0463500784E2A /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63935A28E0463500784E2A /* LoginRepository.swift */; };
 		9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A3289EA25E00C12313 /* TabBarController.swift */; };
 		9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A5289EA38A00C12313 /* TabBar.swift */; };
 		9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */; };
@@ -124,6 +130,9 @@
 		9B5E9F44289CD9E600963ED1 /* GitHub_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHub_iOSUITests.swift; sourceTree = "<group>"; };
 		9B5E9F46289CD9E600963ED1 /* GitHub_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHub_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		9B63934828DEFE3000784E2A /* GitHubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubTests.swift; sourceTree = "<group>"; };
+		9B63935428E041E700784E2A /* LoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUseCase.swift; sourceTree = "<group>"; };
+		9B63935628E0460800784E2A /* DefaultLoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginRepository.swift; sourceTree = "<group>"; };
+		9B63935A28E0463500784E2A /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		9B6A44A3289EA25E00C12313 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9B6A44A5289EA38A00C12313 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
@@ -350,6 +359,7 @@
 		9B63934E28E0286E00784E2A /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				9B63935628E0460800784E2A /* DefaultLoginRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -369,6 +379,7 @@
 		9B63935028E0288A00784E2A /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				9B63935428E041E700784E2A /* LoginUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -384,6 +395,7 @@
 		9B63935228E028A300784E2A /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				9B63935A28E0463500784E2A /* LoginRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -788,9 +800,12 @@
 				9BC2E17628A2ACCA00B5A8B6 /* LanguageType.swift in Sources */,
 				9B5E9F24289CD9E200963ED1 /* AppDelegate.swift in Sources */,
 				9BD5B29D289EFB7D0062206C /* GitHubAPI.swift in Sources */,
+				9B63935728E0460900784E2A /* DefaultLoginRepository.swift in Sources */,
+				9B63935B28E0463500784E2A /* LoginRepository.swift in Sources */,
 				9BD5B2A1289EFB990062206C /* APIService.swift in Sources */,
 				9BD5B298289EF2880062206C /* LoginViewModel.swift in Sources */,
 				9BC2E17C28A312CE00B5A8B6 /* UITableView+Extension.swift in Sources */,
+				9B63935528E041E700784E2A /* LoginUseCase.swift in Sources */,
 				9B781D5D28A091FB0075D72F /* MyStarRepositoryTableViewHeaderView.swift in Sources */,
 				9B5E9F26289CD9E200963ED1 /* SceneDelegate.swift in Sources */,
 				9BC2E17B28A312CE00B5A8B6 /* UICollectionView+Extension.swift in Sources */,
@@ -816,6 +831,7 @@
 				9B41FA6528A59D8100EDE4C5 /* LanguageType.swift in Sources */,
 				9B41FA6728A59D8F00EDE4C5 /* RepositoryTopicCollectionViewCell.swift in Sources */,
 				9B41FA5F28A5800F00EDE4C5 /* TabBarController.swift in Sources */,
+				9B63935928E0461600784E2A /* LoginUseCase.swift in Sources */,
 				9B41FA6628A59D8D00EDE4C5 /* RepositoryTableViewCell.swift in Sources */,
 				9B41FA6928A59DF900EDE4C5 /* UIFont+Extension.swift in Sources */,
 				9B41FA7028A5A00E00EDE4C5 /* UICollectionView+Extension.swift in Sources */,
@@ -823,10 +839,12 @@
 				9B41FA5D28A57FC700EDE4C5 /* APIConstants.swift in Sources */,
 				9B41FA6328A59D7300EDE4C5 /* SearchViewController.swift in Sources */,
 				9B41FA6428A59D7A00EDE4C5 /* RepositoryTableViewCellViewModel.swift in Sources */,
+				9B63935828E0461200784E2A /* DefaultLoginRepository.swift in Sources */,
 				9B85BD8228DB004F00E47747 /* LoadingIndicatorView.swift in Sources */,
 				9B5E9F3B289CD9E600963ED1 /* KeychainManagerTests.swift in Sources */,
 				9B41FA5828A57F7600EDE4C5 /* ViewModelType.swift in Sources */,
 				9B41FA5628A57F2500EDE4C5 /* ProfileViewModel.swift in Sources */,
+				9B63935C28E0463500784E2A /* LoginRepository.swift in Sources */,
 				9B41FA5728A57F4C00EDE4C5 /* UserRepository.swift in Sources */,
 				9B41FA6C28A59F9800EDE4C5 /* UIImage+Extension.swift in Sources */,
 				9B41FA5B28A57F9F00EDE4C5 /* DefaultSession.swift in Sources */,
