@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxRelay
 
-final class SearchViewModel : ViewModelType {
+final class SearchViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
     private let apiService: APIService
     private(set) var currentPage = 1
@@ -57,8 +57,8 @@ final class SearchViewModel : ViewModelType {
     private func requestSearchRepositoryData(query: String) {
         self.state.isRequesting.accept(true)
         apiService.request(GitHubAPI.getSearchRepositoryData(page: currentPage, perPage: perPage, query: query))
-            .subscribe(onSuccess: { [weak self] (searchRepository: SearchRepository) in
-                self?.process(searchRepository: searchRepository)
+            .subscribe(onSuccess: { [weak self] (repositoryInfo: RepositoryInfo) in
+                self?.process(repositoryInfo: repositoryInfo)
                 self?.state.isRequesting.accept(false)
             }, onFailure: {
                 print($0)
@@ -66,11 +66,11 @@ final class SearchViewModel : ViewModelType {
             .disposed(by: disposeBag)
     }
 
-    private func process(searchRepository: SearchRepository) {
-        for item in searchRepository.items {
+    private func process(repositoryInfo: RepositoryInfo) {
+        for item in repositoryInfo.items {
             userRepository.append(item)
         }
-        isRequestCompleted = searchRepository.totalCount <= userRepository.count
+        isRequestCompleted = repositoryInfo.totalCount <= userRepository.count
         currentPage += 1
         
         state.searchRepositoryData.accept(userRepository)
