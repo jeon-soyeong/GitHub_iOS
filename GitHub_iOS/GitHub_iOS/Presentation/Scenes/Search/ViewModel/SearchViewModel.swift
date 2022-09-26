@@ -58,7 +58,7 @@ final class SearchViewModel: ViewModelType {
 
     private func requestSearchRepositoryData(query: String) {
         self.state.isRequesting.accept(true)
-        apiService.request(GitHubAPI.getSearchRepositoryData(page: currentPage, perPage: perPage, query: query))
+        useCase.getSearchRepositoryData(page: currentPage, perPage: perPage, query: query)
             .subscribe(onSuccess: { [weak self] (repositoryInfo: RepositoryInfo) in
                 self?.process(repositoryInfo: repositoryInfo)
                 self?.state.isRequesting.accept(false)

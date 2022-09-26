@@ -52,8 +52,8 @@ final class ProfileViewModel: ViewModelType {
                 if isRequesting == false {
                     if self.userRepository.count == 0 {
                         self.state.isRequesting.accept(true)
-                        Single.zip(self.apiService.request(GitHubAPI.getUserData),
-                                   self.apiService.request(GitHubAPI.getUserStarRepositoryData(page: self.currentPage, perPage: self.perPage))) { [weak self] (user: User, userRepositories: [UserRepository]) in
+                        Single.zip(self.useCase.getUserData(),
+                                   self.useCase.getUserStarRepositoryData(page: self.currentPage, perPage: self.perPage)) { [weak self] (user: User, userRepositories: [UserRepository]) in
                             self?.state.userData.accept(user)
                             self?.process(userRepositories: userRepositories)
                         }
@@ -75,7 +75,7 @@ final class ProfileViewModel: ViewModelType {
 
     private func requestUserStarRepositoryData() {
         self.state.isRequesting.accept(true)
-        apiService.request(GitHubAPI.getUserStarRepositoryData(page: currentPage, perPage: perPage))
+        useCase.getUserStarRepositoryData(page: currentPage, perPage: perPage)
             .subscribe(onSuccess: { [weak self] (userRepositories: [UserRepository]) in
                 self?.process(userRepositories: userRepositories)
                 self?.state.isRequesting.accept(false)

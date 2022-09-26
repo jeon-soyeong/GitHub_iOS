@@ -12,9 +12,10 @@ import RxRelay
 
 final class RepositoryTableViewCellViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
+    private let data: UserRepository
+    private let useCase: StarUseCase
     private let apiService: APIService
     private let contentsLimitWidth = UIScreen.main.bounds.width - 100
-    private let data: UserRepository
     private(set) var topics: [String] = []
     
     struct Action {
@@ -30,8 +31,9 @@ final class RepositoryTableViewCellViewModel: ViewModelType {
     var action = Action()
     var state = State()
 
-    init(data: UserRepository, apiService: APIService) {
+    init(data: UserRepository, useCase: StarUseCase, apiService: APIService) {
         self.data = data
+        self.useCase = useCase
         self.apiService = apiService
         self.configure()
     }
@@ -83,9 +85,9 @@ final class RepositoryTableViewCellViewModel: ViewModelType {
         }
         return resultIndex
     }
-    
+
     private func requestStar(fullName: String) {
-        apiService.request(GitHubAPI.requestStar(fullName: fullName))
+        useCase.requestStar(fullName: fullName)
             .subscribe(onNext: { [weak self] in
                 self?.state.starToggleResult.accept($0.count == 0)
             }, onError: { [weak self] _ in
@@ -95,7 +97,7 @@ final class RepositoryTableViewCellViewModel: ViewModelType {
     }
 
     private func requestUnstar(fullName: String) {
-        apiService.request(GitHubAPI.requestUnstar(fullName: fullName))
+        useCase.requestUnstar(fullName: fullName)
             .subscribe(onNext: { [weak self] in
                 self?.state.starToggleResult.accept($0.count == 0)
             }, onError: { [weak self] _ in
@@ -103,7 +105,7 @@ final class RepositoryTableViewCellViewModel: ViewModelType {
             })
             .disposed(by: disposeBag)
     }
-    
+
     func calculateCellWidth(index: Int, fontSize: CGFloat) -> CGFloat {
         let label = UILabel()
         label.text = data.topics[index]

@@ -183,7 +183,9 @@ extension SearchViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configure(viewModel: RepositoryTableViewCellViewModel(data: viewModel.userRepository[indexPath.row], apiService: APIService()))
+        cell.configure(viewModel: RepositoryTableViewCellViewModel(data: viewModel.userRepository[indexPath.row],
+                                                                   useCase: DefaultStarUseCase(starRepository: DefaultStarRepository()),
+                                                                   apiService: APIService()))
         cell.setupUI(data: viewModel.userRepository[indexPath.row], isStarred: false)
         cell.selectionStyle = .none
         

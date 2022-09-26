@@ -68,6 +68,12 @@
 		9B63936B28E0666E00784E2A /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936928E0666E00784E2A /* ProfileRepository.swift */; };
 		9B63936D28E066AD00784E2A /* DefaultProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936C28E066AD00784E2A /* DefaultProfileRepository.swift */; };
 		9B63936E28E066AD00784E2A /* DefaultProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936C28E066AD00784E2A /* DefaultProfileRepository.swift */; };
+		9B63937028E1556600784E2A /* StarUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936F28E1556600784E2A /* StarUseCase.swift */; };
+		9B63937128E1556600784E2A /* StarUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63936F28E1556600784E2A /* StarUseCase.swift */; };
+		9B63937328E1564200784E2A /* StarRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63937228E1564200784E2A /* StarRepository.swift */; };
+		9B63937428E1564200784E2A /* StarRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63937228E1564200784E2A /* StarRepository.swift */; };
+		9B63937628E164FE00784E2A /* DefaultStarRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63937528E164FE00784E2A /* DefaultStarRepository.swift */; };
+		9B63937728E164FE00784E2A /* DefaultStarRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63937528E164FE00784E2A /* DefaultStarRepository.swift */; };
 		9B6A44A4289EA25E00C12313 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A3289EA25E00C12313 /* TabBarController.swift */; };
 		9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A5289EA38A00C12313 /* TabBar.swift */; };
 		9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */; };
@@ -151,6 +157,9 @@
 		9B63936628E065DC00784E2A /* ProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUseCase.swift; sourceTree = "<group>"; };
 		9B63936928E0666E00784E2A /* ProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepository.swift; sourceTree = "<group>"; };
 		9B63936C28E066AD00784E2A /* DefaultProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProfileRepository.swift; sourceTree = "<group>"; };
+		9B63936F28E1556600784E2A /* StarUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarUseCase.swift; sourceTree = "<group>"; };
+		9B63937228E1564200784E2A /* StarRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRepository.swift; sourceTree = "<group>"; };
+		9B63937528E164FE00784E2A /* DefaultStarRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultStarRepository.swift; sourceTree = "<group>"; };
 		9B6A44A3289EA25E00C12313 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9B6A44A5289EA38A00C12313 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		9B6A44A8289EA3E400C12313 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
@@ -380,6 +389,7 @@
 				9B63935628E0460800784E2A /* DefaultLoginRepository.swift */,
 				9B63936328E0634600784E2A /* DefaultSearchRepository.swift */,
 				9B63936C28E066AD00784E2A /* DefaultProfileRepository.swift */,
+				9B63937528E164FE00784E2A /* DefaultStarRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -402,6 +412,7 @@
 				9B63935428E041E700784E2A /* LoginUseCase.swift */,
 				9B63935D28E05D6600784E2A /* SearchUseCase.swift */,
 				9B63936628E065DC00784E2A /* ProfileUseCase.swift */,
+				9B63936F28E1556600784E2A /* StarUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -420,6 +431,7 @@
 				9B63935A28E0463500784E2A /* LoginRepository.swift */,
 				9B63936028E05E2D00784E2A /* SearchRepository.swift */,
 				9B63936928E0666E00784E2A /* ProfileRepository.swift */,
+				9B63937228E1564200784E2A /* StarRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -814,6 +826,7 @@
 				9BC2E17428A2A41400B5A8B6 /* User.swift in Sources */,
 				9B781D6B28A18A7C0075D72F /* ProfileViewModel.swift in Sources */,
 				9B781D7028A1FE450075D72F /* UserRepository.swift in Sources */,
+				9B63937628E164FE00784E2A /* DefaultStarRepository.swift in Sources */,
 				9B6A44B0289EA56400C12313 /* SearchViewController.swift in Sources */,
 				9B27033328A029D900D65283 /* RepositoryTableViewCell.swift in Sources */,
 				9B41FA4E28A5399700EDE4C5 /* RepositoryInfo.swift in Sources */,
@@ -838,8 +851,10 @@
 				9B5E9F26289CD9E200963ED1 /* SceneDelegate.swift in Sources */,
 				9BC2E17B28A312CE00B5A8B6 /* UICollectionView+Extension.swift in Sources */,
 				9B6A44A9289EA3E400C12313 /* UIFont+Extension.swift in Sources */,
+				9B63937028E1556600784E2A /* StarUseCase.swift in Sources */,
 				9B6A44B3289EA58900C12313 /* ProfileViewController.swift in Sources */,
 				9B85BD8128DA13D100E47747 /* LoadingIndicatorView.swift in Sources */,
+				9B63937328E1564200784E2A /* StarRepository.swift in Sources */,
 				9B781D6E28A18B710075D72F /* ViewModelType.swift in Sources */,
 				9B781D5F28A0ECCC0075D72F /* UIColor+Extension.swift in Sources */,
 				9B6A44A6289EA38A00C12313 /* TabBar.swift in Sources */,
@@ -863,6 +878,7 @@
 				9B41FA5F28A5800F00EDE4C5 /* TabBarController.swift in Sources */,
 				9B63935928E0461600784E2A /* LoginUseCase.swift in Sources */,
 				9B41FA6628A59D8D00EDE4C5 /* RepositoryTableViewCell.swift in Sources */,
+				9B63937728E164FE00784E2A /* DefaultStarRepository.swift in Sources */,
 				9B41FA6928A59DF900EDE4C5 /* UIFont+Extension.swift in Sources */,
 				9B41FA7028A5A00E00EDE4C5 /* UICollectionView+Extension.swift in Sources */,
 				9B41FA6D28A59FAD00EDE4C5 /* ProfileViewController.swift in Sources */,
@@ -887,8 +903,10 @@
 				9B41FA6128A59D2E00EDE4C5 /* LoginViewModel.swift in Sources */,
 				9BBF4A7628A5B2620039A6AB /* ProfileViewModelTests.swift in Sources */,
 				9B41FA6F28A59FBD00EDE4C5 /* UIColor+Extension.swift in Sources */,
+				9B63937128E1556600784E2A /* StarUseCase.swift in Sources */,
 				9B41FA5928A57F7D00EDE4C5 /* GitHubAPI.swift in Sources */,
 				9B63934928DEFE3000784E2A /* GitHubTests.swift in Sources */,
+				9B63937428E1564200784E2A /* StarRepository.swift in Sources */,
 				9B41FA5E28A57FCF00EDE4C5 /* User.swift in Sources */,
 				9B41FA5A28A57F8A00EDE4C5 /* APIService.swift in Sources */,
 				9B41FA6228A59D3100EDE4C5 /* LoginViewController.swift in Sources */,
