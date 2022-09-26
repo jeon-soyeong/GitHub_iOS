@@ -9,16 +9,17 @@
 ## [Preview]
 
 ### 검색 
-<img src="https://user-images.githubusercontent.com/61855905/184260330-28870b89-baca-4814-8f4d-e1a62164f533.gif" width="250" />
+<img src="https://user-images.githubusercontent.com/61855905/192229411-aaeb195f-6201-4e79-bf55-fea06d4fb498.gif" width="250" />
 </br>
 
 ### 로그인, 프로필
-<img src="https://user-images.githubusercontent.com/61855905/184260347-157037f0-ebf4-40b3-abcf-7d562baa08e1.gif" width="250" />
+<img src="https://user-images.githubusercontent.com/61855905/192233595-32f9fcd8-e032-4c88-bc05-dd881d706eb6.gif" width="250" />
 </br>
 
   ## [Reference]
  ### Architecture
 - MVVM
+- Clean Architecture
 
  ### UI
 - SnapKit
@@ -28,7 +29,7 @@
  ### Reactive
 - RxSwift
 - RxCocoa
-- RxDataSources
+- RxRelay
 
  ### Network
 - Moya
