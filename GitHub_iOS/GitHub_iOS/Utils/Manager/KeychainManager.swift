@@ -7,7 +7,7 @@
 
 import Foundation
 
-class KeychainManager {
+final class KeychainManager {
     static let shared = KeychainManager()
     private let bundleIdentifier = Bundle.main.bundleIdentifier as Any
 
@@ -55,6 +55,7 @@ class KeychainManager {
         return password
     }
 
+    @discardableResult
     func deleteAccessToken(key: String) -> Bool {
         let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                                 kSecAttrService: bundleIdentifier,

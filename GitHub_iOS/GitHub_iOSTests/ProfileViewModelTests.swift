@@ -133,7 +133,7 @@ class ProfileViewModelTests: XCTestCase {
     ]
     """.data(using: .utf8)
     
-    let profileViewModel: ProfileViewModel = ProfileViewModel()
+    let profileViewModel: ProfileViewModel = ProfileViewModel(apiService: APIService())
     var userRepository: [UserRepository] = []
     
     override func setUpWithError() throws {
@@ -148,7 +148,7 @@ class ProfileViewModelTests: XCTestCase {
         profileViewModel.process(userRepositories: userRepository)
         
         XCTAssertTrue(profileViewModel.currentPage == 2)
-        XCTAssertTrue(profileViewModel.section.count == 1)
+        XCTAssertTrue(profileViewModel.userRepository.count == 1)
         XCTAssertFalse(profileViewModel.isRequestCompleted == true)
         
         profileViewModel.process(userRepositories: [])
