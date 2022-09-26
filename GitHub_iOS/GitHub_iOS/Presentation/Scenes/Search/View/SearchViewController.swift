@@ -134,8 +134,12 @@ final class SearchViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.searchRepositoryData
-            .subscribe(onNext: { [weak self] _ in
-                self?.searchRepositoryTableView.reloadData()
+            .subscribe(onNext: { [weak self] (repositoryInfo: RepositoryInfo?) in
+                if repositoryInfo?.totalCount == 0 {
+                    self?.showAlert(title: "검색 결과 없음 ❌", message: "검색 결과가 없으므로 다른 키워드로 검색 바랍니다.")
+                } else {
+                    self?.searchRepositoryTableView.reloadData()
+                }
             })
             .disposed(by: disposeBag)
         

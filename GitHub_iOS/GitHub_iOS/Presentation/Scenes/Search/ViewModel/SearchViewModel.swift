@@ -24,7 +24,7 @@ final class SearchViewModel: ViewModelType {
     }
 
     struct State {
-        let searchRepositoryData = BehaviorRelay(value: [UserRepository]())
+        let searchRepositoryData = BehaviorRelay<RepositoryInfo?>(value: nil)
         let isRequesting = BehaviorRelay<Bool>(value: false)
     }
     
@@ -41,7 +41,7 @@ final class SearchViewModel: ViewModelType {
         currentPage = 1
         isRequestCompleted = false
         userRepository = []
-        state.searchRepositoryData.accept([])
+        state.searchRepositoryData.accept(nil)
     }
 
     private func configure() {
@@ -75,6 +75,6 @@ final class SearchViewModel: ViewModelType {
         isRequestCompleted = repositoryInfo.totalCount <= userRepository.count
         currentPage += 1
         
-        state.searchRepositoryData.accept(userRepository)
+        state.searchRepositoryData.accept(repositoryInfo)
     }
 }
