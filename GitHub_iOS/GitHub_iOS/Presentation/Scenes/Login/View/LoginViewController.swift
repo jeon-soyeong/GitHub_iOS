@@ -42,7 +42,7 @@ final class LoginViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         setupSubViews()
         setupConstraints()

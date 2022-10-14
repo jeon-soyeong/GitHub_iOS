@@ -23,7 +23,7 @@ final class SearchViewController: UIViewController {
     }
 
     private var searchRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
-        $0.backgroundColor = .white
+        $0.backgroundColor = .systemBackground
         $0.clipsToBounds = true
         $0.scrollsToTop = true
         $0.isUserInteractionEnabled = true
@@ -56,7 +56,7 @@ final class SearchViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
 
         setupSubViews()
         setupConstraints()
@@ -90,7 +90,6 @@ final class SearchViewController: UIViewController {
     
     private func setupGestureRecognizer(to view: UIView) {
         let tapGestureRecognizer = UITapGestureRecognizer().then {
-            $0.cancelsTouchesInView = false
             view.addGestureRecognizer($0)
         }
         

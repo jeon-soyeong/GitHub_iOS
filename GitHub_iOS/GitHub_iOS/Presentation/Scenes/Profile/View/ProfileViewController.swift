@@ -19,7 +19,7 @@ final class ProfileViewController: UIViewController {
     private let loginViewController = LoginViewController(viewModel: LoginViewModel(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
                                                                                     apiService: APIService()))
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
-        $0.backgroundColor = .white
+        $0.backgroundColor = .systemBackground
         $0.clipsToBounds = true
         $0.scrollsToTop = true
         $0.isUserInteractionEnabled = true
@@ -64,7 +64,7 @@ final class ProfileViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
 
         setupSubViews()
         setupConstraints()
