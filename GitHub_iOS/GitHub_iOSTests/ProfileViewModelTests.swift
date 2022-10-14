@@ -132,8 +132,9 @@ class ProfileViewModelTests: XCTestCase {
        }
     ]
     """.data(using: .utf8)
-    
-    let profileViewModel: ProfileViewModel = ProfileViewModel(apiService: APIService())
+                                   
+    let profileViewModel: ProfileViewModel = ProfileViewModel(useCase: DefaultProfileUseCase(profileRepository: DefaultProfileRepository()),
+                                                              apiService: APIService())
     var userRepository: [UserRepository] = []
     
     override func setUpWithError() throws {
