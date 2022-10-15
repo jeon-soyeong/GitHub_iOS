@@ -13,7 +13,7 @@ import RxSwift
 class APIServiceTests: XCTestCase {
     let disposeBag = DisposeBag()
     
-    func test_givenTestMoyaProviderAPIService_whenRequestGetUserData_ThenSuccess() throws {
+    func test_givenTestMoyaProviderAPIService_whenRequestGetUserData_ThenSuccess() {
         //given
         let customEndpointClosure = { (target: MultiTarget) -> Endpoint in
             return Endpoint(url: URL(target: target).absoluteString,
