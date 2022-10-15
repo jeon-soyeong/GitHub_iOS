@@ -64,6 +64,7 @@ final class RepositoryTableViewCell: UITableViewCell {
     private lazy var repositoryTopicCollectionView = UICollectionView.init(frame: .zero, collectionViewLayout: repositoryTopicCollectionViewFlowLayout).then {
         $0.showsHorizontalScrollIndicator = false
         $0.isScrollEnabled = false
+        $0.backgroundColor = .systemBackground
     }
 
     private let starCountImageView = UIImageView().then {

@@ -33,7 +33,7 @@ final class MyStarRepositoryTableViewHeaderView: UITableViewHeaderFooterView {
     }
     
     private func setupView() {
-        self.backgroundColor = .white
+        self.backgroundColor = .systemBackground
         setupSubViews()
         setupConstraints()
     }
