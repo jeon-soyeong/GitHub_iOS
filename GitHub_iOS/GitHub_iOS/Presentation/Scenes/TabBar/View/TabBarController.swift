@@ -7,17 +7,15 @@
 
 import UIKit
 
-import RxSwift
-import RxCocoa
+import ReactorKit
 
-final class TabBarController: UITabBarController {
-    private let disposeBag = DisposeBag()
+final class TabBarController: UITabBarController, View {
     private var rootViewControllers: [UIViewController] = []
-    private let loginViewModel: LoginViewModel
+    var disposeBag = DisposeBag()
 
-    init(loginViewModel: LoginViewModel) {
-        self.loginViewModel = loginViewModel
+    init(reactor: LoginReactor) {
         super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
     }
 
     required init?(coder: NSCoder) {
@@ -29,8 +27,6 @@ final class TabBarController: UITabBarController {
         
         setupTabBar()
         setupViewControllers()
-        bindAction()
-        bindViewModel()
     }
 
     private func setupTabBar() {
@@ -56,30 +52,44 @@ final class TabBarController: UITabBarController {
         selectedIndex = 0
     }
 
-    private func bindAction() {
+    func bind(reactor: LoginReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+
+    private func bindAction(reactor: LoginReactor) {
+        typealias Action = LoginReactor.Action
+
         rootViewControllers.forEach {
             $0.navigationItem.rightBarButtonItem?.rx.tap
-                .subscribe(onNext: { [weak self] _ in
-                    if KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
-                        self?.loginViewModel.action.didTappedLogoutButton.onNext(())
-                    } else {
-                        self?.loginViewModel.action.didTappedLoginButton.onNext(())
-                    }
-                })
-                .disposed(by: disposeBag)
+            .map {
+                if KeychainManager.shared.readAccessToken(key: "accessToken") != nil {
+                    return Action.didTappedLogoutButton
+                } else {
+                    return Action.didTappedLoginButton
+                }
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         }
     }
 
-    private func bindViewModel() {
-        loginViewModel.state.isLogined
+    private func bindState(reactor: LoginReactor) {
+        reactor.state
+            .map { $0.isLogined }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] isLoginSuccess in
                 if isLoginSuccess {
                     self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "logout")
                 }
             })
             .disposed(by: disposeBag)
-        
-        loginViewModel.state.isLogout
+
+        reactor.state
+            .map { $0.isLogout }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] isLogoutSuccess in
                 if isLogoutSuccess {
                     self?.setupNavigationBarRightButtonItem(size: (width: 28, height: 28), imageName: "login")

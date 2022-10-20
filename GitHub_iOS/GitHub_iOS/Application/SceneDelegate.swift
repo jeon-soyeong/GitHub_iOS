@@ -6,29 +6,40 @@
 //
 
 import UIKit
-import RxSwift
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+import ReactorKit
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate, View {
     var window: UIWindow?
-    private let loginViewModel = LoginViewModel(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
-                                                apiService: APIService())
-    private var tabBarController: TabBarController?
-    private let disposeBag = DisposeBag()
     
+    private let loginReactor = LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
+                                            apiService: APIService())
+    private var tabBarController: TabBarController?
+    private let login = PublishSubject<String>()
+    var disposeBag = DisposeBag()
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        tabBarController = TabBarController(loginViewModel: loginViewModel)
+        self.reactor = loginReactor
+        tabBarController = TabBarController(reactor: loginReactor)
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
-    
+
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let code = URLContexts.first?.url.absoluteString.components(separatedBy: "code=").last else {
             tabBarController?.showToast(message: "로그인 재시도 바랍니다.")
             return
         }
-        loginViewModel.action.login.onNext(code)
+        login.onNext(code)
+    }
+
+    func bind(reactor: LoginReactor) {
+        login
+            .map { LoginReactor.Action.login($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -58,7 +69,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-    
-    
 }
-
