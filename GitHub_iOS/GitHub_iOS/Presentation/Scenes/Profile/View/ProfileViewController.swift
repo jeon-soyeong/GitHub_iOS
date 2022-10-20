@@ -16,7 +16,7 @@ import RxRelay
 final class ProfileViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: ProfileViewModel
-    private let loginViewController = LoginViewController(viewModel: LoginViewModel(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
+    private let loginViewController = LoginViewController(reactor: LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
                                                                                     apiService: APIService()))
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
         $0.backgroundColor = .systemBackground
