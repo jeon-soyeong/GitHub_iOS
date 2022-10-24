@@ -20,6 +20,6 @@ final class DefaultLoginUseCase: LoginUseCase {
     }
     
     func getAccessToken(code: String) -> Observable<Token> {
-        return loginRepository.getAccessToken(code: code).asObservable()
+        return loginRepository.getAccessToken(code: code)
     }
 }

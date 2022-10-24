@@ -9,5 +9,5 @@ import Foundation
 import RxSwift
 
 protocol LoginRepository {
-    func getAccessToken(code: String) -> Single<Token>
+    func getAccessToken(code: String) -> Observable<Token>
 }

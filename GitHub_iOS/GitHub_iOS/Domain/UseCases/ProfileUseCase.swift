@@ -9,8 +9,8 @@ import Foundation
 import RxSwift
 
 protocol ProfileUseCase {
-    func getUserData() -> Single<User> 
-    func getUserStarRepositoryData(page: Int, perPage: Int) -> Single<[UserRepository]>
+    func getUserData() -> Observable<User>
+    func getUserStarRepositoryData(page: Int, perPage: Int) -> Observable<[UserRepository]>
 }
 
 final class DefaultProfileUseCase: ProfileUseCase {
@@ -20,11 +20,11 @@ final class DefaultProfileUseCase: ProfileUseCase {
         self.profileRepository = profileRepository
     }
     
-    func getUserData() -> Single<User> {
+    func getUserData() -> Observable<User> {
         return profileRepository.getUserData()
     }
 
-    func getUserStarRepositoryData(page: Int, perPage: Int) -> Single<[UserRepository]> {
+    func getUserStarRepositoryData(page: Int, perPage: Int) -> Observable<[UserRepository]> {
         return profileRepository.getUserStarRepositoryData(page: page, perPage: perPage)
     }
 }
