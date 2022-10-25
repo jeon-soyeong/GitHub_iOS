@@ -11,8 +11,8 @@
 		9B27033328A029D900D65283 /* RepositoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B27033228A029D900D65283 /* RepositoryTableViewCell.swift */; };
 		9B41FA4E28A5399700EDE4C5 /* RepositoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA4D28A5399700EDE4C5 /* RepositoryInfo.swift */; };
 		9B41FA4F28A5399700EDE4C5 /* RepositoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA4D28A5399700EDE4C5 /* RepositoryInfo.swift */; };
-		9B41FA5128A539A500EDE4C5 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA5028A539A500EDE4C5 /* SearchViewModel.swift */; };
-		9B41FA5228A539A500EDE4C5 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA5028A539A500EDE4C5 /* SearchViewModel.swift */; };
+		9B41FA5128A539A500EDE4C5 /* SearchReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA5028A539A500EDE4C5 /* SearchReactor.swift */; };
+		9B41FA5228A539A500EDE4C5 /* SearchReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B41FA5028A539A500EDE4C5 /* SearchReactor.swift */; };
 		9B41FA5428A53D8E00EDE4C5 /* Key.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B41FA5328A53D8E00EDE4C5 /* Key.plist */; };
 		9B41FA5528A53D8E00EDE4C5 /* Key.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B41FA5328A53D8E00EDE4C5 /* Key.plist */; };
 		9B41FA5628A57F2500EDE4C5 /* ProfileReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6A28A18A7C0075D72F /* ProfileReactor.swift */; };
@@ -125,7 +125,7 @@
 		9B27032D289F7BB100D65283 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		9B27033228A029D900D65283 /* RepositoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTableViewCell.swift; sourceTree = "<group>"; };
 		9B41FA4D28A5399700EDE4C5 /* RepositoryInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepositoryInfo.swift; sourceTree = "<group>"; };
-		9B41FA5028A539A500EDE4C5 /* SearchViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		9B41FA5028A539A500EDE4C5 /* SearchReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchReactor.swift; sourceTree = "<group>"; };
 		9B41FA5328A53D8E00EDE4C5 /* Key.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Key.plist; sourceTree = "<group>"; };
 		9B5E9F20289CD9E200963ED1 /* GitHub_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHub_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B5E9F23289CD9E200963ED1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -231,13 +231,13 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		9B41FA4B28A538F900EDE4C5 /* ViewModel */ = {
+		9B41FA4B28A538F900EDE4C5 /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
-				9B41FA5028A539A500EDE4C5 /* SearchViewModel.swift */,
+				9B41FA5028A539A500EDE4C5 /* SearchReactor.swift */,
 			);
-			name = ViewModel;
-			path = ../ViewModel;
+			name = Reactor;
+			path = ../Reactor;
 			sourceTree = "<group>";
 		};
 		9B5E9F17289CD9E200963ED1 = {
@@ -414,7 +414,7 @@
 		9B6A449F289EA22D00C12313 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				9B41FA4B28A538F900EDE4C5 /* ViewModel */,
+				9B41FA4B28A538F900EDE4C5 /* Reactor */,
 				9B6A44AE289EA56400C12313 /* View */,
 			);
 			name = Search;
@@ -707,7 +707,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B41FA5128A539A500EDE4C5 /* SearchViewModel.swift in Sources */,
+				9B41FA5128A539A500EDE4C5 /* SearchReactor.swift in Sources */,
 				9B27032E289F7BB100D65283 /* UIViewController+Extension.swift in Sources */,
 				9B6A44AB289EA4BD00C12313 /* UIView+Extension.swift in Sources */,
 				9BC2E17428A2A41400B5A8B6 /* User.swift in Sources */,
@@ -759,7 +759,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B41FA5228A539A500EDE4C5 /* SearchViewModel.swift in Sources */,
+				9B41FA5228A539A500EDE4C5 /* SearchReactor.swift in Sources */,
 				9B41FA6528A59D8100EDE4C5 /* LanguageType.swift in Sources */,
 				9B41FA6728A59D8F00EDE4C5 /* RepositoryTopicCollectionViewCell.swift in Sources */,
 				9B41FA5F28A5800F00EDE4C5 /* TabBarController.swift in Sources */,
