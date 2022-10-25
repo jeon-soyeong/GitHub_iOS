@@ -9,15 +9,14 @@ import UIKit
 
 import Then
 import SnapKit
-import RxSwift
-import RxCocoa
-import RxRelay
+import ReactorKit
 
-final class ProfileViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    private let viewModel: ProfileViewModel
+final class ProfileViewController: UIViewController, View {
     private let loginViewController = LoginViewController(reactor: LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
                                                                                     apiService: APIService()))
+    private let fetch = PublishSubject<Void>()
+    var disposeBag = DisposeBag()
+
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
         $0.backgroundColor = .systemBackground
         $0.clipsToBounds = true
@@ -28,12 +27,11 @@ final class ProfileViewController: UIViewController {
     private lazy var loadingIndicatorView = LoadingIndicatorView().then {
         $0.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         $0.center = view.center
-        $0.isHidden = true
     }
 
-    init(viewModel: ProfileViewModel) {
-        self.viewModel = viewModel
+    init(reactor: ProfileReactor) {
         super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
     }
 
     required init?(coder: NSCoder) {
@@ -46,8 +44,6 @@ final class ProfileViewController: UIViewController {
         setupView()
         setupNotification()
         setupTableView()
-        bindAction()
-        bindViewModel()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -58,8 +54,7 @@ final class ProfileViewController: UIViewController {
         } else {
             let safeAreaTopHeight = view.safeAreaInsets.top
             myStarRepositoryTableView.contentOffset = CGPoint(x: 0, y: -Int(safeAreaTopHeight))
-            viewModel.initialize()
-            viewModel.action.fetch.onNext(())
+            fetch.onNext(())
         }
     }
 
@@ -94,35 +89,50 @@ final class ProfileViewController: UIViewController {
 
     private func setupTableView() {
         myStarRepositoryTableView.showsVerticalScrollIndicator = false
-        myStarRepositoryTableView.dataSource = self
         myStarRepositoryTableView.delegate = self
         myStarRepositoryTableView.registerCell(cellType: RepositoryTableViewCell.self)
         myStarRepositoryTableView.register(MyStarRepositoryTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
     }
 
-    private func bindAction() {
+    func bind(reactor: ProfileReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+
+    private func bindAction(reactor: ProfileReactor) {
+        typealias Action = ProfileReactor.Action
+
+        fetch
+            .map { Action.fetch }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         myStarRepositoryTableView.rx.prefetchRows
-            .compactMap(\.last?.row)
-            .bind { [weak self] row in
-                if let dataCount = self?.viewModel.userRepository.count,
-                   row >= dataCount - 3 {
-                    self?.viewModel.action.fetch.onNext(())
-                }
-            }
+            .filter { $0.contains(where: { $0.row >= reactor.currentState.userStarRepositories.count - 3 }) }
+            .map { _ in Action.loadMore }
+            .bind(to: reactor.action)
             .disposed(by: self.disposeBag)
     }
 
-    private func bindViewModel() {
-        viewModel.state.userStarRepositoryData
-            .subscribe(onNext: { [weak self] _ in
-                self?.myStarRepositoryTableView.reloadData()
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel.state.isRequesting
+    private func bindState(reactor: ProfileReactor) {
+        reactor.state
+            .map { $0.userStarRepositories }
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] isRequesting in
-                if isRequesting {
+            .bind(to: myStarRepositoryTableView.rx.items(cellIdentifier: RepositoryTableViewCell.identifier, cellType: RepositoryTableViewCell.self)) { row, userRepository, cell in
+                cell.configure(viewModel: RepositoryTableViewCellViewModel(data: userRepository,
+                                                                           useCase: DefaultStarUseCase(starRepository: DefaultStarRepository()),
+                                                                           apiService: APIService()))
+                cell.setupUI(data: userRepository, isStarred: true)
+                cell.selectionStyle = .none
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state
+            .map { $0.isLoading }
+            .skip(1)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] isLoading in
+                if isLoading {
                     self?.showActivityIndicator()
                 } else {
                     self?.hideActivityIndicator()
@@ -130,14 +140,16 @@ final class ProfileViewController: UIViewController {
             })
             .disposed(by: disposeBag)
     }
-    
-    private func bindViewModel(to headerView: MyStarRepositoryTableViewHeaderView?) {
-        viewModel.state.userData
+
+    private func bindState(reactor: ProfileReactor, to headerView: MyStarRepositoryTableViewHeaderView?) {
+        reactor.state
+            .map { $0.userData }
+            .distinctUntilChanged()
             .subscribe(onNext: { (user: User?) in
                 headerView?.setupUI(data: user)
             }).disposed(by: disposeBag)
     }
-    
+
     private func showActivityIndicator() {
         DispatchQueue.main.async {
             self.loadingIndicatorView.isHidden = false
@@ -152,28 +164,6 @@ final class ProfileViewController: UIViewController {
     }
 }
 
-// MARK: UITableViewDataSource
-extension ProfileViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.userRepository.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(cellType: RepositoryTableViewCell.self, indexPath: indexPath),
-              indexPath.item < viewModel.userRepository.count else {
-            return UITableViewCell()
-        }
-        
-        cell.configure(viewModel: RepositoryTableViewCellViewModel(data: viewModel.userRepository[indexPath.row],
-                                                                   useCase: DefaultStarUseCase(starRepository: DefaultStarRepository()),
-                                                                   apiService: APIService()))
-        cell.setupUI(data: viewModel.userRepository[indexPath.row], isStarred: true)
-        cell.selectionStyle = .none
-        
-        return cell
-    }
-}
-
 // MARK: UITableViewDelegate
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -183,7 +173,9 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
         let myStarRepositoryTableViewHeaderView = headerView as? MyStarRepositoryTableViewHeaderView
-        bindViewModel(to: myStarRepositoryTableViewHeaderView)
+        if let reactor = reactor {
+            bindState(reactor: reactor, to: myStarRepositoryTableViewHeaderView)
+        }
         
         return headerView
     }

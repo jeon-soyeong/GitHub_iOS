@@ -88,7 +88,6 @@
 		9B781D7028A1FE450075D72F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6F28A1FE450075D72F /* UserRepository.swift */; };
 		9B85BD8128DA13D100E47747 /* LoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */; };
 		9B85BD8228DB004F00E47747 /* LoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */; };
-		9BBF4A7628A5B2620039A6AB /* ProfileViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBF4A7528A5B2620039A6AB /* ProfileViewModelTests.swift */; };
 		9BC2E17428A2A41400B5A8B6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17328A2A41300B5A8B6 /* User.swift */; };
 		9BC2E17628A2ACCA00B5A8B6 /* LanguageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */; };
 		9BC2E17B28A312CE00B5A8B6 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17928A312CE00B5A8B6 /* UICollectionView+Extension.swift */; };
@@ -163,7 +162,6 @@
 		9B781D6A28A18A7C0075D72F /* ProfileReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReactor.swift; sourceTree = "<group>"; };
 		9B781D6F28A1FE450075D72F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorView.swift; sourceTree = "<group>"; };
-		9BBF4A7528A5B2620039A6AB /* ProfileViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModelTests.swift; sourceTree = "<group>"; };
 		9BC2E17328A2A41300B5A8B6 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageType.swift; sourceTree = "<group>"; };
 		9BC2E17928A312CE00B5A8B6 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
@@ -280,7 +278,6 @@
 			children = (
 				9B63934828DEFE3000784E2A /* APIServiceTests.swift */,
 				9B5E9F3A289CD9E600963ED1 /* KeychainManagerTests.swift */,
-				9BBF4A7528A5B2620039A6AB /* ProfileViewModelTests.swift */,
 			);
 			path = GitHub_iOSTests;
 			sourceTree = "<group>";
@@ -791,7 +788,6 @@
 				9B41FA6A28A59E0700EDE4C5 /* NotificationName+Extension.swift in Sources */,
 				9B41FA6828A59D9400EDE4C5 /* MyStarRepositoryTableViewHeaderView.swift in Sources */,
 				9B41FA6128A59D2E00EDE4C5 /* LoginReactor.swift in Sources */,
-				9BBF4A7628A5B2620039A6AB /* ProfileViewModelTests.swift in Sources */,
 				9B7606F728F9C53A00EB6297 /* UIViewController+Extension.swift in Sources */,
 				9B41FA6F28A59FBD00EDE4C5 /* UIColor+Extension.swift in Sources */,
 				9B63937128E1556600784E2A /* StarUseCase.swift in Sources */,

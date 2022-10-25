@@ -13,11 +13,13 @@ import RxRelay
 import RxCocoa
 
 final class RepositoryTableViewCell: UITableViewCell {
-    private let disposeBag = DisposeBag()
-    private let contentsLimitWidth = UIScreen.main.bounds.width - 100
+    static let identifier = "RepositoryTableViewCell"
+    
     private var viewModel: RepositoryTableViewCellViewModel?
     private var dataCount = 0
     private var userRepositoryData: UserRepository?
+    private let contentsLimitWidth = UIScreen.main.bounds.width - 100
+    private let disposeBag = DisposeBag()
 
     private let repositoryOwnerImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
