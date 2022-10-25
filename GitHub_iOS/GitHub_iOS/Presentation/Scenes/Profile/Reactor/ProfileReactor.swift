@@ -90,13 +90,13 @@ final class ProfileReactor: Reactor {
             newState.isRequestCompleted = false
         case .setUserData(let user):
             newState.userData = user
-        case .setUserStarRepositories(let userStarRepository):
-            newState.userStarRepositories = userStarRepository
-        case .appendUserStarRepositories(let userStarRepository):
-            if userStarRepository.isEmpty {
+        case .setUserStarRepositories(let userStarRepositories):
+            newState.userStarRepositories = userStarRepositories
+        case .appendUserStarRepositories(let userStarRepositories):
+            if userStarRepositories.isEmpty {
                 newState.isRequestCompleted = true
             }
-            newState.userStarRepositories.append(contentsOf: userStarRepository)
+            newState.userStarRepositories.append(contentsOf: userStarRepositories)
         case .setPage(let page):
             newState.currentPage = page
         case .setLoading(let isLoading):
