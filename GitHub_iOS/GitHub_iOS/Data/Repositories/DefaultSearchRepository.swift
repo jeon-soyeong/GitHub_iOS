@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 final class DefaultSearchRepository: SearchRepository {
-    func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Single<RepositoryInfo> {
+    func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Observable<RepositoryInfo> {
         return APIService().request(GitHubAPI.getSearchRepositoryData(page: page, perPage: perPage, query: query))
     }
 }

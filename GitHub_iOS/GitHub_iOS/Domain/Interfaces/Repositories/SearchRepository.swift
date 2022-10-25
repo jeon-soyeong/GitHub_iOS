@@ -9,5 +9,5 @@ import Foundation
 import RxSwift
 
 protocol SearchRepository {
-    func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Single<RepositoryInfo>
+    func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Observable<RepositoryInfo>
 }

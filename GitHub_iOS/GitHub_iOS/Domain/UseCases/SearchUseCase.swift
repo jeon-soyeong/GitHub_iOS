@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 protocol SearchUseCase {
-    func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Single<RepositoryInfo>
+    func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Observable<RepositoryInfo>
 }
 
 final class DefaultSearchUseCase: SearchUseCase {
@@ -19,7 +19,7 @@ final class DefaultSearchUseCase: SearchUseCase {
         self.searchRepository = searchRepository
     }
     
-    func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Single<RepositoryInfo> {
+    func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Observable<RepositoryInfo> {
         return searchRepository.getSearchRepositoryData(page: page, perPage: perPage, query: query)
     }
 }
