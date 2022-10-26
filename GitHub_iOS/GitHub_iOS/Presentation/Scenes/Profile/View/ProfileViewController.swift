@@ -14,7 +14,6 @@ import ReactorKit
 final class ProfileViewController: UIViewController, View {
     private let loginViewController = LoginViewController(reactor: LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
                                                                                     apiService: APIService()))
-    private let fetch = PublishSubject<Void>()
     var disposeBag = DisposeBag()
 
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
@@ -44,18 +43,6 @@ final class ProfileViewController: UIViewController, View {
         setupView()
         setupNotification()
         setupTableView()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
-            self.navigationController?.pushViewController(loginViewController, animated: false)
-        } else {
-            let safeAreaTopHeight = view.safeAreaInsets.top
-            myStarRepositoryTableView.contentOffset = CGPoint(x: 0, y: -Int(safeAreaTopHeight))
-            fetch.onNext(())
-        }
     }
 
     private func setupView() {
@@ -102,9 +89,17 @@ final class ProfileViewController: UIViewController, View {
     private func bindAction(reactor: ProfileReactor) {
         typealias Action = ProfileReactor.Action
 
-        fetch
-            .map { Action.fetch }
-            .bind(to: reactor.action)
+        self.rx.viewWillAppear
+            .withUnretained(self)
+            .bind(onNext: { owner, _ in
+                if KeychainManager.shared.readAccessToken(key: "accessToken") == nil {
+                    owner.navigationController?.pushViewController(owner.loginViewController, animated: false)
+                } else {
+                    let safeAreaTopHeight = owner.view.safeAreaInsets.top
+                    owner.myStarRepositoryTableView.contentOffset = CGPoint(x: 0, y: -Int(safeAreaTopHeight))
+                    reactor.action.onNext(.fetch)
+                }
+            })
             .disposed(by: disposeBag)
 
         myStarRepositoryTableView.rx.prefetchRows
@@ -145,6 +140,7 @@ final class ProfileViewController: UIViewController, View {
         reactor.state
             .map { $0.userData }
             .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { (user: User?) in
                 headerView?.setupUI(data: user)
             }).disposed(by: disposeBag)
