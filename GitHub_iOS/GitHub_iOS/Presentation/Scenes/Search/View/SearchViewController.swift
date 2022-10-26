@@ -103,20 +103,22 @@ final class SearchViewController: UIViewController, View {
         typealias Action = SearchReactor.Action
 
         searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-            .bind(onNext: { [weak self] _ in
-                if let searchText = self?.searchBar.searchTextField.text {
-                    self?.searchBar.resignFirstResponder()
-                    reactor.action.onNext(.didSearch(searchText))
-                }
+            .do(onNext: { [weak self] _ in
+                self?.searchBar.resignFirstResponder()
             })
+            .map { Action.didSearch(self.searchBar.searchTextField.text) }
+            .bind(to: reactor.action)
             .disposed(by: self.disposeBag)
 
         searchBar.searchTextField.rx.text
             .orEmpty
             .filter { $0.isEmpty }
-            .bind(onNext: { [weak self] _ in
-                self?.initializeUI()
+            .do(onNext: { [weak self] _ in
+                self?.searchBar.searchTextField.text = ""
+                self?.searchRepositoryTableView.contentOffset = .zero
             })
+            .map { _ in Action.initialize }
+            .bind(to: reactor.action)
             .disposed(by: self.disposeBag)
 
         searchRepositoryTableView.rx.prefetchRows
@@ -162,12 +164,6 @@ final class SearchViewController: UIViewController, View {
             .disposed(by: disposeBag)
     }
 
-    private func initializeUI() {
-        searchBar.searchTextField.text = ""
-        searchRepositoryTableView.contentOffset = .zero
-        reactor?.action.onNext(.initialize)
-    }
-    
     private func showActivityIndicator() {
         DispatchQueue.main.async {
             self.loadingIndicatorView.isHidden = false
