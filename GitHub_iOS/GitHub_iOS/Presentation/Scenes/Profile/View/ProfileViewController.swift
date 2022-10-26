@@ -114,9 +114,9 @@ final class ProfileViewController: UIViewController, View {
             .map { $0.userStarRepositories }
             .observe(on: MainScheduler.instance)
             .bind(to: myStarRepositoryTableView.rx.items(cellIdentifier: RepositoryTableViewCell.identifier, cellType: RepositoryTableViewCell.self)) { row, userRepository, cell in
-                cell.configure(viewModel: RepositoryTableViewCellViewModel(data: userRepository,
-                                                                           useCase: DefaultStarUseCase(starRepository: DefaultStarRepository()),
-                                                                           apiService: APIService()))
+                cell.configure(reactor: RepositoryTableViewCellReactor(data: userRepository,
+                                                                       useCase: DefaultStarUseCase(starRepository: DefaultStarRepository()),
+                                                                       apiService: APIService()))
                 cell.setupUI(data: userRepository, isStarred: true)
                 cell.selectionStyle = .none
             }
