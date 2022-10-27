@@ -9,20 +9,17 @@ import UIKit
 
 import ReactorKit
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate, View {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
-    private let loginReactor = LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
+    private let reactor = LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
                                             apiService: APIService())
     private var tabBarController: TabBarController?
-    private let login = PublishSubject<String>()
-    var disposeBag = DisposeBag()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        self.reactor = loginReactor
-        tabBarController = TabBarController(reactor: loginReactor)
+        tabBarController = TabBarController(reactor: reactor)
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
@@ -32,14 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, View {
             tabBarController?.showToast(message: "로그인 재시도 바랍니다.")
             return
         }
-        login.onNext(code)
-    }
-
-    func bind(reactor: LoginReactor) {
-        login
-            .map { LoginReactor.Action.login($0) }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+        reactor.action.onNext(.login(code))
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

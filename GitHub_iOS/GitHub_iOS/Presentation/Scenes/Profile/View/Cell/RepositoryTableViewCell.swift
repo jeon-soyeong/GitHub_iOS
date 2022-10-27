@@ -191,7 +191,7 @@ final class RepositoryTableViewCell: UITableViewCell, View {
 
     private func bindState(reactor: RepositoryTableViewCellReactor) {
         reactor.state
-            .map{ $0.topics }
+            .map { $0.topics }
             .observe(on: MainScheduler.instance)
             .bind(to: repositoryTopicCollectionView.rx.items(cellIdentifier: RepositoryTopicCollectionViewCell.identifier, cellType: RepositoryTopicCollectionViewCell.self)) { item, topic, cell in
                 cell.setupUI(topic: topic)
@@ -199,7 +199,7 @@ final class RepositoryTableViewCell: UITableViewCell, View {
             .disposed(by: disposeBag)
         
         reactor.state
-            .map{ $0.starToggleResult }
+            .map { $0.starToggleResult }
             .observe(on: MainScheduler.instance)
             .bind(onNext: { [weak self] isSuccess in
                 guard let self = self,
