@@ -20,6 +20,7 @@
  ### Architecture
 - MVVM
 - Clean Architecture
+- ReactorKit
 
  ### UI
 - SnapKit
@@ -29,7 +30,6 @@
  ### Reactive
 - RxSwift
 - RxCocoa
-- RxRelay
 
  ### Network
 - Moya
