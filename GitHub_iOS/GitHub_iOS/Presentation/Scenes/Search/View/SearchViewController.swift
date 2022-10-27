@@ -7,22 +7,19 @@
 
 import UIKit
 
-import RxSwift
-import RxCocoa
-import RxRelay
+import ReactorKit
 import Then
 import SnapKit
 
-final class SearchViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    private let viewModel: SearchViewModel
+final class SearchViewController: UIViewController, View {
+    var disposeBag = DisposeBag()
 
     private let searchBar = UISearchBar().then {
         $0.searchBarStyle = .minimal
         $0.searchTextField.layer.cornerRadius = 20
     }
 
-    private var searchRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
+    private var searchRepositoryTableView = UITableView(frame: CGRect.zero).then {
         $0.backgroundColor = .systemBackground
         $0.clipsToBounds = true
         $0.scrollsToTop = true
@@ -36,9 +33,9 @@ final class SearchViewController: UIViewController {
         $0.isHidden = true
     }
 
-    init(viewModel: SearchViewModel) {
-        self.viewModel = viewModel
+    init(reactor: SearchReactor) {
         super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
     }
 
     required init?(coder: NSCoder) {
@@ -51,8 +48,6 @@ final class SearchViewController: UIViewController {
         setupView()
         setupTableView()
         setupGestureRecognizer(to: searchRepositoryTableView)
-        bindAction()
-        bindViewModel()
     }
 
     private func setupView() {
@@ -82,7 +77,6 @@ final class SearchViewController: UIViewController {
 
     private func setupTableView() {
         searchRepositoryTableView.showsVerticalScrollIndicator = false
-        searchRepositoryTableView.dataSource = self
         searchRepositoryTableView.delegate = self
         searchRepositoryTableView.registerCell(cellType: RepositoryTableViewCell.self)
         searchRepositoryTableView.register(MyStarRepositoryTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
@@ -100,52 +94,68 @@ final class SearchViewController: UIViewController {
         .disposed(by: disposeBag)
     }
 
-    private func bindAction() {
+    func bind(reactor: SearchReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+
+    private func bindAction(reactor: SearchReactor) {
+        typealias Action = SearchReactor.Action
+
         searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-            .bind { [weak self] _ in
-                self?.viewModel.initialize()
-                if let searchText = self?.searchBar.searchTextField.text {
-                    self?.searchBar.resignFirstResponder()
-                    self?.viewModel.action.didSearch.onNext((searchText))
-                }
-            }
+            .do(onNext: { [weak self] _ in
+                self?.searchBar.resignFirstResponder()
+            })
+            .map { Action.didSearch(self.searchBar.searchTextField.text) }
+            .bind(to: reactor.action)
             .disposed(by: self.disposeBag)
 
         searchBar.searchTextField.rx.text
             .orEmpty
             .filter { $0.isEmpty }
-            .bind { [weak self] _ in
-                self?.initializeUI()
-            }
+            .do(onNext: { [weak self] _ in
+                self?.searchBar.searchTextField.text = ""
+                self?.searchRepositoryTableView.contentOffset = .zero
+            })
+            .map { _ in Action.initialize }
+            .bind(to: reactor.action)
             .disposed(by: self.disposeBag)
 
         searchRepositoryTableView.rx.prefetchRows
-            .compactMap(\.last?.row)
-            .bind { [weak self] row in
-                if let searchText = self?.searchBar.searchTextField.text,
-                   let dataCount = self?.viewModel.userRepository.count,
-                   row >= dataCount - 3 {
-                    self?.viewModel.action.didSearch.onNext((searchText))
-                }
-            }
+            .filter { $0.contains(where: { $0.row >= reactor.currentState.searchRepositories.count - 3 }) }
+            .map { _ in Action.loadMore }
+            .bind(to: reactor.action)
             .disposed(by: self.disposeBag)
     }
 
-    private func bindViewModel() {
-        viewModel.state.searchRepositoryData
-            .subscribe(onNext: { [weak self] (repositoryInfo: RepositoryInfo?) in
-                if repositoryInfo?.totalCount == 0 {
-                    self?.showAlert(title: "검색 결과 없음 ❌", message: "검색 결과가 없으므로 다른 키워드로 검색 바랍니다.")
-                } else {
-                    self?.searchRepositoryTableView.reloadData()
-                }
+    private func bindState(reactor: SearchReactor) {
+        reactor.state
+            .map { $0.searchRepositories }
+            .observe(on: MainScheduler.instance)
+            .bind(to: searchRepositoryTableView.rx.items(cellIdentifier: RepositoryTableViewCell.identifier, cellType: RepositoryTableViewCell.self)) { row, userRepository, cell in
+                cell.configure(reactor: RepositoryTableViewCellReactor(data: userRepository,
+                                                                       useCase: DefaultStarUseCase(starRepository: DefaultStarRepository()),
+                                                                       apiService: APIService()))
+                cell.setupUI(data: userRepository, isStarred: false)
+                cell.selectionStyle = .none
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state
+            .map { $0.noSearchResult }
+            .filter { $0 == true }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                self?.showAlert(title: "검색 결과 없음 ❌", message: "검색 결과가 없으므로 다른 키워드로 검색 바랍니다.")
             })
             .disposed(by: disposeBag)
-        
-        viewModel.state.isRequesting
+
+        reactor.state
+            .map { $0.isLoading }
+            .skip(1)
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] isRequesting in
-                if isRequesting {
+            .subscribe(onNext: { [weak self] isLoading in
+                if isLoading {
                     self?.showActivityIndicator()
                 } else {
                     self?.hideActivityIndicator()
@@ -154,12 +164,6 @@ final class SearchViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    private func initializeUI() {
-        searchBar.searchTextField.text = ""
-        viewModel.initialize()
-        searchRepositoryTableView.contentOffset = .zero
-    }
-    
     private func showActivityIndicator() {
         DispatchQueue.main.async {
             self.loadingIndicatorView.isHidden = false
@@ -174,39 +178,9 @@ final class SearchViewController: UIViewController {
     }
 }
 
-// MARK: UITableViewDataSource
-extension SearchViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.userRepository.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(cellType: RepositoryTableViewCell.self, indexPath: indexPath),
-              indexPath.item < viewModel.userRepository.count else {
-            return UITableViewCell()
-        }
-        
-        cell.configure(viewModel: RepositoryTableViewCellViewModel(data: viewModel.userRepository[indexPath.row],
-                                                                   useCase: DefaultStarUseCase(starRepository: DefaultStarRepository()),
-                                                                   apiService: APIService()))
-        cell.setupUI(data: viewModel.userRepository[indexPath.row], isStarred: false)
-        cell.selectionStyle = .none
-        
-        return cell
-    }
-}
-
 // MARK: UITableViewDelegate
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 155
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return UIView()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return .leastNonzeroMagnitude
     }
 }

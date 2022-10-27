@@ -8,6 +8,8 @@
 import UIKit
 
 final class RepositoryTopicCollectionViewCell: UICollectionViewCell {
+    static let identifier = "RepositoryTopicCollectionViewCell"
+
     private let repositoryTopicLabelView = UIView().then {
         $0.backgroundColor = .mainSkyBlue
         $0.layer.masksToBounds = true

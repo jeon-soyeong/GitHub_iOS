@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import RxSwift
+import RxCocoa
 
 extension UIViewController {
     func showToast(message: String, font: UIFont = UIFont.systemFont(ofSize: 14.0)) {
@@ -37,5 +39,15 @@ extension UIViewController {
         let okAction = UIAlertAction(title: "확인", style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
+    }
+}
+
+public extension Reactive where Base: UIViewController {
+    var viewDidLoad: Observable<Void> {
+        return methodInvoked(#selector(Base.viewDidLoad)).map { _ in () }
+    }
+
+    var viewWillAppear: Observable<Bool> {
+        return methodInvoked(#selector(Base.viewWillAppear)).map { $0.first as? Bool ?? false }
     }
 }

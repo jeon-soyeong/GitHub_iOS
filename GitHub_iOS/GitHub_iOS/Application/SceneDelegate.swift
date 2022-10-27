@@ -6,29 +6,30 @@
 //
 
 import UIKit
-import RxSwift
+
+import ReactorKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    private let loginViewModel = LoginViewModel(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
-                                                apiService: APIService())
-    private var tabBarController: TabBarController?
-    private let disposeBag = DisposeBag()
     
+    private let reactor = LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
+                                            apiService: APIService())
+    private var tabBarController: TabBarController?
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        tabBarController = TabBarController(loginViewModel: loginViewModel)
+        tabBarController = TabBarController(reactor: reactor)
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
-    
+
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let code = URLContexts.first?.url.absoluteString.components(separatedBy: "code=").last else {
             tabBarController?.showToast(message: "로그인 재시도 바랍니다.")
             return
         }
-        loginViewModel.action.login.onNext(code)
+        reactor.action.onNext(.login(code))
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -58,7 +59,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-    
-    
 }
-

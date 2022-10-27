@@ -9,6 +9,6 @@ import Foundation
 import RxSwift
 
 protocol ProfileRepository {
-    func getUserData() -> Single<User>
-    func getUserStarRepositoryData(page: Int, perPage: Int) -> Single<[UserRepository]>
+    func getUserData() -> Observable<User>
+    func getUserStarRepositoryData(page: Int, perPage: Int) -> Observable<[UserRepository]>
 }

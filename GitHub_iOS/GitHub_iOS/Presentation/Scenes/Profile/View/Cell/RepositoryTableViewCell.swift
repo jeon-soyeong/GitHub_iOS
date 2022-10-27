@@ -7,17 +7,15 @@
 
 import UIKit
 
-import RxSwift
+import ReactorKit
 import Kingfisher
-import RxRelay
-import RxCocoa
 
-final class RepositoryTableViewCell: UITableViewCell {
-    private let disposeBag = DisposeBag()
-    private let contentsLimitWidth = UIScreen.main.bounds.width - 100
-    private var viewModel: RepositoryTableViewCellViewModel?
-    private var dataCount = 0
+final class RepositoryTableViewCell: UITableViewCell, View {
+    static let identifier = "RepositoryTableViewCell"
+
     private var userRepositoryData: UserRepository?
+    private let contentsLimitWidth = UIScreen.main.bounds.width - 100
+    var disposeBag = DisposeBag()
 
     private let repositoryOwnerImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
@@ -97,11 +95,9 @@ final class RepositoryTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(viewModel: RepositoryTableViewCellViewModel) {
-        self.viewModel = viewModel
-        bindAction()
-        bindViewModel()
-        viewModel.action.fetchTopics.onNext(())
+    func configure(reactor: RepositoryTableViewCellReactor) {
+        self.reactor = reactor
+        reactor.action.onNext(.fetchTopics)
     }
 
     private func setupView() {
@@ -176,29 +172,36 @@ final class RepositoryTableViewCell: UITableViewCell {
 
     private func setupCollectionView() {
         repositoryTopicCollectionView.delegate = self
-        repositoryTopicCollectionView.dataSource = self
         repositoryTopicCollectionView.registerCell(cellType: RepositoryTopicCollectionViewCell.self)
     }
 
-    private func bindAction() {
+    func bind(reactor: RepositoryTableViewCellReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+
+    private func bindAction(reactor: RepositoryTableViewCellReactor) {
+        typealias Action = RepositoryTableViewCellReactor.Action
+
         starButton.rx.tap
-            .bind { [weak self] in
-                guard let self = self,
-                      let fullName = self.userRepositoryData?.fullName else { return }
-                self.viewModel?.action.didTappedStarButton.onNext((!self.starButton.isSelected, fullName))
-            }
+            .map { Action.didTappedStarButton((!self.starButton.isSelected, self.userRepositoryData?.fullName)) }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 
-    private func bindViewModel() {
-        viewModel?.state.topicsData
-            .subscribe(onNext: { [weak self] _ in
-                self?.repositoryTopicCollectionView.reloadData()
-            })
+    private func bindState(reactor: RepositoryTableViewCellReactor) {
+        reactor.state
+            .map { $0.topics }
+            .observe(on: MainScheduler.instance)
+            .bind(to: repositoryTopicCollectionView.rx.items(cellIdentifier: RepositoryTopicCollectionViewCell.identifier, cellType: RepositoryTopicCollectionViewCell.self)) { item, topic, cell in
+                cell.setupUI(topic: topic)
+            }
             .disposed(by: disposeBag)
         
-        viewModel?.state.starToggleResult
-            .subscribe(onNext: { [weak self] isSuccess in
+        reactor.state
+            .map { $0.starToggleResult }
+            .observe(on: MainScheduler.instance)
+            .bind(onNext: { [weak self] isSuccess in
                 guard let self = self,
                       isSuccess else { return }
                 self.starButton.isSelected = !self.starButton.isSelected
@@ -268,28 +271,10 @@ final class RepositoryTableViewCell: UITableViewCell {
     }
 }
 
-// MARK: UICollectionViewDataSource
-extension RepositoryTableViewCell: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel?.topics.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(cellType: RepositoryTopicCollectionViewCell.self, indexPath: indexPath),
-              let topics = viewModel?.topics,
-              indexPath.item < topics.count else {
-            return UICollectionViewCell()
-        }
-        cell.setupUI(topic: topics[indexPath.item])
-        
-        return cell
-    }
-}
-
 // MARK: UICollectionViewDelegateFlowLayout
 extension RepositoryTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = viewModel?.calculateCellWidth(index: indexPath.item, fontSize: 12) ?? 0
+        let cellWidth = reactor?.calculateCellWidth(index: indexPath.item, fontSize: 12) ?? 0
         let cellPadding = 12
         return CGSize(width: Int(cellWidth) + cellPadding, height: 24)
     }

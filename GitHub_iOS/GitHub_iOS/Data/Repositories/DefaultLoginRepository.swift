@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 final class DefaultLoginRepository: LoginRepository {
-    func getAccessToken(code: String) -> Single<[String: String]> {
+    func getAccessToken(code: String) -> Observable<Token> {
         return APIService().request(GitHubAPI.getAccessToken(code: code))
     }
 }

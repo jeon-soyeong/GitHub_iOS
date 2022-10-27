@@ -11,11 +11,11 @@ import RxSwift
 final class DefaultProfileRepository: ProfileRepository {
     let apiService = APIService()
     
-    func getUserData() -> Single<User> {
+    func getUserData() -> Observable<User> {
         return apiService.request(GitHubAPI.getUserData)
     }
     
-    func getUserStarRepositoryData(page: Int, perPage: Int) -> Single<[UserRepository]> {
+    func getUserStarRepositoryData(page: Int, perPage: Int) -> Observable<[UserRepository]> {
         return APIService().request(GitHubAPI.getUserStarRepositoryData(page: page, perPage: perPage))
     }
 }

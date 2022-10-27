@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 protocol LoginUseCase {
-    func getAccessToken(code: String) -> Single<[String: String]>
+    func getAccessToken(code: String) -> Observable<Token>
 }
 
 final class DefaultLoginUseCase: LoginUseCase {
@@ -19,7 +19,7 @@ final class DefaultLoginUseCase: LoginUseCase {
         self.loginRepository = loginRepository
     }
     
-    func getAccessToken(code: String) -> Single<[String: String]> {
+    func getAccessToken(code: String) -> Observable<Token> {
         return loginRepository.getAccessToken(code: code)
     }
 }

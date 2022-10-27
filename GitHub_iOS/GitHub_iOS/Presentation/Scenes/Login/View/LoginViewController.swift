@@ -7,12 +7,10 @@
 
 import UIKit
 
-import RxSwift
-import RxCocoa
+import ReactorKit
 
-final class LoginViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    private let viewModel: LoginViewModel
+final class LoginViewController: UIViewController, View {
+    var disposeBag = DisposeBag()
 
     private let loginLabel = UILabel().then {
         $0.text = "로그인이 필요합니다"
@@ -24,9 +22,10 @@ final class LoginViewController: UIViewController {
         $0.setImage(resizedImage, for: .normal)
     }
     
-    init(viewModel: LoginViewModel) {
-        self.viewModel = viewModel
+    init(reactor: LoginReactor) {
         super.init(nibName: nil, bundle: nil)
+        setupNavigationItem()
+        self.reactor = reactor
     }
 
     required init?(coder: NSCoder) {
@@ -37,8 +36,14 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
-        bindAction()
         setupNotification()
+    }
+
+    private func setupNavigationItem() {
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.title = "GitHub"
+        let resizedImage = UIImage(named: "login")?.resize(size: CGSize(width: 28, height: 28)).withRenderingMode(.alwaysOriginal)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizedImage, style: .plain, target: self, action: nil)
     }
 
     private func setupView() {
@@ -46,7 +51,6 @@ final class LoginViewController: UIViewController {
         
         setupSubViews()
         setupConstraints()
-        setupNavigationItem()
     }
 
     private func setupSubViews() {
@@ -64,24 +68,21 @@ final class LoginViewController: UIViewController {
         }
     }
 
-    private func setupNavigationItem() {
-        self.navigationItem.hidesBackButton = true
-        self.navigationItem.title = "GitHub"
-        let resizedImage = UIImage(named: "login")?.resize(size: CGSize(width: 28, height: 28)).withRenderingMode(.alwaysOriginal)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizedImage, style: .plain, target: self, action: nil)
+    func bind(reactor: LoginReactor) {
+        bindAction(reactor: reactor)
     }
 
-    private func bindAction() {
+    private func bindAction(reactor: LoginReactor) {
+        typealias Action = LoginReactor.Action
+
         loginButton.rx.tap
-            .subscribe(onNext: { [weak self] in
-                self?.viewModel.action.didTappedLoginButton.onNext(())
-            })
+            .map { Action.didTappedLoginButton }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         self.navigationItem.rightBarButtonItem?.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                self?.viewModel.action.didTappedLoginButton.onNext(())
-            })
+            .map { Action.didTappedLoginButton }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 
