@@ -11,8 +11,9 @@ import Then
 import SnapKit
 import ReactorKit
 
-final class ProfileViewController: UIViewController, View {
+final class ProfileViewController: UIViewController {
     @Dependency var loginViewController: LoginViewController
+    @Dependency var reactor: ProfileReactor
     var disposeBag = DisposeBag()
 
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {
@@ -27,21 +28,13 @@ final class ProfileViewController: UIViewController, View {
         $0.center = view.center
     }
 
-    init(reactor: ProfileReactor) {
-        super.init(nibName: nil, bundle: nil)
-        self.reactor = reactor
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupView()
         setupNotification()
         setupTableView()
+        bind()
     }
 
     private func setupView() {
@@ -80,12 +73,12 @@ final class ProfileViewController: UIViewController, View {
         myStarRepositoryTableView.register(MyStarRepositoryTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
     }
 
-    func bind(reactor: ProfileReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
+    func bind() {
+        bindAction()
+        bindState()
     }
 
-    private func bindAction(reactor: ProfileReactor) {
+    private func bindAction() {
         typealias Action = ProfileReactor.Action
 
         self.rx.viewWillAppear
@@ -96,19 +89,19 @@ final class ProfileViewController: UIViewController, View {
                 } else {
                     let safeAreaTopHeight = owner.view.safeAreaInsets.top
                     owner.myStarRepositoryTableView.contentOffset = CGPoint(x: 0, y: -Int(safeAreaTopHeight))
-                    reactor.action.onNext(.fetch)
+                    self.reactor.action.onNext(.fetch)
                 }
             })
             .disposed(by: disposeBag)
 
         myStarRepositoryTableView.rx.prefetchRows
-            .filter { $0.contains(where: { $0.row >= reactor.currentState.userStarRepositories.count - 3 }) }
+            .filter { $0.contains(where: { $0.row >= self.reactor.currentState.userStarRepositories.count - 3 }) }
             .map { _ in Action.loadMore }
             .bind(to: reactor.action)
             .disposed(by: self.disposeBag)
     }
 
-    private func bindState(reactor: ProfileReactor) {
+    private func bindState() {
         reactor.state
             .map { $0.userStarRepositories }
             .observe(on: MainScheduler.instance)
@@ -168,10 +161,8 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyStarRepositoryTableViewHeaderView.headerViewID)
         let myStarRepositoryTableViewHeaderView = headerView as? MyStarRepositoryTableViewHeaderView
-        if let reactor = reactor {
-            bindState(reactor: reactor, to: myStarRepositoryTableViewHeaderView)
-        }
-        
+        bindState(reactor: reactor, to: myStarRepositoryTableViewHeaderView)
+
         return headerView
     }
 
