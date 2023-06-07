@@ -37,9 +37,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let container = DIContainer.shared
         
         container.register(type: LoginRepository.self, service: DefaultLoginRepository())
+        container.register(type: SearchRepository.self, service: DefaultSearchRepository())
+        
         container.register(type: LoginUseCase.self, service: DefaultLoginUseCase())
+        container.register(type: SearchUseCase.self, service: DefaultSearchUseCase())
+        
         container.register(type: LoginReactor.self, service: LoginReactor())
+        container.register(type: SearchReactor.self, service: SearchReactor())
+        
         container.register(type: LoginViewController.self, service: LoginViewController())
+        container.register(type: SearchViewController.self, service: SearchViewController())
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

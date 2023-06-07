@@ -13,11 +13,7 @@ protocol SearchUseCase {
 }
 
 final class DefaultSearchUseCase: SearchUseCase {
-    private let searchRepository: SearchRepository
-    
-    init(searchRepository: SearchRepository) {
-        self.searchRepository = searchRepository
-    }
+    @Dependency var searchRepository: SearchRepository
     
     func getSearchRepositoryData(page: Int, perPage: Int, query: String) -> Observable<RepositoryInfo> {
         return searchRepository.getSearchRepositoryData(page: page, perPage: perPage, query: query)

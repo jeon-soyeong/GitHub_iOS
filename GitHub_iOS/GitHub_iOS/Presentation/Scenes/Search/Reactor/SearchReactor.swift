@@ -10,9 +10,8 @@ import Foundation
 import ReactorKit
 
 final class SearchReactor: Reactor {
-    private let useCase: SearchUseCase
-    private let apiService: APIService
-
+    @Dependency var useCase: SearchUseCase
+    
     enum Action {
         case initialize
         case didSearch(String?)
@@ -39,11 +38,6 @@ final class SearchReactor: Reactor {
     }
 
     let initialState = State()
-
-    init(useCase: SearchUseCase, apiService: APIService) {
-        self.useCase = useCase
-        self.apiService = apiService
-    }
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {

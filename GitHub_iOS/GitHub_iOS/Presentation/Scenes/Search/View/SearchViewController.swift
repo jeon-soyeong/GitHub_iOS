@@ -11,7 +11,8 @@ import ReactorKit
 import Then
 import SnapKit
 
-final class SearchViewController: UIViewController, View {
+final class SearchViewController: UIViewController {
+    @Dependency var reactor: SearchReactor
     var disposeBag = DisposeBag()
 
     private let searchBar = UISearchBar().then {
@@ -33,21 +34,13 @@ final class SearchViewController: UIViewController, View {
         $0.isHidden = true
     }
 
-    init(reactor: SearchReactor) {
-        super.init(nibName: nil, bundle: nil)
-        self.reactor = reactor
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupView()
         setupTableView()
         setupGestureRecognizer(to: searchRepositoryTableView)
+        bind()
     }
 
     private func setupView() {
@@ -94,12 +87,12 @@ final class SearchViewController: UIViewController, View {
         .disposed(by: disposeBag)
     }
 
-    func bind(reactor: SearchReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
+    func bind() {
+        bindAction()
+        bindState()
     }
 
-    private func bindAction(reactor: SearchReactor) {
+    private func bindAction() {
         typealias Action = SearchReactor.Action
 
         searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
@@ -122,13 +115,13 @@ final class SearchViewController: UIViewController, View {
             .disposed(by: self.disposeBag)
 
         searchRepositoryTableView.rx.prefetchRows
-            .filter { $0.contains(where: { $0.row >= reactor.currentState.searchRepositories.count - 3 }) }
+            .filter { $0.contains(where: { $0.row >= self.reactor.currentState.searchRepositories.count - 3 }) }
             .map { _ in Action.loadMore }
             .bind(to: reactor.action)
             .disposed(by: self.disposeBag)
     }
 
-    private func bindState(reactor: SearchReactor) {
+    private func bindState() {
         reactor.state
             .map { $0.searchRepositories }
             .observe(on: MainScheduler.instance)
