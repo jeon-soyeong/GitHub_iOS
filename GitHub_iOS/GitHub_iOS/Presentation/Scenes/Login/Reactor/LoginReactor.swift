@@ -9,8 +9,7 @@ import Foundation
 import ReactorKit
 
 final class LoginReactor: Reactor {
-    private let useCase: LoginUseCase
-    private let apiService: APIService
+    @Dependency var useCase: LoginUseCase
 
     enum Action {
         case didTappedLoginButton
@@ -29,11 +28,6 @@ final class LoginReactor: Reactor {
     }
 
     let initialState: State = State()
-
-    init(useCase: LoginUseCase, apiService: APIService) {
-        self.useCase = useCase
-        self.apiService = apiService
-    }
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {

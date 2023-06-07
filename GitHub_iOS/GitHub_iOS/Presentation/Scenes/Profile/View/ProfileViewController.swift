@@ -12,8 +12,7 @@ import SnapKit
 import ReactorKit
 
 final class ProfileViewController: UIViewController, View {
-    private let loginViewController = LoginViewController(reactor: LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
-                                                                                    apiService: APIService()))
+    @Dependency var loginViewController: LoginViewController
     var disposeBag = DisposeBag()
 
     private var myStarRepositoryTableView = UITableView(frame: CGRect.zero, style: .grouped).then {

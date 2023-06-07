@@ -13,11 +13,7 @@ protocol LoginUseCase {
 }
 
 final class DefaultLoginUseCase: LoginUseCase {
-    private let loginRepository: LoginRepository
-    
-    init(loginRepository: LoginRepository) {
-        self.loginRepository = loginRepository
-    }
+    @Dependency var loginRepository: LoginRepository
     
     func getAccessToken(code: String) -> Observable<Token> {
         return loginRepository.getAccessToken(code: code)

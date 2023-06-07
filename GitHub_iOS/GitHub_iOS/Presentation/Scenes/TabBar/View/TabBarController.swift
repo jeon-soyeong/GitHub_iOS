@@ -9,24 +9,17 @@ import UIKit
 
 import ReactorKit
 
-final class TabBarController: UITabBarController, View {
+final class TabBarController: UITabBarController {
+    @Dependency var reactor: LoginReactor
     private var rootViewControllers: [UIViewController] = []
     var disposeBag = DisposeBag()
-
-    init(reactor: LoginReactor) {
-        super.init(nibName: nil, bundle: nil)
-        self.reactor = reactor
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupTabBar()
         setupViewControllers()
+        bind()
     }
 
     private func setupTabBar() {
@@ -52,12 +45,12 @@ final class TabBarController: UITabBarController, View {
         selectedIndex = 0
     }
 
-    func bind(reactor: LoginReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
+    func bind() {
+        bindAction()
+        bindState()
     }
 
-    private func bindAction(reactor: LoginReactor) {
+    private func bindAction() {
         typealias Action = LoginReactor.Action
 
         rootViewControllers.forEach {
@@ -74,7 +67,7 @@ final class TabBarController: UITabBarController, View {
         }
     }
 
-    private func bindState(reactor: LoginReactor) {
+    private func bindState() {
         reactor.state
             .map { $0.isLogined }
             .distinctUntilChanged()
