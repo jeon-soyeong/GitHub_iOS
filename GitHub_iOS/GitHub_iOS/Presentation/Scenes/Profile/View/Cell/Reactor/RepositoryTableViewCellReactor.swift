@@ -10,9 +10,8 @@ import Foundation
 import ReactorKit
 
 final class RepositoryTableViewCellReactor: Reactor {
+    @Dependency var useCase: StarUseCase
     private let data: UserRepository
-    private let useCase: StarUseCase
-    private let apiService: APIService
     private let contentsLimitWidth = UIScreen.main.bounds.width - 100
     private(set) var topics: [String] = []
     
@@ -33,10 +32,8 @@ final class RepositoryTableViewCellReactor: Reactor {
 
     let initialState = State()
 
-    init(data: UserRepository, useCase: StarUseCase, apiService: APIService) {
+    init(data: UserRepository) {
         self.data = data
-        self.useCase = useCase
-        self.apiService = apiService
     }
 
     func mutate(action: Action) -> Observable<Mutation> {

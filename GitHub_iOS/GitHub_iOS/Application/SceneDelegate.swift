@@ -39,10 +39,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         container.register(type: LoginRepository.self, service: DefaultLoginRepository())
         container.register(type: SearchRepository.self, service: DefaultSearchRepository())
         container.register(type: ProfileRepository.self, service: DefaultProfileRepository())
+        container.register(type: StarRepository.self, service: DefaultStarRepository())
         
         container.register(type: LoginUseCase.self, service: DefaultLoginUseCase())
         container.register(type: SearchUseCase.self, service: DefaultSearchUseCase())
         container.register(type: ProfileUseCase.self, service: DefaultProfileUseCase())
+        container.register(type: StarUseCase.self, service: DefaultStarUseCase())
         
         container.register(type: LoginReactor.self, service: LoginReactor())
         container.register(type: SearchReactor.self, service: SearchReactor())

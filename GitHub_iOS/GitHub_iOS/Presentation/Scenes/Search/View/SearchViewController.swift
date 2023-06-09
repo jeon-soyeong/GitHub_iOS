@@ -126,9 +126,7 @@ final class SearchViewController: UIViewController {
             .map { $0.searchRepositories }
             .observe(on: MainScheduler.instance)
             .bind(to: searchRepositoryTableView.rx.items(cellIdentifier: RepositoryTableViewCell.identifier, cellType: RepositoryTableViewCell.self)) { row, userRepository, cell in
-                cell.configure(reactor: RepositoryTableViewCellReactor(data: userRepository,
-                                                                       useCase: DefaultStarUseCase(starRepository: DefaultStarRepository()),
-                                                                       apiService: APIService()))
+                cell.configure(reactor: RepositoryTableViewCellReactor(data: userRepository))
                 cell.setupUI(data: userRepository, isStarred: false)
                 cell.selectionStyle = .none
             }
