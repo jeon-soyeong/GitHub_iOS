@@ -14,12 +14,8 @@ protocol StarUseCase {
 }
 
 final class DefaultStarUseCase: StarUseCase {
-    private let starRepository: StarRepository
-    
-    init(starRepository: StarRepository) {
-        self.starRepository = starRepository
-    }
-    
+    @Dependency var starRepository: StarRepository
+
     func requestStar(fullName: String) -> Observable<Data> {
         return starRepository.requestStar(fullName: fullName)
     }

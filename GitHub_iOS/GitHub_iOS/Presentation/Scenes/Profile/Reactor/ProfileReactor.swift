@@ -10,8 +10,7 @@ import Foundation
 import ReactorKit
 
 final class ProfileReactor: Reactor {
-    private let useCase: ProfileUseCase
-    private let apiService: APIService
+    @Dependency var useCase: ProfileUseCase
 
     enum Action {
         case fetch
@@ -37,11 +36,6 @@ final class ProfileReactor: Reactor {
     }
 
     let initialState = State()
-
-    init(useCase: ProfileUseCase, apiService: APIService) {
-        self.useCase = useCase
-        self.apiService = apiService
-    }
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {

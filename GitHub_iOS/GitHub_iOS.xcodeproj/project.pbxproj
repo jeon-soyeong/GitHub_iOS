@@ -88,6 +88,8 @@
 		9B781D7028A1FE450075D72F /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B781D6F28A1FE450075D72F /* UserRepository.swift */; };
 		9B85BD8128DA13D100E47747 /* LoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */; };
 		9B85BD8228DB004F00E47747 /* LoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */; };
+		9B8E55702A30B821003871D8 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8E556F2A30B821003871D8 /* DIContainer.swift */; };
+		9B8E55722A30B8BD003871D8 /* Dependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8E55712A30B8BD003871D8 /* Dependency.swift */; };
 		9BC2E17428A2A41400B5A8B6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17328A2A41300B5A8B6 /* User.swift */; };
 		9BC2E17628A2ACCA00B5A8B6 /* LanguageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */; };
 		9BC2E17B28A312CE00B5A8B6 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2E17928A312CE00B5A8B6 /* UICollectionView+Extension.swift */; };
@@ -162,6 +164,8 @@
 		9B781D6A28A18A7C0075D72F /* ProfileReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReactor.swift; sourceTree = "<group>"; };
 		9B781D6F28A1FE450075D72F /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorView.swift; sourceTree = "<group>"; };
+		9B8E556F2A30B821003871D8 /* DIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
+		9B8E55712A30B8BD003871D8 /* Dependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependency.swift; sourceTree = "<group>"; };
 		9BC2E17328A2A41300B5A8B6 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9BC2E17528A2ACCA00B5A8B6 /* LanguageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageType.swift; sourceTree = "<group>"; };
 		9BC2E17928A312CE00B5A8B6 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
@@ -307,7 +311,9 @@
 			isa = PBXGroup;
 			children = (
 				9B6A44A7289EA3D400C12313 /* Extension */,
-				9BD5B290289EF1C80062206C /* Manager */,
+				9BD5B291289EF1D90062206C /* KeychainManager.swift */,
+				9B8E556F2A30B821003871D8 /* DIContainer.swift */,
+				9B8E55712A30B8BD003871D8 /* Dependency.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -501,14 +507,6 @@
 				9B85BD8028DA13D000E47747 /* LoadingIndicatorView.swift */,
 			);
 			name = CustomView;
-			sourceTree = "<group>";
-		};
-		9BD5B290289EF1C80062206C /* Manager */ = {
-			isa = PBXGroup;
-			children = (
-				9BD5B291289EF1D90062206C /* KeychainManager.swift */,
-			);
-			path = Manager;
 			sourceTree = "<group>";
 		};
 		9BD5B293289EF22F0062206C /* Login */ = {
@@ -710,6 +708,7 @@
 				9B41FA5128A539A500EDE4C5 /* SearchReactor.swift in Sources */,
 				9B27032E289F7BB100D65283 /* UIViewController+Extension.swift in Sources */,
 				9B6A44AB289EA4BD00C12313 /* UIView+Extension.swift in Sources */,
+				9B8E55702A30B821003871D8 /* DIContainer.swift in Sources */,
 				9BC2E17428A2A41400B5A8B6 /* User.swift in Sources */,
 				9B781D6B28A18A7C0075D72F /* ProfileReactor.swift in Sources */,
 				9B781D7028A1FE450075D72F /* UserRepository.swift in Sources */,
@@ -723,6 +722,7 @@
 				9B6A44B5289EB81500C12313 /* UIImage+Extension.swift in Sources */,
 				9B781D6128A0F1F00075D72F /* RepositoryTopicCollectionViewCell.swift in Sources */,
 				9BD5B2A3289EFBA30062206C /* DefaultSession.swift in Sources */,
+				9B8E55722A30B8BD003871D8 /* Dependency.swift in Sources */,
 				9BC2E17628A2ACCA00B5A8B6 /* LanguageType.swift in Sources */,
 				9B5E9F24289CD9E200963ED1 /* AppDelegate.swift in Sources */,
 				9BD5B29D289EFB7D0062206C /* GitHubAPI.swift in Sources */,

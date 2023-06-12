@@ -14,11 +14,7 @@ protocol ProfileUseCase {
 }
 
 final class DefaultProfileUseCase: ProfileUseCase {
-    private let profileRepository: ProfileRepository
-    
-    init(profileRepository: ProfileRepository) {
-        self.profileRepository = profileRepository
-    }
+    @Dependency var profileRepository: ProfileRepository
     
     func getUserData() -> Observable<User> {
         return profileRepository.getUserData()

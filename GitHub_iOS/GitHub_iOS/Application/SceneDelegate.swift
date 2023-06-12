@@ -11,15 +11,14 @@ import ReactorKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
-    private let reactor = LoginReactor(useCase: DefaultLoginUseCase(loginRepository: DefaultLoginRepository()),
-                                            apiService: APIService())
     private var tabBarController: TabBarController?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        registerDependencies()
+        
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        tabBarController = TabBarController(reactor: reactor)
+        tabBarController = TabBarController()
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
@@ -29,7 +28,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             tabBarController?.showToast(message: "로그인 재시도 바랍니다.")
             return
         }
-        reactor.action.onNext(.login(code))
+
+        @Dependency var loginReactor: LoginReactor
+        loginReactor.action.onNext(.login(code))
+    }
+                 
+    private func registerDependencies() {
+        let container = DIContainer.shared
+        
+        container.register(type: LoginRepository.self, service: DefaultLoginRepository())
+        container.register(type: SearchRepository.self, service: DefaultSearchRepository())
+        container.register(type: ProfileRepository.self, service: DefaultProfileRepository())
+        container.register(type: StarRepository.self, service: DefaultStarRepository())
+        
+        container.register(type: LoginUseCase.self, service: DefaultLoginUseCase())
+        container.register(type: SearchUseCase.self, service: DefaultSearchUseCase())
+        container.register(type: ProfileUseCase.self, service: DefaultProfileUseCase())
+        container.register(type: StarUseCase.self, service: DefaultStarUseCase())
+        
+        container.register(type: LoginReactor.self, service: LoginReactor())
+        container.register(type: SearchReactor.self, service: SearchReactor())
+        container.register(type: ProfileReactor.self, service: ProfileReactor())
+        
+        container.register(type: LoginViewController.self, service: LoginViewController())
+        container.register(type: SearchViewController.self, service: SearchViewController())
+        container.register(type: ProfileViewController.self, service: ProfileViewController())
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

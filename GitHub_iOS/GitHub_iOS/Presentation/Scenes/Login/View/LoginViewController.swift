@@ -9,7 +9,8 @@ import UIKit
 
 import ReactorKit
 
-final class LoginViewController: UIViewController, View {
+final class LoginViewController: UIViewController {
+    @Dependency var reactor: LoginReactor
     var disposeBag = DisposeBag()
 
     private let loginLabel = UILabel().then {
@@ -22,10 +23,10 @@ final class LoginViewController: UIViewController, View {
         $0.setImage(resizedImage, for: .normal)
     }
     
-    init(reactor: LoginReactor) {
+    init() {
         super.init(nibName: nil, bundle: nil)
         setupNavigationItem()
-        self.reactor = reactor
+        bind()
     }
 
     required init?(coder: NSCoder) {
@@ -68,11 +69,11 @@ final class LoginViewController: UIViewController, View {
         }
     }
 
-    func bind(reactor: LoginReactor) {
-        bindAction(reactor: reactor)
+    func bind() {
+        bindAction()
     }
 
-    private func bindAction(reactor: LoginReactor) {
+    private func bindAction() {
         typealias Action = LoginReactor.Action
 
         loginButton.rx.tap
